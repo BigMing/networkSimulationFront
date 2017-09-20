@@ -1,0 +1,76 @@
+/**
+ * 公共样式
+ */
+body {
+    font-family: "Helvetica Neue", Helvetica, Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
+}
+
+/**
+ * header样式
+ */
+.navbar {
+    margin-bottom: 0;
+}
+
+/**
+ * 高度划分
+ */
+#main {
+    border-bottom: 1px solid #cccccc;
+}
+
+#main, #slider {
+    height: 900px;
+}
+
+#innerMain, #innerSlider{
+    height: 500px;
+}
+
+#innerContent {
+    width: 500px;
+    height: 500px;
+    padding: 0;
+}
+
+#content {
+    height: 900px;
+    padding: 0;
+}
+
+/**
+ * 侧边栏样式
+ */
+.right {
+    border-right: 1px solid #cccccc;
+}
+
+.smallbox {
+    text-align: center;
+    margin: 40px 0 20px 0;
+    border-bottom: 1px solid #cccccc;
+}
+
+.smallbox a.title {
+    text-decoration: none;
+}
+
+.fenlei {
+    cursor: pointer;
+    border-top: 1px dashed #cccccc;
+}
+
+/**
+ * 右边栏样式
+ */
+#message{
+    height:50px;
+    line-height: 50px;
+    border-bottom: 1px solid #cccccc;
+    text-align: center;
+}
+#message span{
+    color: #c12e2a;
+    margin-right: 10px;
+    font-weight: 700;
+}

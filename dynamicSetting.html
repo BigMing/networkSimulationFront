@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>动态场景规则设定</title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="lib/jquery/jquery-confirm.min.css"/>
+    <link rel="stylesheet" href="css/dynamicSetting.css"/>、
+</head>
+<header>
+    <div class="row clearfix">
+        <div class="col-md-offset-1 col-md-11 column">
+            <div class="page-header">
+                <h1>
+                    动态场景规则设定 <small>过滤stk文件中的链路</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+</header>
+<body>
+<div class="container">
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active">
+            <a href="#home" data-toggle="tab">
+                节点链路通断设置
+            </a>
+        </li>
+        <li>
+            <a href="#ios" data-toggle="tab">
+                大类之间规则设置
+            </a>
+        </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="home">
+            <br>
+            <div class="alert alert-info alert-dismissable" hidden="hidden" id="alertInfo">
+                只能取消勾选，若勾选上初始没有的链路，则不会生效！
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-6 column">
+                    <div id="tree"></div>
+                </div>
+                <div class="col-md-6 column">
+                    <div id="tree_1"></div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="ios">
+            <br>
+            <div class="row clearfix">
+                <div class="col-md-4 column">
+                    <div id="tree_2"></div>
+                </div>
+                <div class="col-md-4 column">
+                    <div id="tree_3"></div>
+                </div>
+                <div class="col-md-4 column">
+                    <div class="alert alert-info alert-dismissable" hidden="hidden" id="selectInfo">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                        当左右两边选中相同的时，设置的是类节点内部规则。
+                    </div>
+                    <select class="form-control" id="rule">
+                        <option value="1">规则 1</option>
+                        <option value="2">规则 2</option>
+                    </select>
+                    <!--<div class="checkbox">-->
+                        <!--<label><input type="checkbox" value="rule1" id="rule1" name="checkbox">选项 1</label>-->
+                    <!--</div>-->
+                    <!--<div class="checkbox">-->
+                        <!--<label><input type="checkbox" value="rule2" id="rule2" name="checkbox">选项 2</label>-->
+                    <!--</div>-->
+                    <!--<div class="checkbox">-->
+                        <!--<label><input type="checkbox" value="rule3" id="rule3" name="checkbox">选项 3</label>-->
+                    <!--</div>-->
+                    <!--<div class="checkbox">-->
+                        <!--<label><input type="checkbox" value="rule4" id="rule4" name="checkbox">选项 4</label>-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <hr>
+            <div class="row clearfix">
+                <div class="col-md-10">
+                    <!--<label class="radio-inline">-->
+                    <!--<input type="radio" name="optionsRadiosinline" value="option1" checked> 过滤规则 1-->
+                    <!--</label>-->
+                    <!--<label class="radio-inline">-->
+                    <!--<input type="radio" name="optionsRadiosinline" value="option2"> 过滤规则 2-->
+                    <!--</label>-->
+                    <!--<label class="radio-inline">-->
+                    <!--<input type="radio" name="optionsRadiosinline" value="option3"> 过滤规则 3-->
+                    <!--</label>-->
+                </div>
+                <div class="col-md-2">
+                    <button id="submit" type="button" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 节点模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">请输大类参数</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">大类名称</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="bigNodeName" size="8">
+                                <!--<option value="0">简单二层节点（Docker）</option>-->
+                                <!--<option value="1">简单二层节点(VM)</option>-->
+                            </select>
+                        </div>
+                    </div>
+                    <div id="bigNodeConfigOperation">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">节点类型</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="nodeType">
+                                    <option value="0">简单二层节点（Docker）</option>
+                                    <option value="1">简单二层节点(VM)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">硬件架构</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="hardwareArchitecture">
+                                    <option value="0">Intel x86 32bit</option>
+                                    <option value="1">Intel x86 64bit</option>
+                                    <option value="2">ARM</option>
+                                    <option value="3">MIPS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">操作系统</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="operatingSystem">
+                                    <option value="0">Linux</option>
+                                    <option value="1">FreeBSD</option>
+                                    <option value="2">Window</option>
+                                    <option value="3">Android</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">节点配置</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="nodeConfig">
+                                    <option value="tiny">Tiny</option>
+                                    <option value="small">Small</option>
+                                    <option value="big">Big</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">节点镜像</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="nodeImage">
+                                    <option value="Router">Router</option>
+                                    <option value="Switch">Switch</option>
+                                    <option value="Zph/new:11.04">Zph/new:11.04</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-sm-2 control-label">内部规则</label>-->
+                            <!--<div class="col-sm-10">-->
+                                <!--<label class="checkbox-inline">-->
+                                    <!--<input type="checkbox" name="inlineCheckbox" value="option1" id="option1"> 选项 1-->
+                                <!--</label>-->
+                                <!--<label class="checkbox-inline">-->
+                                    <!--<input type="checkbox" name="inlineCheckbox" value="option2" id="option2"> 选项 2-->
+                                <!--</label>-->
+                                <!--<label class="checkbox-inline">-->
+                                    <!--<input type="checkbox" name="inlineCheckbox" value="option3" id="option3"> 选项 3-->
+                                <!--</label>-->
+                                <!--<label class="checkbox-inline">-->
+                                    <!--<input type="checkbox" name="inlineCheckbox" value="option4" id="option4"> 选项 4-->
+                                <!--</label>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="addNode">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+</body>
+</html>
+
+<script type="text/javascript" src="lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="lib/bootstrap/js/bootstrap-treeview.min.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="lib/jquery-ui-1.11.4/jquery-ui.js"></script>
+<script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="js/dynamicSetting.js"></script>

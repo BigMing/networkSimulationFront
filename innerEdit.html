@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>节点内部编辑器</title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/index1.css"/>
+    <link rel="stylesheet" href="lib/jquery/jquery-confirm.min.css"/>
+    <link rel="stylesheet" href="lib/jquery-ui-1.11.4/jquery-ui.css"/>
+</head>
+<body>
+<!--头部区域-->
+<header>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="javascript:;" id="inName">节点内部编辑器</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <p id="systemTime" class="navbar-text navbar-left"></p>
+                <li><a href="register.html"  target="_blank"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+                <li><a href="login.html"  target="_blank"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!--内容区域-->
+<div class="container-fluid" id="main">
+    <!--侧边栏-->
+    <div class="col-md-2 slide right" id="slider">
+        <div class="smallbox">
+            <a href="javascript:;" data-toggle="collapse" data-target="#weixing" class="title"><h4>添加Docker节点</h4></a>
+            <div id="weixing" class="collapse in">
+                <div class="fenlei">
+                    <img src="img/switchOptical.png" id="weixing1">
+                    &nbsp;&nbsp;&nbsp;&nbsp;交换机
+                </div>
+                <div class="fenlei">
+                    <img src="img/router.png" id="weixing2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;路由器
+                </div>
+                <div class="fenlei">
+                    <img src="img/5200.png" id="weixing3">
+                    &nbsp;&nbsp;&nbsp;&nbsp;防火墙
+                </div>
+            </div>
+        </div>
+        <div class="smallbox">
+            <a href="javascript:;" data-toggle="collapse" data-target="#link" class="title"><h4>选择链路</h4></a>
+            <div id="link" class="collapse in">
+                <div class="fenlei" id="addlink01">
+                    <img src="img/link02.png">
+                    &nbsp;&nbsp;&nbsp;<span id="link01">添加链路</span>
+                </div>
+                <!--<div class="fenlei" id="addlink02">-->
+                    <!--<img src="img/link02.png">-->
+                    <!--&nbsp;&nbsp;&nbsp;&nbsp;<span id="link02">一对多链路</span>-->
+                <!--</div>-->
+                <div class="fenlei" id="addlink04">
+                    <img src="img/link03.png">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span id="link04">停止添加链路</span>
+                </div>
+            </div>
+        </div>
+        <button id="submit" type="button" class="btn btn-primary btn-block">提交编辑</button>
+    </div>
+
+    <!--右侧内容区域-->
+    <div class="col-md-10" id="content">
+        <div id="message">
+            <span id="selectEle"></span> 被选中了 &nbsp;&nbsp;&nbsp;
+            <button class="btn btn-warning" id="remove">删除</button>
+            <button class="btn btn-default" id="openCli">打开控制台</button>
+            <button class="btn btn-info" id="editNode">编辑节点属性</button>
+        </div>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- 节点模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">请输节点参数</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">节点名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control"  placeholder="请输入节点名称" id="nodeName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">管理IP</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="请输入192.168.10.0/24网段地址" id="manageIP">
+                            </div>
+                        </div>
+                        <div class="alert alert-danger" hidden="hidden" id="nodeIpErrorInfo">错误！请进行一些更改。</div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">节点类型</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="nodeType">
+                                    <option value="0">简单二层节点（Docker）</option>
+                                    <!--<option value="1">简单三层节点（Docker）</option>-->
+                                    <option value="1">简单二层节点(VM)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">硬件架构</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="hardwareArchitecture">
+                                    <option value="0">Intel x86 32bit</option>
+                                    <option value="1">Intel x86 64bit</option>
+                                    <option value="2">ARM</option>
+                                    <option value="3">MIPS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">操作系统</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="operatingSystem">
+                                    <option value="0">Linux</option>
+                                    <option value="1">FreeBSD</option>
+                                    <option value="2">Window</option>
+                                    <option value="3">Android</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">节点配置</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="nodeConfig">
+                                    <option value="tiny">Tiny</option>
+                                    <option value="small">Small</option>
+                                    <option value="big">Big</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">节点镜像</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="nodeImage">
+                                    <option value="Router">Router</option>
+                                    <option value="Switch">Switch</option>
+                                    <option value="Zph/new:11.04">Zph/new:11.04</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="addNode">提交</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <!-- 链路模态框（Modal） -->
+    <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="linkModalLabel">请输入链路参数</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">链路名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control"  placeholder="链路1" id="linkName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">链路类型</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="linkType">
+                                    <option value="0">有线</option>
+                                    <option value="1">无线</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">from端口</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="fromPort"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">to端口</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="toPort"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">from IP</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="请输入与已存在链路不同网段的地址" id="fromNodeIP">
+                            </div>
+                        </div>
+                        <div class="alert alert-danger" hidden="hidden" id="fromNodeIpErrorInfo">错误！请进行一些更改。</div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">to IP</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="请输入与已存在链路不同网段的地址" id="toNodeIP">
+                            </div>
+                        </div>
+                        <div class="alert alert-danger" hidden="hidden" id="toNodeIpErrorInfo">错误！请进行一些更改。</div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">信道噪音</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="数字(仅无线有效)" id="channelNoise">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">信道干扰</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="数字(仅无线有效)" id="channelDisturbance">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">信道模型</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="channelType">
+                                    <option value="0">XXX</option>
+                                    <option value="1">XXX</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">链路长度</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="XXX米" id="linkLenth">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="addLink">提交</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+</div>
+
+<script type="text/javascript" src="lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="lib/jquery-ui-1.11.4/jquery-ui.js"></script>
+<script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="lib/jtopo/jtopo-0.4.8-min.js"></script>
+<script type="text/javascript" src="js/innerEdit.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+.treeview .list-group-item.node-checked {
+    color: red;
+}
+.treeview .list-group-item.node-selected {
+    color: red;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>节点编辑器</title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/index1.css"/>
+</head>
+<header>
+    <div class="row clearfix">
+        <div class="col-md-offset-1 col-md-11 column">
+            <div class="page-header">
+                <h1>
+                    复杂节点编辑器 <small>详细属性查看&编辑</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+</header>
+<body>
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-6 column">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">节点名称</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="请输入节点名称" id="nodeName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">节点编号</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"  placeholder="0~65535" id="nodeId" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button id="editNode" type="button" class="btn btn-primary btn-block">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-3 column">
+            <div class="column">
+                <a href="#" class="list-group-item active">
+                    <span class="badge" id="innerNodeCount"></span>
+                    内部节点列表
+                </a>
+                <select size="8" class="form-control" id="innerNodeList"></select>
+            </div>
+        </div>
+        <div class="col-md-3 column">
+            <div class="column">
+                <a href="#" class="list-group-item active">
+                    <span class="badge" id="innerLinkCount"></span>
+                    内部链路列表
+                </a>
+                <select size="8" class="form-control" id="innerLinkList"></select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="lib/jquery-ui-1.11.4/jquery-ui.js"></script>
+<script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="js/complexNodeEdit.js"></script>
+
+</body>
+</html>
