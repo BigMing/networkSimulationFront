@@ -563,9 +563,30 @@ $("#addNode").click(function () {
         success: function (msg) {
             $.alert(msg);
             $("#myModal").modal('hide');
-            setTimeout(function () {
-                window.close();
-            }, 500);
+            // 进度条100s后关掉页面
+            $(function() {
+                var progressbar = $( "#progressbar" ),
+                    progressLabel = $( ".progress-label" );
+                progressbar.progressbar({
+                    value: false,
+                    change: function() {
+                        progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+                    },
+                    complete: function() {
+                        window.parent.location.reload();
+                        window.close();
+                        progressLabel.text( "完成！" );
+                    }
+                });
+                function progress() {
+                    var val = progressbar.progressbar( "value" ) || 0;
+                    progressbar.progressbar( "value", val + 1 );
+                    if ( val < 99 ) {
+                        setTimeout( progress, 1000 );
+                    }
+                }
+                setTimeout( progress, 3000 );
+            });
         },
         error: function () {
 

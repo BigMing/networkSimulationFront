@@ -36,6 +36,10 @@ function showTime() {
     $("#systemTime").html(curTime.toLocaleString());
     setTimeout("showTime()", 1000);
 }
+// 每分钟刷新页面
+setInterval(function () {
+    window.location.reload();
+}, 60 * 1000);
 
 var scenarioId = $.getUrlParam("scenarioId");
 //预读就记录下简单节点的id和类型
