@@ -563,6 +563,9 @@ $("#addNode").click(function () {
         success: function (msg) {
             $.alert(msg);
             $("#myModal").modal('hide');
+            setTimeout(function () {
+                window.close();
+            }, 500);
         },
         error: function () {
 

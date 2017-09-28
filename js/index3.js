@@ -1228,6 +1228,27 @@ $("#inputFileSubmit").click(function () {
     }, 1000);
 });
 
+/**
+ * 点击开始仿真按钮
+ */
+$("#startSimulation").click(function () {
+    $.ajax({
+        url: '/NetworkSimulation/startSimulation',
+        data: {
+            s_id : $.getUrlParam("scenarioId")
+        },
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        success: function (msg) {
+            $.alert(msg);
+        },
+        error: function () {
+
+        }
+    });
+});
+
 //打开控制台页面
 $("#openCli").click(function () {
     var elements = scene.selectedElements;
