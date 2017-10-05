@@ -446,7 +446,7 @@ function initMyModal(data) {
     }
     // console.log(bigNodeConfigArray);
     $("#bigNodeName").html(html);
-    $("#bigNodeName").val('');
+    $("#bigNodeName").val(''); // 初始化时不选择任何一项
     $("#myModal").modal();
 }
 
@@ -464,6 +464,15 @@ $("#bigNodeName").click(function () {
             $("#operatingSystem").val(bigNodeConfigArray[i].operatingSystem);
             $("#nodeConfig").val(bigNodeConfigArray[i].flavorType);
             $("#nodeImage").val(bigNodeConfigArray[i].imageName);
+            if ($("#bigNodeName").val() == 'GEO') {
+                bigNodeConfigArray[i].iconUrl = "img/gaogui01.png";
+            }
+            if ($("#bigNodeName").val() == 'LEO') {
+                bigNodeConfigArray[i].iconUrl = "img/zhonggui01.png";
+            }
+            if ($("#bigNodeName").val() == 'GroundVehicle') {
+                bigNodeConfigArray[i].iconUrl = "img/leida01.png";
+            }
             // // 初始化复选框，先全部取消
             // $('input[name = "inlineCheckbox"]').each(function(){
             //     $(this).removeAttr("checked");

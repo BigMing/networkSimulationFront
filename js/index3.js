@@ -36,23 +36,14 @@ function showTime() {
     $("#systemTime").html(curTime.toLocaleString());
     setTimeout("showTime()", 1000);
 }
-// 每分钟刷新页面
-setInterval(function () {
-    window.location.reload();
-}, 60 * 1000);
 
 var scenarioId = $.getUrlParam("scenarioId");
 //预读就记录下简单节点的id和类型
 var simpleNodeId = [];
 var simpleNodeType = [];
-//预读
-$(document).ready(function () {
-    showTime();
-    //设置到stk提交框
-    $("#scenarioId").val($.getUrlParam("scenarioId"));
-    //显示工程名和场景名
-    $("#projectName").html($.getUrlParam("projectName"));
-    $("#scenarioName").html($.getUrlParam("scenarioName"));
+
+// 刷新画布区域的请求
+function refreshCanvas() {
     //画出已有节点，简单节点
     $.ajax({
         url: '/NetworkSimulation/selectNodeList',
@@ -107,8 +98,8 @@ $(document).ready(function () {
         dataType: 'json',
         async: false,
         success: function (data) {
-        	setTimeout(function () {
-        		var fromNode = undefined;
+            setTimeout(function () {
+                var fromNode = undefined;
                 var toNode = undefined;
                 //解析出来link对象
                 var objs = jQuery.parseJSON(data);
@@ -123,7 +114,7 @@ $(document).ready(function () {
                         if (objs[i].logicalToNodeName == elements[j].text) {
                             toNode = elements[j];
                         }
-                    }              
+                    }
                     //画出链路
                     if (objs[i].linkStatus == 1 && objs[i].cn_id == 0) {
                         //断开的链路，红色
@@ -134,12 +125,23 @@ $(document).ready(function () {
                         newLink(fromNode, toNode, objs[i].linkName, "0,0,255");
                     }
                 }
-        	}, 1000);
+            }, 1000);
         },
         error: function () {
 
         }
     });
+}
+
+//预读
+$(document).ready(function () {
+    showTime();
+    //设置到stk提交框
+    $("#scenarioId").val($.getUrlParam("scenarioId"));
+    //显示工程名和场景名
+    $("#projectName").html($.getUrlParam("projectName"));
+    $("#scenarioName").html($.getUrlParam("scenarioName"));
+    refreshCanvas();
 });
 
 /**
@@ -1251,6 +1253,9 @@ $("#startSimulation").click(function () {
 
         }
     });
+    var interval_1 = setInterval(function () {
+        refreshCanvas();
+    }, 60 * 1000);
 });
 
 //打开控制台页面

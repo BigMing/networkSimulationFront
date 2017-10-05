@@ -87,9 +87,12 @@ function selectP(i) {
         $("#suspendScenatio").attr("disabled", "disabled");
     }
     //打开场景编辑器
-    $("#editScenario").click(function () {
+    document.getElementById("editScenario").onclick = function () {
         window.open(encodeURI("index3.html?scenarioId=" + scenarioId[i] + "&scenarioName=" + scenarioList[i] + "&projectName=" + $("#projectName").val()));
-    });
+    };
+    // $("#editScenario").click(function () {
+    //     window.open(encodeURI("index3.html?scenarioId=" + scenarioId[i] + "&scenarioName=" + scenarioList[i] + "&projectName=" + $("#projectName").val()));
+    // });
     //挂起场景
     $("#suspendScenatio").click(function () {
         $.ajax({
