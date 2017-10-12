@@ -81,7 +81,7 @@ function prasePortList(data) {
 
 //显示网口列表
 function initPortList() {
-    areaCont = "";
+    var areaCont = "";
     for (var i = 0; i < portList.length; i++){
         areaCont += '<option onClick="selectP(' + i + ');">' + portList[i] + '</option>';
     }
@@ -117,12 +117,46 @@ function selectP(i) {
     });
 }
 
-//新建网口
+/**
+ * 选择网口类型需要禁用掉一些属性
+ */
+$("#portType").change(function () {
+    if ($("#portType").val() == 1) { // 类型1
+        $("#transmitterPower").removeAttr("disabled", "disabled");
+        $("#transmitterFrequency").removeAttr("disabled", "disabled");
+        $("#transmitterBandwidth").removeAttr("disabled", "disabled");
+        $("#transmitterGain").removeAttr("disabled", "disabled");
+        $("#receiverFrequency").removeAttr("disabled", "disabled");
+        $("#receiverBandwidth").removeAttr("disabled", "disabled");
+        $("#receiverGain").removeAttr("disabled", "disabled");
+        $("#modem").removeAttr("disabled", "disabled");
+        $("#maximumRate").attr("disabled", "disabled");
+        $("#packetLoss").attr("disabled", "disabled");
+    }
+    if ($("#portType").val() == 2) { // 类型2
+        $("#transmitterPower").attr("disabled", "disabled");
+        $("#transmitterFrequency").attr("disabled", "disabled");
+        $("#transmitterBandwidth").attr("disabled", "disabled");
+        $("#transmitterGain").attr("disabled", "disabled");
+        $("#receiverFrequency").attr("disabled", "disabled");
+        $("#receiverBandwidth").attr("disabled", "disabled");
+        $("#receiverGain").attr("disabled", "disabled");
+        $("#modem").attr("disabled", "disabled");
+        $("#maximumRate").removeAttr("disabled", "disabled");
+        $("#packetLoss").removeAttr("disabled", "disabled");
+    }
+});
+
+/**
+ * 点击新建网口
+ */
 $("#addPort").click(function () {
     $("#myModal").modal();
 });
 
-//新建网口提交
+/**
+ * 新建网口提交
+ */
 $("#submitPort").click(function () {
     $.ajax({
         url: '/NetworkSimulation/addPort',
@@ -130,21 +164,22 @@ $("#submitPort").click(function () {
             n_id : $("#nodeId").val(),
             portName : $("#portName").val(),
             portType : $("#portType").val(),
-            // portIP : $("#portIP").val(),
-            antennaType : $("#antennaType").val(),
-            antennaGain : $("#antennaGain").val(),
-            txPower : $("#txPower").val(),
-            modulationScheme : $("#modulationScheme").val(),
-            channelCodingScheme : $("#channelCodingScheme").val(),
-            frequencyBandwidth : $("#frequencyBandwidth").val(),
-            txBitRate : $("#txBitRate").val(),
-            txPacketLoss : $("#txPacketLoss").val()
+            transmitterPower : $("#transmitterPower").val(),
+            transmitterFrequency : $("#transmitterFrequency").val(),
+            transmitterBandwidth : $("#transmitterBandwidth").val(),
+            transmitterGain : $("#transmitterGain").val(),
+            receiverFrequency : $("#receiverFrequency").val(),
+            receiverBandwidth : $("#receiverBandwidth").val(),
+            receiverGain : $("#receiverGain").val(),
+            modem : $("#modem").val(),
+            maximumRate : $("#maximumRate").val(),
+            packetLoss : $("#packetLoss").val()
         },
         type: 'post',
         dataType: 'json',
         async: false,
         success: function (msg) {
-            alert(msg);
+            $.alert(msg);
             window.location.reload();
         },
         error: function () {
@@ -152,11 +187,6 @@ $("#submitPort").click(function () {
         }
     });
 });
-
-//打开节点内部编辑器
-// $("#editInnerScenario").click(function () {
-//     window.open(encodeURI("innerEdit.html?nodeId=" + $("#nodeId").val()));
-// });
 
 //编辑节点属性提交
 $("#editNode").click(function () {

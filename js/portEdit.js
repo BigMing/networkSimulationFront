@@ -17,23 +17,24 @@ $("#editPort").click(function () {
         url: '/NetworkSimulation/editPort',
         data: {
             portName : $("#portName").val(),
-            p_id : $("#portId").val(),
+            portId : $("#portId").val(),
             portType : $("#portType").val(),
-            antennaType : $("#antennaType").val(),
-            antennaGain : $("#antennaGain").val(),
-            transmittingPower : $("#transmittingPower").val(),
-            modulationSystem : $("#modulationSystem").val(),
-            encodedMode : $("#encodedMode").val(),
-            spectralBandwidth : $("#spectralBandwidth").val(),
+            transmitterPower : $("#transmitterPower").val(),
+            transmitterFrequency : $("#transmitterFrequency").val(),
+            transmitterBandwidth : $("#transmitterBandwidth").val(),
+            transmitterGain : $("#transmitterGain").val(),
+            receiverFrequency : $("#receiverFrequency").val(),
+            receiverBandwidth : $("#receiverBandwidth").val(),
+            receiverGain : $("#receiverGain").val(),
+            modem : $("#modem").val(),
             maximumRate : $("#maximumRate").val(),
-            packetLoss : $("#packetLoss").val(),
-            timeDelay : $("#timeDelay").val()
+            packetLoss : $("#packetLoss").val()
         },
         type: 'post',
         dataType: 'json',
         async: false,
         success: function (msg) {
-            alert(msg);
+            $.alert(msg);
             //刷新当前页面
             location.herf = encodeURI("portEdit.html?portId=" + $("#portId").val());
         },
@@ -54,7 +55,7 @@ $(document).ready(function () {
         dataType: 'json',
         async: false,
         success: function (msg) {
-            alert(msg);
+            console.log(msg);
             initPortAttr(msg);
         },
         error: function () {
@@ -69,13 +70,68 @@ function initPortAttr(data) {
     $("#portName").val(objs[0].portName);
     $("#portId").val(objs[0].p_id);
     $("#portType").val(objs[0].portType);
-    $("#antennaType").val(objs[0].antennaType);
-    $("#antennaGain").val(objs[0].antennaGain);
-    $("#transmittingPower").val(objs[0].transmittingPower);
-    $("#modulationSystem").val(objs[0].modulationSystem);
-    $("#encodedMode").val(objs[0].encodedMode);
-    $("#spectralBandwidth").val(objs[0].spectralBandwidth);
+    $("#transmitterPower").val(objs[0].transmitterPower);
+    $("#transmitterFrequency").val(objs[0].transmitterFrequency);
+    $("#transmitterBandwidth").val(objs[0].transmitterBandwidth);
+    $("#transmitterGain").val(objs[0].transmitterGain);
+    $("#receiverFrequency").val(objs[0].receiverFrequency);
+    $("#receiverBandwidth").val(objs[0].receiverBandwidth);
+    $("#receiverGain").val(objs[0].receiverGain);
+    $("#modem").val(objs[0].modem);
     $("#maximumRate").val(objs[0].maximumRate);
     $("#packetLoss").val(objs[0].packetLoss);
-    $("#timeDelay").val(objs[0].timeDelay);
+    if ($("#portType").val() == 1) { // 类型1
+        $("#transmitterPower").removeAttr("disabled", "disabled");
+        $("#transmitterFrequency").removeAttr("disabled", "disabled");
+        $("#transmitterBandwidth").removeAttr("disabled", "disabled");
+        $("#transmitterGain").removeAttr("disabled", "disabled");
+        $("#receiverFrequency").removeAttr("disabled", "disabled");
+        $("#receiverBandwidth").removeAttr("disabled", "disabled");
+        $("#receiverGain").removeAttr("disabled", "disabled");
+        $("#modem").removeAttr("disabled", "disabled");
+        $("#maximumRate").attr("disabled", "disabled");
+        $("#packetLoss").attr("disabled", "disabled");
+    }
+    if ($("#portType").val() == 2) { // 类型2
+        $("#transmitterPower").attr("disabled", "disabled");
+        $("#transmitterFrequency").attr("disabled", "disabled");
+        $("#transmitterBandwidth").attr("disabled", "disabled");
+        $("#transmitterGain").attr("disabled", "disabled");
+        $("#receiverFrequency").attr("disabled", "disabled");
+        $("#receiverBandwidth").attr("disabled", "disabled");
+        $("#receiverGain").attr("disabled", "disabled");
+        $("#modem").attr("disabled", "disabled");
+        $("#maximumRate").removeAttr("disabled", "disabled");
+        $("#packetLoss").removeAttr("disabled", "disabled");
+    }
 }
+
+/**
+ * 选择网口类型需要禁用掉一些属性
+ */
+$("#portType").change(function () {
+    if ($("#portType").val() == 1) { // 类型1
+        $("#transmitterPower").removeAttr("disabled", "disabled");
+        $("#transmitterFrequency").removeAttr("disabled", "disabled");
+        $("#transmitterBandwidth").removeAttr("disabled", "disabled");
+        $("#transmitterGain").removeAttr("disabled", "disabled");
+        $("#receiverFrequency").removeAttr("disabled", "disabled");
+        $("#receiverBandwidth").removeAttr("disabled", "disabled");
+        $("#receiverGain").removeAttr("disabled", "disabled");
+        $("#modem").removeAttr("disabled", "disabled");
+        $("#maximumRate").attr("disabled", "disabled");
+        $("#packetLoss").attr("disabled", "disabled");
+    }
+    if ($("#portType").val() == 2) { // 类型2
+        $("#transmitterPower").attr("disabled", "disabled");
+        $("#transmitterFrequency").attr("disabled", "disabled");
+        $("#transmitterBandwidth").attr("disabled", "disabled");
+        $("#transmitterGain").attr("disabled", "disabled");
+        $("#receiverFrequency").attr("disabled", "disabled");
+        $("#receiverBandwidth").attr("disabled", "disabled");
+        $("#receiverGain").attr("disabled", "disabled");
+        $("#modem").attr("disabled", "disabled");
+        $("#maximumRate").removeAttr("disabled", "disabled");
+        $("#packetLoss").removeAttr("disabled", "disabled");
+    }
+});

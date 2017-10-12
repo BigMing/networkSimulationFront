@@ -930,8 +930,8 @@ $("#manageIP").blur(function () {
     var reSpaceCheck = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
     if (reSpaceCheck.test(ip)) {
         ip.match(reSpaceCheck);
-        if (RegExp.$1 == 192 && RegExp.$2 == 168 && RegExp.$3 == 10
-            && RegExp.$4<=255 && RegExp.$4>=0) {
+        if ( RegExp.$1 == 192 && RegExp.$2 == 168 && ( RegExp.$3 == 10 || RegExp.$3 == 5 )
+            && RegExp.$4 <= 255 && RegExp.$4 > 0) {
             //再检查是否有重复
             for (var i = 0; i < node_ips.length; i++){
                 if (ip == node_ips[i]){
@@ -1043,9 +1043,8 @@ $("#addLink").click(function () {
             txPort_id : $("#fromPort").val(),
             rxPort_id : $("#toPort").val(),
             linkNoise : $("#channelNoise").val(),
-            linkInterference : $("#channelDisturbance").val(),
             channelModel : $("#channelType").val(),
-            linkLength : $("#linkLenth").val(),
+            linkLength : $("#linkLength").val(),
             scenario_id : $.getUrlParam("scenarioId")
         },
         type: 'post',
@@ -1089,9 +1088,9 @@ $("#addComplexLink_0").click(function () {
             txPort_id : $("#selectFromPort_0").val(),
             rxPort_id : $("#selectToPort_0").val(),
             linkNoise : $("#channelNoise_0").val(),
-            linkInterference : $("#channelDisturbance_0").val(),
+            // linkInterference : $("#channelDisturbance_0").val(),
             channelModel : $("#channelType_0").val(),
-            linkLength : $("#linkLenth_0").val(),
+            linkLength : $("#linkLength_0").val(),
             scenario_id : $.getUrlParam("scenarioId")
         },
         type: 'post',
@@ -1135,9 +1134,9 @@ $("#addComplexLink_1").click(function () {
             txPort_id : $("#fromPort_1").val(),
             rxPort_id : $("#selectToPort_1").val(),
             linkNoise : $("#channelNoise_1").val(),
-            linkInterference : $("#channelDisturbance_1").val(),
+            // linkInterference : $("#channelDisturbance_1").val(),
             channelModel : $("#channelType_1").val(),
-            linkLength : $("#linkLenth_1").val(),
+            linkLength : $("#linkLength_1").val(),
             scenario_id : $.getUrlParam("scenarioId")
         },
         type: 'post',
@@ -1183,7 +1182,7 @@ $("#addComplexLink_2").click(function () {
             linkNoise : $("#channelNoise_2").val(),
             linkInterference : $("#channelDisturbance_2").val(),
             channelModel : $("#channelType_2").val(),
-            linkLength : $("#linkLenth_2").val(),
+            linkLength : $("#linkLength_2").val(),
             scenario_id : $.getUrlParam("scenarioId")
         },
         type: 'post',

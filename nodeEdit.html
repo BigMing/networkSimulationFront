@@ -7,6 +7,7 @@
     <title>节点编辑器</title>
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css"/>
     <link rel="stylesheet" href="css/index1.css"/>
+    <link rel="stylesheet" href="lib/jquery/jquery-confirm.min.css"/>
 </head>
 <header>
     <div class="row clearfix">
@@ -145,93 +146,97 @@
             <div class="modal-body">
                 <form class="form-horizontal" role="form">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">网口名称</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label">网口名称</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control"  placeholder="网口1" id="portName">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">网口类型</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label">网口类型</label>
+                        <div class="col-sm-9">
                             <select class="form-control" id="portType">
-                                <option value="0">有线</option>
-                                <option value="1">无线</option>
-                            </select>
-                        </div>
-                    </div>
-                    <!--<div class="form-group">-->
-                        <!--<label class="col-sm-2 control-label">网口ip</label>-->
-                        <!--<div class="col-sm-10">-->
-                            <!--<input type="text" class="form-control"  placeholder="192.168.1.1" id="portIP">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">天线类型</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="antennaType">
-                                <option value="0">XXX</option>
-                                <option value="1">XXX</option>
+                                <option value="1">类型1</option>
+                                <option value="2">类型2</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">天线增益</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="antennaGain">
-                                <option value="0">XXX</option>
-                                <option value="1">XXX</option>
+                        <label class="col-sm-3 control-label">发射机功率</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"  placeholder="单位（dBW）" id="transmitterPower">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">发射机频率</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"  placeholder="单位（GHz）" id="transmitterFrequency">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">发射机带宽</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"  placeholder="单位（GHz）" id="transmitterBandwidth">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">发射增益</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"  placeholder="单位（dB）" id="transmitterGain">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">接收机频率</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"  placeholder="单位（GHz）" id="receiverFrequency">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">接收机带宽</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"  placeholder="单位（GHz）" id="receiverBandwidth">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">接收增益</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"  placeholder="单位（dB）" id="receiverGain">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">调制解调方式</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="modem">
+                                <option value="bpsk">bpsk</option>
+                                <option value="bpsk_phc">bpsk_phc</option>
+                                <option value="cck_11">cck_11</option>
+                                <option value="cck_55">cck_55</option>
+                                <option value="dpsk">dpsk</option>
+                                <option value="fsk_ncoh">fsk_ncoh</option>
+                                <option value="fsk2">fsk2</option>
+                                <option value="fsk2_ncoh">fsk2_ncoh</option>
+                                <option value="fsk2_phc">fsk2_phc</option>
+                                <option value="gmsk">gmsk</option>
+                                <option value="msk">msk</option>
+                                <option value="msk_phc">msk_phc</option>
+                                <option value="psk8">psk8</option>
+                                <option value="psk8_phc">psk8_phc</option>
+                                <option value="qam16">qam16</option>
+                                <option value="qam64">qam64</option>
+                                <option value="qpsk">qpsk</option>
+                                <option value="qpsk_phc">qpsk_phc</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">发射功率</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="txPower">
-                                <option value="0">XXX</option>
-                                <option value="1">XXX</option>
-                            </select>
+                        <label class="col-sm-3 control-label">最大速率</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"  placeholder="单位（Mbps）" id="maximumRate" disabled="disabled">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">调制方式</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="modulationScheme">
-                                <option value="0">XXX</option>
-                                <option value="1">XXX</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">编码方式</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="channelCodingScheme">
-                                <option value="0">XXX</option>
-                                <option value="1">XXX</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">频谱带宽</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="spectralBandwidth">
-                                <option value="100">100Mbps</option>
-                                <option value="1000">1000Mbps</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">最大速率</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="txBitRate">
-                                <option value="100">100Mbps</option>
-                                <option value="1000">1000Mbps</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">丢包率</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control"  placeholder="0~100" id="txPacketLoss">
+                        <label class="col-sm-3 control-label">丢包率</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"  placeholder="单位（%）" id="packetLoss" disabled="disabled">
                         </div>
                     </div>
                 </form>
@@ -245,6 +250,7 @@
 </div>
 
 <script type="text/javascript" src="lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery-confirm.min.js"></script>
 <script type="text/javascript" src="lib/jquery-ui-1.11.4/jquery-ui.js"></script>
 <script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="js/nodeEdit.js"></script>

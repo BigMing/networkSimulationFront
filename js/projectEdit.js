@@ -94,7 +94,7 @@ function selectP(i) {
     //     window.open(encodeURI("index3.html?scenarioId=" + scenarioId[i] + "&scenarioName=" + scenarioList[i] + "&projectName=" + $("#projectName").val()));
     // });
     //挂起场景
-    $("#suspendScenatio").click(function () {
+    document.getElementById("suspendScenatio").onclick = function () {
         $.ajax({
             url: '/NetworkSimulation/keepScenario',
             data: {
@@ -113,9 +113,9 @@ function selectP(i) {
 
             }
         });
-    });
+    };
     //恢复场景
-    $("#recoverScenatio").click(function () {
+    document.getElementById("recoverScenatio").onclick = function () {
         $.ajax({
             url: '/NetworkSimulation/recoverScenario',
             data: {
@@ -134,9 +134,9 @@ function selectP(i) {
 
             }
         });
-    });
+    };
     //删除场景
-    $("#delScenatio").click(function () {
+    document.getElementById("delScenatio").onclick = function () {
         $.confirm({
             title: '请确认！',
             content: '是否完全删除场景？',
@@ -155,7 +155,7 @@ function selectP(i) {
                             dataType: 'json',
                             async: false,
                             success: function (msg) {
-                                alert(msg);
+                                $.alert(msg);
                                 //刷新当前页面
                                 window.location.reload();
                                 opener.location.reload();
@@ -180,7 +180,7 @@ function selectP(i) {
                             dataType: 'json',
                             async: false,
                             success: function (msg) {
-                                alert(msg);
+                                $.alert(msg);
                                 //刷新当前页面
                                 window.location.reload();
                                 opener.location.reload();
@@ -193,7 +193,7 @@ function selectP(i) {
                 }
             }
         });
-    });
+    };
 }
 
 //编辑工程属性提交
