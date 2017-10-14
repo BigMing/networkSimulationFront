@@ -115,12 +115,21 @@ function refreshCanvas() {
                             toNode = elements[j];
                         }
                     }
-                    //画出链路
+                    //画出链路，静态场景中
                     if (objs[i].linkStatus == 1 && objs[i].cn_id == 0) {
                         //断开的链路，红色
                         newLink(fromNode, toNode, objs[i].linkName, "255,0,0");
                     }
                     if (objs[i].linkStatus == 0 && objs[i].cn_id == 0) {
+                        //接通的链路，蓝色
+                        newLink(fromNode, toNode, objs[i].linkName, "0,0,255");
+                    }
+                    // 动态场景中
+                    // if (objs[i].linkStatus == 2 && objs[i].cn_id == 0) {
+                    //     //断开的链路，红色
+                    //     newLink(fromNode, toNode, objs[i].linkName, "255,0,0");
+                    // }
+                    if (objs[i].linkStatus == 3 && objs[i].cn_id == 0) {
                         //接通的链路，蓝色
                         newLink(fromNode, toNode, objs[i].linkName, "0,0,255");
                     }
@@ -859,7 +868,7 @@ function createComplexNode(name, X, Y, pic) {
 function newLink(nodeA, nodeZ, text, color) {
     var link = new JTopo.Link(nodeA, nodeZ, text);
     link.fontColor = "0,0,0";
-    link.lineWidth = 3; // 线宽
+    link.lineWidth = 2; // 线宽
     //link.dashedPattern = dashedPattern; // 虚线
     link.bundleOffset = 60; // 折线拐角处的长度
     link.bundleGap = 20; // 线条之间的间隔
@@ -1244,15 +1253,16 @@ $("#startSimulation").click(function () {
         },
         type: 'post',
         dataType: 'json',
-        async: false,
+        async: true,
         success: function (msg) {
+            console.log("开始仿真：" + msg);
             $.alert(msg);
         },
         error: function () {
 
         }
     });
-    var interval_1 = setInterval(function () {
+    setInterval(function () { // 每分钟刷新画布
         refreshCanvas();
     }, 60 * 1000);
 });
@@ -1301,23 +1311,17 @@ $("#openInnerEdit").click(function () {
     }
 });
 
-//打开节点编辑器
+/**
+ * 打开节点编辑器
+ */
 $("#editNode").click(function () {
     var elements = scene.selectedElements;
-    if (elements[0] == undefined || elements[0] instanceof JTopo.Link || elements[0].fontColor == "255,0,0"){
-        $.alert("请选中简单节点后在进行下一步操作");
-    } else {
+    if (elements[0] instanceof JTopo.Node && elements[0].fontColor == "0,0,0") { // 选中的是简单节点
         window.open(encodeURI("nodeEdit.html?nodeName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
-    }
-});
-
-//打开复杂节点编辑器
-$("#editNode").click(function () {
-    var elements = scene.selectedElements;
-    if (elements[0] == undefined || elements[0] instanceof JTopo.Link || elements[0].fontColor == "0,0,0"){
-        $.alert("请选中复杂节点后在进行下一步操作");
-    } else {
+    } else if (elements[0] instanceof JTopo.Node && elements[0].fontColor == "255,0,0") { // 选中的是复杂节点
         window.open(encodeURI("complexNodeEdit.html?complexNodeName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
+    } else {
+        $.alert("请选中节点后在进行下一步操作！");
     }
 });
 
@@ -1325,7 +1329,7 @@ $("#editNode").click(function () {
 $("#cutLink").click(function () {
    var elements = scene.selectedElements;
    if (elements[0] == undefined || elements[0] instanceof JTopo.Node){
-       $.alert("请选中链路后在进行下一步操作");
+       $.alert("请选中链路后在进行下一步操作！");
    } else {
        //弹出模态框
        $("#cutLinkModal").modal();

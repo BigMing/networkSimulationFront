@@ -464,14 +464,17 @@ $("#bigNodeName").click(function () {
             $("#operatingSystem").val(bigNodeConfigArray[i].operatingSystem);
             $("#nodeConfig").val(bigNodeConfigArray[i].flavorType);
             $("#nodeImage").val(bigNodeConfigArray[i].imageName);
-            if ($("#bigNodeName").val() == 'GEO') {
+            if ($("#bigNodeName").val().indexOf('GEO') >= 0) {
                 bigNodeConfigArray[i].iconUrl = "img/gaogui01.png";
             }
-            if ($("#bigNodeName").val() == 'LEO') {
+            if ($("#bigNodeName").val().indexOf('LEO') >= 0) {
                 bigNodeConfigArray[i].iconUrl = "img/zhonggui01.png";
             }
-            if ($("#bigNodeName").val() == 'GroundVehicle') {
+            if ($("#bigNodeName").val().indexOf('Facility') >= 0) {
                 bigNodeConfigArray[i].iconUrl = "img/leida01.png";
+            }
+            if ($("#bigNodeName").val().indexOf('GroundVehicle') >= 0) {
+                bigNodeConfigArray[i].iconUrl = "img/junjian01.png";
             }
             // // 初始化复选框，先全部取消
             // $('input[name = "inlineCheckbox"]').each(function(){
@@ -506,7 +509,7 @@ $("#bigNodeConfigOperation").change(function () {
             // for (var j = 0; j < id_array.length; j++) {
             //     bigNodeConfigArray[i].innerRules[j] = id_array[j];
             // }
-            bigNodeConfigArray[i].iconUrl = "img/gaogui01.png";
+            // bigNodeConfigArray[i].iconUrl = "img/gaogui01.png"; // 设置默认的图标
             console.log("当前类的数据是：" + bigNodeConfigArray[i]);
         }
     }
