@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">网口编号</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control"  placeholder="0~65535" id="portId" disabled>
+                        <input type="text" class="form-control"  placeholder="0~65535" id="portId" disabled="disabled">
                     </div>
                 </div>
                 <div class="form-group">
@@ -47,48 +47,55 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-sm-3 control-label">网口IP</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"  placeholder="0.0.0.0" id="portIp">
+                    </div>
+                </div>
+                <div class="alert alert-danger" hidden="hidden" id="portIpErrorInfo">您输入的IP地址不合法！</div>
+                <div class="form-group" id="transmitterPowerDiv">
                     <label class="col-sm-3 control-label">发射机功率</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control"  placeholder="单位（dBW）" id="transmitterPower">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="transmitterFrequencyDiv">
                     <label class="col-sm-3 control-label">发射机频率</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control"  placeholder="单位（GHz）" id="transmitterFrequency">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="transmitterBandwidthDiv">
                     <label class="col-sm-3 control-label">发射机带宽</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control"  placeholder="单位（GHz）" id="transmitterBandwidth">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="transmitterGainDiv">
                     <label class="col-sm-3 control-label">发射增益</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control"  placeholder="单位（dB）" id="transmitterGain">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="receiverFrequencyDiv">
                     <label class="col-sm-3 control-label">接收机频率</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control"  placeholder="单位（GHz）" id="receiverFrequency">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="receiverBandwidthDiv">
                     <label class="col-sm-3 control-label">接收机带宽</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control"  placeholder="单位（GHz）" id="receiverBandwidth">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="receiverGainDiv">
                     <label class="col-sm-3 control-label">接收增益</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control"  placeholder="单位（dB）" id="receiverGain">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="modemDiv">
                     <label class="col-sm-3 control-label">调制解调方式</label>
                     <div class="col-sm-9">
                         <select class="form-control" id="modem">
@@ -113,16 +120,16 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="maximumRateDiv" hidden="hidden">
                     <label class="col-sm-3 control-label">最大速率</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control"  placeholder="单位（Mbps）" id="maximumRate" disabled="disabled">
+                        <input type="text" class="form-control"  placeholder="单位（Mbps）" id="maximumRate">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="packetLossDiv" hidden="hidden">
                     <label class="col-sm-3 control-label">丢包率</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control"  placeholder="单位（%）" id="packetLoss" disabled="disabled">
+                        <input type="text" class="form-control"  placeholder="单位（%）" id="packetLoss">
                     </div>
                 </div>
                 <div class="form-group">

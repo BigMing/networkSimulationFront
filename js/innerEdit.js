@@ -588,9 +588,8 @@ $("#addLink").click(function () {
             txPort_id : $("#fromPort").val(),
             rxPort_id : $("#toPort").val(),
             linkNoise : $("#channelNoise").val(),
-            linkInterference : $("#channelDisturbance").val(),
             channelModel : $("#channelType").val(),
-            linkLength : $("#linkLenth").val(),
+            linkLength : $("#linkLength").val(),
             scenario_id : $.getUrlParam("scenarioId"),
             complexNodeName : $.getUrlParam("nodeName")
         },
@@ -669,8 +668,8 @@ function onunload_handler() {
 }
 
 $("#submit").click(function () {
+    opener.location.reload();
     setTimeout(function () {
-        opener.location.reload();
+        window.close();
     }, 1000);
-    window.close();
 });

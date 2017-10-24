@@ -122,28 +122,28 @@ function selectP(i) {
  */
 $("#portType").change(function () {
     if ($("#portType").val() == 1) { // 类型1
-        $("#transmitterPower").removeAttr("disabled", "disabled");
-        $("#transmitterFrequency").removeAttr("disabled", "disabled");
-        $("#transmitterBandwidth").removeAttr("disabled", "disabled");
-        $("#transmitterGain").removeAttr("disabled", "disabled");
-        $("#receiverFrequency").removeAttr("disabled", "disabled");
-        $("#receiverBandwidth").removeAttr("disabled", "disabled");
-        $("#receiverGain").removeAttr("disabled", "disabled");
-        $("#modem").removeAttr("disabled", "disabled");
-        $("#maximumRate").attr("disabled", "disabled");
-        $("#packetLoss").attr("disabled", "disabled");
+        $("#transmitterPowerDiv").removeAttr("hidden", "hidden");
+        $("#transmitterFrequencyDiv").removeAttr("hidden", "hidden");
+        $("#transmitterBandwidthDiv").removeAttr("hidden", "hidden");
+        $("#transmitterGainDiv").removeAttr("hidden", "hidden");
+        $("#receiverFrequencyDiv").removeAttr("hidden", "hidden");
+        $("#receiverBandwidthDiv").removeAttr("hidden", "hidden");
+        $("#receiverGainDiv").removeAttr("hidden", "hidden");
+        $("#modemDiv").removeAttr("hidden", "hidden");
+        $("#maximumRateDiv").attr("hidden", "hidden");
+        $("#packetLossDiv").attr("hidden", "hidden");
     }
     if ($("#portType").val() == 2) { // 类型2
-        $("#transmitterPower").attr("disabled", "disabled");
-        $("#transmitterFrequency").attr("disabled", "disabled");
-        $("#transmitterBandwidth").attr("disabled", "disabled");
-        $("#transmitterGain").attr("disabled", "disabled");
-        $("#receiverFrequency").attr("disabled", "disabled");
-        $("#receiverBandwidth").attr("disabled", "disabled");
-        $("#receiverGain").attr("disabled", "disabled");
-        $("#modem").attr("disabled", "disabled");
-        $("#maximumRate").removeAttr("disabled", "disabled");
-        $("#packetLoss").removeAttr("disabled", "disabled");
+        $("#transmitterPowerDiv").attr("hidden", "hidden");
+        $("#transmitterFrequencyDiv").attr("hidden", "hidden");
+        $("#transmitterBandwidthDiv").attr("hidden", "hidden");
+        $("#transmitterGainDiv").attr("hidden", "hidden");
+        $("#receiverFrequencyDiv").attr("hidden", "hidden");
+        $("#receiverBandwidthDiv").attr("hidden", "hidden");
+        $("#receiverGainDiv").attr("hidden", "hidden");
+        $("#modemDiv").attr("hidden", "hidden");
+        $("#maximumRateDiv").removeAttr("hidden", "hidden");
+        $("#packetLossDiv").removeAttr("hidden", "hidden");
     }
 });
 
@@ -152,6 +152,24 @@ $("#portType").change(function () {
  */
 $("#addPort").click(function () {
     $("#myModal").modal();
+});
+
+//判断ip是否合法的正则
+function isValidIP(ip) {
+    var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+    return reg.test(ip);
+}
+
+/**
+ * 判断输入的ip地址是否合法
+ */
+$("#portIp").blur(function () {
+    var ip = $("#portIp").val();
+    if (isValidIP(ip)) {
+        $("#portIpErrorInfo").attr("hidden", "hidden");
+    } else {
+        $("#portIpErrorInfo").removeAttr("hidden");
+    }
 });
 
 /**
@@ -164,6 +182,7 @@ $("#submitPort").click(function () {
             n_id : $("#nodeId").val(),
             portName : $("#portName").val(),
             portType : $("#portType").val(),
+            portIp : $("#portIp").val(),
             transmitterPower : $("#transmitterPower").val(),
             transmitterFrequency : $("#transmitterFrequency").val(),
             transmitterBandwidth : $("#transmitterBandwidth").val(),

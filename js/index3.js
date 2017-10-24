@@ -310,8 +310,7 @@ $("#addlink04").click(function () {
 });
 
 //判断ip是否合法的正则
-function isValidIP(ip)
-{
+function isValidIP(ip) {
     var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
     return reg.test(ip);
 }
@@ -793,49 +792,66 @@ $("#toNodeIP_2").blur(function () {
     }
 });
 
-var fromPortList = [];
-var fromPortId = [];
-//初始化from端口下拉框
+var fromPortObjs;
+/**
+ * 初始化from端口下拉框
+ */
 function initFromPortList(data) {
-    fromPortList = [];
-    fromPortId = [];
-    var objs = jQuery.parseJSON(data);
-    for (var i = 0; i < objs.length; i++){
-        fromPortList[i] = objs[i].portName;
-        fromPortId[i] = objs[i].pt_id;
-    }
+    fromPortObjs = jQuery.parseJSON(data);
     var areaCont = "";
-    for (var i = 0; i < objs.length; i++){
-        if (objs[i].portStatus == 0){
-            areaCont += '<option value="' + fromPortId[i] + '">' + fromPortList[i] + '</option>';
+    for (var i = 0; i < fromPortObjs.length; i++){
+        if (fromPortObjs[i].portStatus == 0){
+            areaCont += '<option value="' + fromPortObjs[i].pt_id + '">' + fromPortObjs[i].portName + '(' + fromPortObjs[i].portIp + ')' + '</option>';
         } else {
-            areaCont += '<option value="' + fromPortId[i] + '" disabled="disabled">' + fromPortList[i] + '(已占用)' + '</option>';
+            areaCont += '<option value="' + fromPortObjs[i].pt_id + '" disabled="disabled">' + fromPortObjs[i].portName + '(已占用)' + '</option>';
         }
     }
     $("#fromPort").html(areaCont);
 }
 
-var toPortList = [];
-var toPortId = [];
-//初始化to端口下拉框
+var toPortObjs;
+/**
+ * 初始化to端口下拉框
+ */
 function initToPortList(data) {
-    toPortList = [];
-    toPortId = [];
-    var objs = jQuery.parseJSON(data);
-    for (var i = 0; i < objs.length; i++){
-        toPortList[i] = objs[i].portName;
-        toPortId[i] = objs[i].pt_id;
-    }
+    toPortObjs = jQuery.parseJSON(data);
     var areaCont = "";
-    for (var i = 0; i < objs.length; i++){
-        if (objs[i].portStatus == 0){
-            areaCont += '<option value="' + toPortId[i] + '">' + toPortList[i] + '</option>';
+    for (var i = 0; i < toPortObjs.length; i++){
+        if (toPortObjs[i].portStatus == 0){
+            areaCont += '<option value="' + toPortObjs[i].pt_id + '">' + toPortObjs[i].portName + '(' + toPortObjs[i].portIp + ')' + '</option>';
         } else {
-            areaCont += '<option value="' + toPortId[i] + '" disabled="disabled">' + toPortList[i] + '(已占用)' + '</option>';
+            areaCont += '<option value="' + toPortObjs[i].pt_id + '" disabled="disabled">' + toPortObjs[i].portName + '(已占用)' + '</option>';
         }
     }
     $("#toPort").html(areaCont);
 }
+
+/**
+ * 判断选择的两个端口ip是否在同一网段
+ */
+$("#toPort").blur(function () {
+    var fromPortId = $("#fromPort").val();
+    var toPortId = $("#toPort").val();
+    var fromPortIp;
+    var toPortIp;
+    for (var i = 0; i < fromPortObjs.length; i++) {
+        if (fromPortId == fromPortObjs[i].pt_id) {
+            fromPortIp = fromPortObjs[i].portIp;
+        }
+    }
+    for (var i = 0; i < toPortObjs.length; i++) {
+        if (toPortId == toPortObjs[i].pt_id) {
+            toPortIp = toPortObjs[i].portIp;
+        }
+    }
+    fromPortIp = fromPortIp.substring(0, fromPortIp.lastIndexOf("."));
+    toPortIp = toPortIp.substring(0, toPortIp.lastIndexOf(".")); // 取得网段
+    if (fromPortIp.match(toPortIp) != null) { // 有重复
+        $("#portErrorInfo").removeAttr("hidden");
+    } else { // 没有重复
+        $("#portErrorInfo").attr("hidden", "hidden");
+    }
+});
 
 scene.mousedown(function (e) {
     if (e.target == null || e.target === beginNode || e.target === link1) {
