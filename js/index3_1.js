@@ -2,11 +2,11 @@
  * Created by sjm on 2017/6/23.
  */
 //定义定时任务的对象
-var t1 = undefined;
-var t2 = undefined;
+// var t1 = undefined;
+// var t2 = undefined;
 
 //点击开始动态变化
-var flag = 0;
+// var flag = 0;
 // $("#startMove").click(function () {
 //     alert("开始变化");
 //     //定时任务
@@ -47,10 +47,10 @@ function changeLinkToBlue(link) {
 }
 
 //点击停止动态变化
-$("#stopMove").click(function () {
-   window.clearInterval(t1);
-   window.clearInterval(t2);
-   t1 = undefined;
-   t2 = undefined;
-   alert("停止变化");
-});
+// $("#stopMove").click(function () {
+//    window.clearInterval(t1);
+//    window.clearInterval(t2);
+//    t1 = undefined;
+//    t2 = undefined;
+//    alert("停止变化");
+// });
