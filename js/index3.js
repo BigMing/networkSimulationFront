@@ -1,4 +1,6 @@
-//解析url参数的函数，包括解码
+/**
+ * 解析url参数的函数，包括解码
+ */
 (function ($) {
     $.getUrlParam = function (name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -8,7 +10,9 @@
     }
 })(jQuery);
 
-//设置canvas画布大小
+/**
+ * 设置canvas画布大小
+ */
 var canvas = document.getElementById('canvas');
 var content = document.getElementById('content');
 window.onload = window.onresize = function () {
@@ -18,8 +22,11 @@ window.onload = window.onresize = function () {
 
 var stage = new JTopo.Stage(canvas); // 创建一个舞台对象
 stage.eagleEye.visible = true; // 显示鹰眼
+var scene = new JTopo.Scene(stage); // 创建一个场景对象
 
-// 缩放
+/**
+ * 画布缩放
+ */
 $('#zoomOutButton').click(function(){
     stage.zoomIn();
 });
@@ -27,21 +34,29 @@ $('#zoomInButton').click(function(){
     stage.zoomOut();
 });
 
-var scene = new JTopo.Scene(stage); // 创建一个场景对象
-
-// 定义获取和更新时间的函数
+/**
+ * 定义获取和更新时间的函数
+ */
 function showTime() {
     var curTime = new Date();
     $("#systemTime").html(curTime.toLocaleString());
     setTimeout("showTime()", 1000);
 }
 
+/**
+ * 记录下场景id，在提交解析stk文件时自动填入
+ */
 var scenarioId = $.getUrlParam("scenarioId");
-//预读就记录下简单节点的id和类型
+
+/**
+ * 记录下简单节点的id和类型
+ */
 var simpleNodeId = [];
 var simpleNodeType = [];
 
-// 刷新画布区域的请求
+/**
+ * 刷新画布区域的请求函数
+ */
 function refreshCanvas() {
     //画出已有节点，简单节点
     $.ajax({
@@ -116,12 +131,10 @@ function refreshCanvas() {
                     }
                     //画出链路，静态场景中
                     if (objs[i].linkStatus == 1 && objs[i].cn_id == 0) {
-                        //断开的链路，红色
-                        newLink(fromNode, toNode, objs[i].linkName, "255,0,0");
+                        newLink(fromNode, toNode, objs[i].linkName, "255,0,0"); // 断开的链路，红色
                     }
                     if (objs[i].linkStatus == 0 && objs[i].cn_id == 0) {
-                        //接通的链路，蓝色
-                        newLink(fromNode, toNode, objs[i].linkName, "0,0,255");
+                        newLink(fromNode, toNode, objs[i].linkName, "0,0,255"); // 接通的链路，蓝色
                     }
                     // 动态场景中
                     // if (objs[i].linkStatus == 2 && objs[i].cn_id == 0) {
@@ -129,8 +142,7 @@ function refreshCanvas() {
                     //     newLink(fromNode, toNode, objs[i].linkName, "255,0,0");
                     // }
                     if (objs[i].linkStatus == 3 && objs[i].cn_id == 0) {
-                        //接通的链路，蓝色
-                        newLink(fromNode, toNode, objs[i].linkName, "0,0,255");
+                        newLink(fromNode, toNode, objs[i].linkName, "0,0,255"); // 接通的链路，蓝色
                     }
                 }
             }, 1000);
@@ -142,25 +154,23 @@ function refreshCanvas() {
 }
 
 /**
- * 显示时间，工程名和场景名
+ * 显示时间，工程名和场景名，刷新画布
  */
 $(document).ready(function () {
-    showTime();
-    //设置到stk提交框
-    $("#scenarioId").val($.getUrlParam("scenarioId"));
-    //显示工程名和场景名
-    $("#projectName").html($.getUrlParam("projectName"));
+    showTime(); // 右上角显示时间
+    $("#scenarioId").val($.getUrlParam("scenarioId")); // 设置到stk提交框
+    $("#projectName").html($.getUrlParam("projectName")); // 显示工程名和场景名
     $("#scenarioName").html($.getUrlParam("scenarioName"));
-    refreshCanvas();
+    refreshCanvas(); // 刷新画布
 });
 
 /**
- * 右上角的选中状态
+ * 画布中元素的选中状态，名称显示到操作栏
  */
 scene.click(function () {
     var elements = scene.selectedElements;
     if (elements[0] == undefined) {
-        $("#selectEle").html("none");
+        $("#selectEle").html("null");
     }
     $("#selectEle").html(elements[0].text);
 });
@@ -172,13 +182,11 @@ $("#remove").click(function () {
     var elements = scene.selectedElements;
     if (elements[0] == undefined){
         $.alert("请选中节点后在进行下一步操作");
-    }else {
+    } else {
         for (var i = 0; i < elements.length; i++) {
-            if (elements[i] instanceof JTopo.Node) {
-                if (elements[i].fontColor == "255,0,0") {
-                    //如果是复杂节点
-                    $.alert("删除一个复杂节点" + elements[i].text);
-                    //从画布删除节点
+            if (elements[i] instanceof JTopo.Node) { // 如果是节点
+                if (elements[i].fontColor == "255,0,0") { // 如果是复杂节点
+                    $.alert("删除一个复杂节点：" + elements[i].text);
                     $.ajax({
                         url: '/NetworkSimulation/deleteComplexNode',
                         data: {
@@ -197,10 +205,8 @@ $("#remove").click(function () {
 
                         }
                     });
-                } else if (elements[i].fontColor == "0,0,0") {
-                    //如果是简单节点
-                    $.alert("删除一个简单节点" + elements[i].text);
-                    //从画布删除节点
+                } else if (elements[i].fontColor == "0,0,0") { // 如果是简单节点
+                    $.alert("删除一个简单节点：" + elements[i].text);
                     $.ajax({
                         url: '/NetworkSimulation/deleteNode',
                         data: {
@@ -221,14 +227,11 @@ $("#remove").click(function () {
                     });
                 }
             }
-            if (elements[i] instanceof JTopo.Link) {
-            	console.log(elements[i].strokeColor);
-                if (elements[i].strokeColor == "255,0,0") {
-                    //如果是断开的链路
+            if (elements[i] instanceof JTopo.Link) { // 如果是链路被选中
+                if (elements[i].strokeColor == "255,0,0") { // 如果是断开的链路
                     $.alert("无法删除断开的链路！");
-                } else {
-                    $.alert("删除一个链路" + elements[i].text);
-                    //从画布删除链路
+                } else { // 正常的链路
+                    $.alert("删除一个链路：" + elements[i].text);
                     $.ajax({
                         url: '/NetworkSimulation/deleteLink',
                         data: {
@@ -251,37 +254,33 @@ $("#remove").click(function () {
             }
         }
     }
-    //10秒后刷新链路
-    setTimeout(function () {
-        window.location.reload();
-    }, 10 * 1000);
+    setTimeout("refreshCanvas()", 10 * 1000); // 10秒后刷新画布
 });
 
 /**
- * 创建连线
+ * 创建连线相关
  */
 var beginNode = null;
 var endLastNode = null;
+
 var tempNodeA = new JTopo.Node('tempA');
 tempNodeA.setSize(1, 1);
-
 var tempNodeZ = new JTopo.Node('tempZ');
 tempNodeZ.setSize(1, 1);
 
-var link1 = new JTopo.Link(tempNodeA, tempNodeZ);
+var link1 = new JTopo.Link(tempNodeA, tempNodeZ); // 临时显示的线段，跟随鼠标
 
-//按钮点击事件，添加
-var link01 = document.getElementById("link01");
+var link01 = document.getElementById("link01");// 按钮点击事件，添加
+var link04 = document.getElementById("link04"); // 停止添加
 
-//停止添加
-var link04 = document.getElementById("link04");
-var flag = 0;
-//1,2,3表示三种链路，4表示停止添加链路--------------------->用于添加链路类型时候的判断
+var flag = 0; // 1,2,3表示三种链路，4表示停止添加链路，用于添加链路类型时候的判断
+
 $("#addlink01").click(function () {
     flag = 1;
     link01.style.color = "red";
     link04.style.color = "#333";
 });
+
 $("#addlink04").click(function () {
     flag = 0;
     link01.style.color = "#333";
@@ -312,6 +311,7 @@ function initFromNode(data, k) {
     console.log("html：" + html);
     $('[id = "selectFromNode_' + k + '"]').html(html);
 }
+
 /**
  * 选中节点后，初始化其中的端口
  */
@@ -344,6 +344,7 @@ function getFromPort(k) {
         }
     });
 }
+
 function initToNode(data, k) {
     var html = '';
     var objs = jQuery.parseJSON(data);
@@ -352,6 +353,7 @@ function initToNode(data, k) {
     }
     $('[id = "selectToNode_' + k + '"]').html(html);
 }
+
 var toPortObjs_0;
 function getToPort(k) {
     $.ajax({
@@ -399,6 +401,7 @@ function initFromPort(data, k) {
     }
     $('[id = "fromPort_' + k + '"]').html(html);
 }
+
 var toPortObjs_1;
 function initToPort(data, k) {
     var html = '';
@@ -440,6 +443,7 @@ $("#selectToPort_0, #selectFromPort_0").blur(function () {
         $("#portErrorInfo_0").attr("hidden", "hidden");
     }
 });
+
 /**
  * 简单到复杂节点链路模态框端口网段的判断
  */
@@ -466,6 +470,7 @@ $("#selectToPort_1, #fromPort_1").blur(function () {
         $("#portErrorInfo_1").attr("hidden", "hidden");
     }
 });
+
 /**
  * 复杂到简单节点链路模态框端口网段的判断
  */
@@ -493,215 +498,219 @@ $("#selectFromPort_2, #toPort_2").blur(function () {
     }
 });
 
-//查询已有链路的地址
-function getExitLinkIps() {
-    $.ajax({
-        url: '/NetworkSimulation/getLinkList',
-        data: {
-            s_id : $.getUrlParam("scenarioId")
-        },
-        type: 'post',
-        dataType: 'json',
-        async: false,
-        success: function (data) {
-            var objs = jQuery.parseJSON(data);
-            for (var i = 0; i < objs.length; i++){
-                //存已有ip地址的前三位
-                link_ips[i] = objs[i].fromNodeIP.substring(0,objs[i].fromNodeIP.lastIndexOf("."));
-            }
-            console.log("已读取存在的网段");
-        },
-        error: function () {
-
-        }
-    });
-}
-
-//判断输入的ip与已存在的ip不属于同网段
-$("#fromNodeIP").blur(function () {
-    var ip = $("#fromNodeIP").val();
-    if (isValidIP(ip)) {
-        //再判断是否重复
-        for (var i = 0; i < link_ips.length; i++){
-            if (ip.match(link_ips[i]) != null){
-                //匹配到不空，说明有重复的网段，显示出错误信息
-                $("#fromNodeIpErrorInfo").removeAttr("hidden");
-                $("#fromNodeIpErrorInfo").html("输入的地址网段与已有的重复，请重新输入！");
-                $("#fromNodeIP").val("");
-                return false;
-            }
-        }
-        //匹配到都是null，说明没有重复的网段
-        $("#fromNodeIpErrorInfo").attr("hidden", "hidden");
-        return true;
-    } else {
-        $("#fromNodeIpErrorInfo").removeAttr("hidden");
-        $("#fromNodeIpErrorInfo").html("输入的ip地址不合法，请重新输入！");
-        $("#fromNodeIP").val("");
-        return false;
-    }
-});
-$("#toNodeIP").blur(function () {
-    var ip = $("#toNodeIP").val();
-    if (isValidIP(ip)) {
-        //再判断是否重复
-        for (var i = 0; i < link_ips.length; i++){
-            if (ip.match(link_ips[i]) != null){
-                $("#toNodeIpErrorInfo").removeAttr("hidden");
-                $("#toNodeIpErrorInfo").html("输入的地址网段与已有的重复，请重新输入！");
-                $("#toNodeIP").val("");
-                return false;
-            }
-        }
-        $("#toNodeIpErrorInfo").attr("hidden", "hidden");
-        return true;
-    } else {
-        $("#toNodeIpErrorInfo").removeAttr("hidden");
-        $("#toNodeIpErrorInfo").html("输入的ip地址不合法，请重新输入！");
-        $("#toNodeIP").val("");
-        return false;
-    }
-});
-
-$("#fromNodeIP_0").blur(function () {
-    var ip = $("#fromNodeIP_0").val();
-    if (isValidIP(ip)) {
-        //再判断是否重复
-        for (var i = 0; i < link_ips.length; i++){
-            if (ip.match(link_ips[i]) != null){
-                //匹配到不空，说明有重复的网段，显示出错误信息
-                $("#fromNodeIpErrorInfo_0").removeAttr("hidden");
-                $("#fromNodeIpErrorInfo_0").html("输入的地址网段与已有的重复，请重新输入！");
-                $("#fromNodeIP_0").val("");
-                return false;
-            }
-        }
-        //匹配到都是null，说明没有重复的网段
-        $("#fromNodeIpErrorInfo_0").attr("hidden", "hidden");
-        return true;
-    } else {
-        $("#fromNodeIpErrorInfo_0").removeAttr("hidden");
-        $("#fromNodeIpErrorInfo_0").html("输入的ip地址不合法，请重新输入！");
-        $("#fromNodeIP_0").val("");
-        return false;
-    }
-});
-$("#toNodeIP_0").blur(function () {
-    var ip = $("#toNodeIP_0").val();
-    if (isValidIP(ip)) {
-        //再判断是否重复
-        for (var i = 0; i < link_ips.length; i++){
-            if (ip.match(link_ips[i]) != null){
-                $("#toNodeIpErrorInfo_0").removeAttr("hidden");
-                $("#toNodeIpErrorInfo_0").html("输入的地址网段与已有的重复，请重新输入！");
-                $("#toNodeIP_0").val("");
-                return false;
-            }
-        }
-        $("#toNodeIpErrorInfo_0").attr("hidden", "hidden");
-        return true;
-    } else {
-        $("#toNodeIpErrorInfo_0").removeAttr("hidden");
-        $("#toNodeIpErrorInfo_0").html("输入的ip地址不合法，请重新输入！");
-        $("#toNodeIP_0").val("");
-        return false;
-    }
-});
-
-$("#fromNodeIP_1").blur(function () {
-    var ip = $("#fromNodeIP_1").val();
-    if (isValidIP(ip)) {
-        //再判断是否重复
-        for (var i = 0; i < link_ips.length; i++){
-            if (ip.match(link_ips[i]) != null){
-                //匹配到不空，说明有重复的网段，显示出错误信息
-                $("#fromNodeIpErrorInfo_1").removeAttr("hidden");
-                $("#fromNodeIpErrorInfo_1").html("输入的地址网段与已有的重复，请重新输入！");
-                $("#fromNodeIP_1").val("");
-                return false;
-            }
-        }
-        //匹配到都是null，说明没有重复的网段
-        $("#fromNodeIpErrorInfo_1").attr("hidden", "hidden");
-        return true;
-    } else {
-        $("#fromNodeIpErrorInfo_1").removeAttr("hidden");
-        $("#fromNodeIpErrorInfo_1").html("输入的ip地址不合法，请重新输入！");
-        $("#fromNodeIP_1").val("");
-        return false;
-    }
-});
-$("#toNodeIP_1").blur(function () {
-    var ip = $("#toNodeIP_1").val();
-    if (isValidIP(ip)) {
-        //再判断是否重复
-        for (var i = 0; i < link_ips.length; i++){
-            if (ip.match(link_ips[i]) != null){
-                $("#toNodeIpErrorInfo_1").removeAttr("hidden");
-                $("#toNodeIpErrorInfo_1").html("输入的地址网段与已有的重复，请重新输入！");
-                $("#toNodeIP_1").val("");
-                return false;
-            }
-        }
-        $("#toNodeIpErrorInfo_1").attr("hidden", "hidden");
-        return true;
-    } else {
-        $("#toNodeIpErrorInfo_1").removeAttr("hidden");
-        $("#toNodeIpErrorInfo_1").html("输入的ip地址不合法，请重新输入！");
-        $("#toNodeIP_1").val("");
-        return false;
-    }
-});
-
-$("#fromNodeIP_2").blur(function () {
-    var ip = $("#fromNodeIP_2").val();
-    if (isValidIP(ip)) {
-        //再判断是否重复
-        for (var i = 0; i < link_ips.length; i++){
-            if (ip.match(link_ips[i]) != null){
-                //匹配到不空，说明有重复的网段，显示出错误信息
-                $("#fromNodeIpErrorInfo_2").removeAttr("hidden");
-                $("#fromNodeIpErrorInfo_2").html("输入的地址网段与已有的重复，请重新输入！");
-                $("#fromNodeIP_2").val("");
-                return false;
-            }
-        }
-        //匹配到都是null，说明没有重复的网段
-        $("#fromNodeIpErrorInfo_2").attr("hidden", "hidden");
-        return true;
-    } else {
-        $("#fromNodeIpErrorInfo_2").removeAttr("hidden");
-        $("#fromNodeIpErrorInfo_2").html("输入的ip地址不合法，请重新输入！");
-        $("#fromNodeIP_2").val("");
-        return false;
-    }
-});
-$("#toNodeIP_2").blur(function () {
-    var ip = $("#toNodeIP_2").val();
-    if (isValidIP(ip)) {
-        //再判断是否重复
-        for (var i = 0; i < link_ips.length; i++){
-            if (ip.match(link_ips[i]) != null){
-                $("#toNodeIpErrorInfo_2").removeAttr("hidden");
-                $("#toNodeIpErrorInfo_2").html("输入的地址网段与已有的重复，请重新输入！");
-                $("#toNodeIP_2").val("");
-                return false;
-            }
-        }
-        $("#toNodeIpErrorInfo_2").attr("hidden", "hidden");
-        return true;
-    } else {
-        $("#toNodeIpErrorInfo_2").removeAttr("hidden");
-        $("#toNodeIpErrorInfo_2").html("输入的ip地址不合法，请重新输入！");
-        $("#toNodeIP_2").val("");
-        return false;
-    }
-});
-
-var fromPortObjs;
 /**
- * 初始化from端口下拉框
+ * 查询已有链路的地址
  */
+// function getExitLinkIps() {
+//     $.ajax({
+//         url: '/NetworkSimulation/getLinkList',
+//         data: {
+//             s_id : $.getUrlParam("scenarioId")
+//         },
+//         type: 'post',
+//         dataType: 'json',
+//         async: false,
+//         success: function (data) {
+//             var objs = jQuery.parseJSON(data);
+//             for (var i = 0; i < objs.length; i++){
+//                 //存已有ip地址的前三位
+//                 link_ips[i] = objs[i].fromNodeIP.substring(0,objs[i].fromNodeIP.lastIndexOf("."));
+//             }
+//             console.log("已读取存在的网段");
+//         },
+//         error: function () {
+//
+//         }
+//     });
+// }
+
+/**
+ * 判断输入的ip与已存在的ip不属于同网段
+ */
+// $("#fromNodeIP").blur(function () {
+//     var ip = $("#fromNodeIP").val();
+//     if (isValidIP(ip)) {
+//         //再判断是否重复
+//         for (var i = 0; i < link_ips.length; i++){
+//             if (ip.match(link_ips[i]) != null){
+//                 //匹配到不空，说明有重复的网段，显示出错误信息
+//                 $("#fromNodeIpErrorInfo").removeAttr("hidden");
+//                 $("#fromNodeIpErrorInfo").html("输入的地址网段与已有的重复，请重新输入！");
+//                 $("#fromNodeIP").val("");
+//                 return false;
+//             }
+//         }
+//         //匹配到都是null，说明没有重复的网段
+//         $("#fromNodeIpErrorInfo").attr("hidden", "hidden");
+//         return true;
+//     } else {
+//         $("#fromNodeIpErrorInfo").removeAttr("hidden");
+//         $("#fromNodeIpErrorInfo").html("输入的ip地址不合法，请重新输入！");
+//         $("#fromNodeIP").val("");
+//         return false;
+//     }
+// });
+// $("#toNodeIP").blur(function () {
+//     var ip = $("#toNodeIP").val();
+//     if (isValidIP(ip)) {
+//         //再判断是否重复
+//         for (var i = 0; i < link_ips.length; i++){
+//             if (ip.match(link_ips[i]) != null){
+//                 $("#toNodeIpErrorInfo").removeAttr("hidden");
+//                 $("#toNodeIpErrorInfo").html("输入的地址网段与已有的重复，请重新输入！");
+//                 $("#toNodeIP").val("");
+//                 return false;
+//             }
+//         }
+//         $("#toNodeIpErrorInfo").attr("hidden", "hidden");
+//         return true;
+//     } else {
+//         $("#toNodeIpErrorInfo").removeAttr("hidden");
+//         $("#toNodeIpErrorInfo").html("输入的ip地址不合法，请重新输入！");
+//         $("#toNodeIP").val("");
+//         return false;
+//     }
+// });
+
+// $("#fromNodeIP_0").blur(function () {
+//     var ip = $("#fromNodeIP_0").val();
+//     if (isValidIP(ip)) {
+//         //再判断是否重复
+//         for (var i = 0; i < link_ips.length; i++){
+//             if (ip.match(link_ips[i]) != null){
+//                 //匹配到不空，说明有重复的网段，显示出错误信息
+//                 $("#fromNodeIpErrorInfo_0").removeAttr("hidden");
+//                 $("#fromNodeIpErrorInfo_0").html("输入的地址网段与已有的重复，请重新输入！");
+//                 $("#fromNodeIP_0").val("");
+//                 return false;
+//             }
+//         }
+//         //匹配到都是null，说明没有重复的网段
+//         $("#fromNodeIpErrorInfo_0").attr("hidden", "hidden");
+//         return true;
+//     } else {
+//         $("#fromNodeIpErrorInfo_0").removeAttr("hidden");
+//         $("#fromNodeIpErrorInfo_0").html("输入的ip地址不合法，请重新输入！");
+//         $("#fromNodeIP_0").val("");
+//         return false;
+//     }
+// });
+// $("#toNodeIP_0").blur(function () {
+//     var ip = $("#toNodeIP_0").val();
+//     if (isValidIP(ip)) {
+//         //再判断是否重复
+//         for (var i = 0; i < link_ips.length; i++){
+//             if (ip.match(link_ips[i]) != null){
+//                 $("#toNodeIpErrorInfo_0").removeAttr("hidden");
+//                 $("#toNodeIpErrorInfo_0").html("输入的地址网段与已有的重复，请重新输入！");
+//                 $("#toNodeIP_0").val("");
+//                 return false;
+//             }
+//         }
+//         $("#toNodeIpErrorInfo_0").attr("hidden", "hidden");
+//         return true;
+//     } else {
+//         $("#toNodeIpErrorInfo_0").removeAttr("hidden");
+//         $("#toNodeIpErrorInfo_0").html("输入的ip地址不合法，请重新输入！");
+//         $("#toNodeIP_0").val("");
+//         return false;
+//     }
+// });
+
+// $("#fromNodeIP_1").blur(function () {
+//     var ip = $("#fromNodeIP_1").val();
+//     if (isValidIP(ip)) {
+//         //再判断是否重复
+//         for (var i = 0; i < link_ips.length; i++){
+//             if (ip.match(link_ips[i]) != null){
+//                 //匹配到不空，说明有重复的网段，显示出错误信息
+//                 $("#fromNodeIpErrorInfo_1").removeAttr("hidden");
+//                 $("#fromNodeIpErrorInfo_1").html("输入的地址网段与已有的重复，请重新输入！");
+//                 $("#fromNodeIP_1").val("");
+//                 return false;
+//             }
+//         }
+//         //匹配到都是null，说明没有重复的网段
+//         $("#fromNodeIpErrorInfo_1").attr("hidden", "hidden");
+//         return true;
+//     } else {
+//         $("#fromNodeIpErrorInfo_1").removeAttr("hidden");
+//         $("#fromNodeIpErrorInfo_1").html("输入的ip地址不合法，请重新输入！");
+//         $("#fromNodeIP_1").val("");
+//         return false;
+//     }
+// });
+// $("#toNodeIP_1").blur(function () {
+//     var ip = $("#toNodeIP_1").val();
+//     if (isValidIP(ip)) {
+//         //再判断是否重复
+//         for (var i = 0; i < link_ips.length; i++){
+//             if (ip.match(link_ips[i]) != null){
+//                 $("#toNodeIpErrorInfo_1").removeAttr("hidden");
+//                 $("#toNodeIpErrorInfo_1").html("输入的地址网段与已有的重复，请重新输入！");
+//                 $("#toNodeIP_1").val("");
+//                 return false;
+//             }
+//         }
+//         $("#toNodeIpErrorInfo_1").attr("hidden", "hidden");
+//         return true;
+//     } else {
+//         $("#toNodeIpErrorInfo_1").removeAttr("hidden");
+//         $("#toNodeIpErrorInfo_1").html("输入的ip地址不合法，请重新输入！");
+//         $("#toNodeIP_1").val("");
+//         return false;
+//     }
+// });
+
+// $("#fromNodeIP_2").blur(function () {
+//     var ip = $("#fromNodeIP_2").val();
+//     if (isValidIP(ip)) {
+//         //再判断是否重复
+//         for (var i = 0; i < link_ips.length; i++){
+//             if (ip.match(link_ips[i]) != null){
+//                 //匹配到不空，说明有重复的网段，显示出错误信息
+//                 $("#fromNodeIpErrorInfo_2").removeAttr("hidden");
+//                 $("#fromNodeIpErrorInfo_2").html("输入的地址网段与已有的重复，请重新输入！");
+//                 $("#fromNodeIP_2").val("");
+//                 return false;
+//             }
+//         }
+//         //匹配到都是null，说明没有重复的网段
+//         $("#fromNodeIpErrorInfo_2").attr("hidden", "hidden");
+//         return true;
+//     } else {
+//         $("#fromNodeIpErrorInfo_2").removeAttr("hidden");
+//         $("#fromNodeIpErrorInfo_2").html("输入的ip地址不合法，请重新输入！");
+//         $("#fromNodeIP_2").val("");
+//         return false;
+//     }
+// });
+// $("#toNodeIP_2").blur(function () {
+//     var ip = $("#toNodeIP_2").val();
+//     if (isValidIP(ip)) {
+//         //再判断是否重复
+//         for (var i = 0; i < link_ips.length; i++){
+//             if (ip.match(link_ips[i]) != null){
+//                 $("#toNodeIpErrorInfo_2").removeAttr("hidden");
+//                 $("#toNodeIpErrorInfo_2").html("输入的地址网段与已有的重复，请重新输入！");
+//                 $("#toNodeIP_2").val("");
+//                 return false;
+//             }
+//         }
+//         $("#toNodeIpErrorInfo_2").attr("hidden", "hidden");
+//         return true;
+//     } else {
+//         $("#toNodeIpErrorInfo_2").removeAttr("hidden");
+//         $("#toNodeIpErrorInfo_2").html("输入的ip地址不合法，请重新输入！");
+//         $("#toNodeIP_2").val("");
+//         return false;
+//     }
+// });
+
+/**
+ * 简单节点之间的链路初始化from端口下拉框
+ */
+var fromPortObjs;
 function initFromPortList(data) {
     fromPortObjs = jQuery.parseJSON(data);
     var areaCont = "";
@@ -715,10 +724,10 @@ function initFromPortList(data) {
     $("#fromPort").html(areaCont);
 }
 
-var toPortObjs;
 /**
- * 初始化to端口下拉框
+ * 简单节点之间的链路初始化to端口下拉框
  */
+var toPortObjs;
 function initToPortList(data) {
     toPortObjs = jQuery.parseJSON(data);
     var areaCont = "";

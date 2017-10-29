@@ -1,21 +1,26 @@
-//设置链路定时断开
+/**
+ * 设置链路定时断开
+ */
+var cutLink;
 $("#cutLink").click(function () {
     var elements = scene.selectedElements;
     if (elements[0] == undefined || elements[0] instanceof JTopo.Node){
         $.alert("请选中链路后在进行下一步操作！");
     } else {
-        //弹出模态框
+        cutLink = elements;
         $("#cutLinkModal").modal();
     }
 });
 
-//设置链路定时断开提交
+/**
+ * 设置链路定时断开提交
+ */
 $("#cutLinkSubmit").click(function () {
     setTimeout(function () {
         $.ajax({
             url: '/NetworkSimulation/cutLink',
             data: {
-                linkName : elements[0].text,
+                linkName : cutLink[0].text,
                 scenario_id : $.getUrlParam("scenarioId")
             },
             type: 'post',
@@ -24,8 +29,7 @@ $("#cutLinkSubmit").click(function () {
             success: function (msg) {
                 $.alert(msg);
                 if (msg == "断开成功") {
-                    //变化链路为红色虚线
-                    changeLinkToRed(elements[0]);
+                    changeLinkToRed(cutLink[0]); // 变化链路为红色虚线
                 }
             },
             error: function () {
@@ -33,11 +37,12 @@ $("#cutLinkSubmit").click(function () {
             }
         });
     }, $("#cutLinkTime").val() * 1000);
-    //关闭模态框
     $("#cutLinkModal").modal('hide');
 });
 
-//接通链路
+/**
+ * 接通链路
+ */
 $("#connectLink").click(function () {
     var elements = scene.selectedElements;
     if (elements[0] == undefined || elements[0] instanceof JTopo.Node){
@@ -55,8 +60,7 @@ $("#connectLink").click(function () {
             success: function (msg) {
                 $.alert(msg);
                 if (msg == "恢复成功") {
-                    //变化链路为蓝色
-                    changeLinkToBlue(elements[0]);
+                    changeLinkToBlue(elements[0]); // 变化链路为蓝色
                 }
             },
             error: function () {
@@ -70,7 +74,9 @@ $("#connectLink").click(function () {
 var linkListHtml ='';
 //status
 var statusMap = [];
-//设置链路通段时间
+/**
+ * 设置链路通段时间
+ */
 $("#setLinkTime").click(function () {
     //弹出模态框
     $("#setLinkTimeModal").modal();
@@ -89,11 +95,11 @@ $("#setLinkTime").click(function () {
 
         }
     });
-    // var testJson = '[{"channelModel":0,"fromNodeName":"55","l_id":44,"linkInterference":234,"linkLength":34,"linkName":"link321","linkNoise":132,"linkStatus":0,"linkType":0,"rxPort_id":95,"scenario_id":25,"toNodeName":"66","txPort_id":94},{"channelModel":0,"fromNodeName":"6677","l_id":45,"linkInterference":234,"linkLength":34,"linkName":"link321123","linkNoise":132,"linkStatus":0,"linkType":0,"rxPort_id":97,"scenario_id":25,"toNodeName":"55","txPort_id":96}]';
-    // initSelectLink(testJson);
 });
 
-//初始化可选链路列表
+/**
+ * 初始化可选链路列表
+ */
 function initSelectLink(data) {
     var linkListHtml = '';
     var objs = jQuery.parseJSON(data);
@@ -101,28 +107,28 @@ function initSelectLink(data) {
         linkListHtml += '<option value="' + objs[i].linkName + '" >' + objs[i].linkName + '</option>';
         statusMap[objs[i].linkName] = objs[i].linkStatus;
     }
-    // console.log(linkListHtml);
     $("#selectLink_0").html(linkListHtml);
 }
 
-//判断链路状态来决定是否能选择连通或断开
+/**
+ * 判断链路状态来决定是否能选择连通或断开
+ * @param i 行数
+ */
 function selectConnction(i) {
-    //如果是断开的那一行
-    // console.log($('[id = "selectLink_' + i + '"]').val());
-    if (statusMap[$('[id = "selectLink_' + i + '"]').val()] == 1) {
+    if (statusMap[$('[id = "selectLink_' + i + '"]').val()] == 1) { // 如果是断开的那一行
         $('[id = "switch_' + i + '"]').children().last().attr("disabled", "disabled");
         $('[id = "switch_' + i + '"]').children().first().removeAttr("disabled", "disabled");
     }
-    //如果是连通的一行
-    if (statusMap[$('[id = "selectLink_' + i + '"]').val()] == 0) {
+    if (statusMap[$('[id = "selectLink_' + i + '"]').val()] == 0) { // 如果是连通的一行
         $('[id = "switch_' + i + '"]').children().first().attr("disabled", "disabled");
         $('[id = "switch_' + i + '"]').children().last().removeAttr("disabled", "disabled");
     }
 }
 
-//用于记录第几行的数据的标记,默认已经有第0行
-var flag_1 = 0;
-//点击增加一行
+var flag_1 = 0; // 用于记录第几行的数据的标记,默认已经有第0行
+/**
+ * 点击增加一行
+ */
 $("#addOneControl").click(function () {
     ++flag_1;
     var htmlString1 = '<div class="form-group">\
@@ -145,10 +151,11 @@ $("#addOneControl").click(function () {
     $("#setLinkTimeForm").html(htmlString);
 });
 
-//点击删除一行
+/**
+ * 点击删除一行
+ */
 $("#minusOneControl").click(function () {
-    if (flag_1 > 0) {
-        //flag最小回归为0
+    if (flag_1 > 0) { // flag最小回归为0
         --flag_1;
     }
     $("#setLinkTimeForm").children().last().remove();
@@ -158,8 +165,6 @@ $("#minusOneControl").click(function () {
  * 设置链路通断时间点击提交
  */
 $("#setLinkTimeSubmit").click(function () {
-    //i为行数
-    // console.log("flag_1:" + flag_1);
     console.log("链路名：" + $('[id = "selectLink_' + 0 + '"]').val());
     if ($("#totalTime").val() == '') {
         $.alert("请输入总仿真时间！");
@@ -167,7 +172,7 @@ $("#setLinkTimeSubmit").click(function () {
     }
     var elements = scene.getDisplayedElements();
     //遍历每行定时任务
-    for (var i = 0; i <= flag_1; i++) {
+    for (var i = 0; i <= flag_1; i++) { // i为行数
         if ($('[id = "moment_' + i + '"]').val() > $("#totalTime").val()) {
             $.alert("第" + i + "行的时刻输入大于总仿真时间，请重新输入！");
             $('[id = "moment_' + i + '"]').val('');
@@ -240,7 +245,6 @@ $("#setLinkTimeSubmit").click(function () {
     setTimeout(function () {
         window.location.reload();
     }, $("#totalTime").val() * 1000 + 10 * 1000);
-    //关闭模态框
     $("#setLinkTimeModal").modal('hide');
 });
 
@@ -285,11 +289,9 @@ $("#openCli").click(function () {
     var elements = scene.selectedElements;
     if (elements[0] == undefined || elements[0] instanceof JTopo.Link || elements[0].fontColor == "255,0,0"){
         $.alert("请选中简单节点后在进行下一步操作");
-    } else if (simpleNodeType[elements[0].text] == 0) {
-        //如果是docker节点
+    } else if (simpleNodeType[elements[0].text] == 0) { // 如果是docker节点
         window.open(encodeURI("dockerConsole.html?nodeId=" + simpleNodeId[elements[0].text]));
-    } else if (simpleNodeType[elements[0].text] == 1) {
-        //如果是vm
+    } else if (simpleNodeType[elements[0].text] == 1) { // 如果是vm
         $.ajax({
             url: '/NetworkSimulation/openConsole',
             data: {
@@ -300,17 +302,15 @@ $("#openCli").click(function () {
             dataType: 'json',
             async: false,
             success: function (msg) {
-                // $.alert("即将打开vm控制台：" + msg);
                 window.open(msg);
             },
             error: function () {
 
             }
         });
-    } else if (simpleNodeType[elements[0].text] == null) {
-        //如果是新建的节点，未存id和type就刷新
-        $.alert("自动刷新后请您再打开。");
-        window.location.reload();
+    } else if (simpleNodeType[elements[0].text] == null) { // 如果是新建的节点，未存id和type就刷新
+        $.alert("即将自动刷新，2秒后请您再打开。");
+        refreshCanvas();
     }
 });
 
