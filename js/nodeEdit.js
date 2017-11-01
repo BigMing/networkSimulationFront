@@ -148,13 +148,60 @@ $("#portType").change(function () {
 });
 
 /**
- * 点击新建网口
+ * 点击新建网口，要初始化可选模板参数
  */
+var portTemplateObjs; // 端口模板对象
 $("#addPort").click(function () {
-    $("#myModal").modal();
+    $("#myModal").modal(); // 弹出模态框
+    $.ajax({ // 查询已有的端口模板，返回List<端口>的json
+        url: '/NetworkSimulation/getPortTemplate',
+        data: {
+
+        },
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        success: function (msg) {
+            console.log(msg);
+            portTemplateObjs = jQuery.parseJSON(msg);
+            var html = '';
+            for (var i = 0; i < portTemplateObjs.length; i++) {
+                html += '<option value="' + portTemplateObjs[i].portName + '">' + '（模板）' + portTemplateObjs[i].portName + '</option>';
+            }
+            $("#portTemplate").html(html);
+            $("#portTemplate").val(''); // 初始化让它谁也不选
+        },
+        error: function () {
+
+        }
+    });
 });
 
-//判断ip是否合法的正则
+/**
+ * 选中某一个模板之后自动填入部分参数
+ */
+$("#portTemplate").change(function () {
+    var portTemplateName = $("#portTemplate").val();
+    for (var i = 0; i < portTemplateObjs.length; i++) {
+        if (portTemplateName == portTemplateObjs[i].portName) { // 找到选中模板对应的对象
+            $("#portType").val(portTemplateObjs[i].portType);
+            $("#transmitterPower").val(portTemplateObjs[i].transmitterPower);
+            $("#transmitterFrequency").val(portTemplateObjs[i].transmitterFrequency);
+            $("#transmitterBandwidth").val(portTemplateObjs[i].transmitterBandwidth);
+            $("#transmitterGain").val(portTemplateObjs[i].transmitterGain);
+            $("#receiverFrequency").val(portTemplateObjs[i].receiverFrequency);
+            $("#receiverBandwidth").val(portTemplateObjs[i].receiverBandwidth);
+            $("#receiverGain").val(portTemplateObjs[i].receiverGain);
+            $("#modem").val(portTemplateObjs[i].modem);
+            $("#maximumRate").val(portTemplateObjs[i].maximumRate);
+            $("#packetLoss").val(portTemplateObjs[i].packetLoss);
+        }
+    }
+});
+
+/**
+ * 判断ip是否合法的正则
+ */
 function isValidIP(ip) {
     var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
     return reg.test(ip);
@@ -176,38 +223,72 @@ $("#portIp").blur(function () {
  * 新建网口提交
  */
 $("#submitPort").click(function () {
-    $.ajax({
-        url: '/NetworkSimulation/addPort',
-        data: {
-            n_id : $("#nodeId").val(),
-            portName : $("#portName").val(),
-            portType : $("#portType").val(),
-            portIp : $("#portIp").val(),
-            transmitterPower : $("#transmitterPower").val(),
-            transmitterFrequency : $("#transmitterFrequency").val(),
-            transmitterBandwidth : $("#transmitterBandwidth").val(),
-            transmitterGain : $("#transmitterGain").val(),
-            receiverFrequency : $("#receiverFrequency").val(),
-            receiverBandwidth : $("#receiverBandwidth").val(),
-            receiverGain : $("#receiverGain").val(),
-            modem : $("#modem").val(),
-            maximumRate : $("#maximumRate").val(),
-            packetLoss : $("#packetLoss").val()
-        },
-        type: 'post',
-        dataType: 'json',
-        async: false,
-        success: function (msg) {
-            $.alert(msg);
-            window.location.reload();
-        },
-        error: function () {
+    if ($("input[name='saveAsTemplateCheckbox']:checked").val() == 1) { // 选中了保存为模板
+        $.ajax({
+            url: '/NetworkSimulation/addPortAsTemplate',
+            data: {
+                n_id : $("#nodeId").val(),
+                portName : $("#portName").val(),
+                portType : $("#portType").val(),
+                portIp : $("#portIp").val(),
+                transmitterPower : $("#transmitterPower").val(),
+                transmitterFrequency : $("#transmitterFrequency").val(),
+                transmitterBandwidth : $("#transmitterBandwidth").val(),
+                transmitterGain : $("#transmitterGain").val(),
+                receiverFrequency : $("#receiverFrequency").val(),
+                receiverBandwidth : $("#receiverBandwidth").val(),
+                receiverGain : $("#receiverGain").val(),
+                modem : $("#modem").val(),
+                maximumRate : $("#maximumRate").val(),
+                packetLoss : $("#packetLoss").val()
+            },
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                $.alert(msg);
+                window.location.reload();
+            },
+            error: function () {
 
-        }
-    });
+            }
+        });
+    } else { // 未选中保存为模板
+        $.ajax({
+            url: '/NetworkSimulation/addPort',
+            data: {
+                n_id : $("#nodeId").val(),
+                portName : $("#portName").val(),
+                portType : $("#portType").val(),
+                portIp : $("#portIp").val(),
+                transmitterPower : $("#transmitterPower").val(),
+                transmitterFrequency : $("#transmitterFrequency").val(),
+                transmitterBandwidth : $("#transmitterBandwidth").val(),
+                transmitterGain : $("#transmitterGain").val(),
+                receiverFrequency : $("#receiverFrequency").val(),
+                receiverBandwidth : $("#receiverBandwidth").val(),
+                receiverGain : $("#receiverGain").val(),
+                modem : $("#modem").val(),
+                maximumRate : $("#maximumRate").val(),
+                packetLoss : $("#packetLoss").val()
+            },
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                $.alert(msg);
+                window.location.reload();
+            },
+            error: function () {
+
+            }
+        });
+    }
 });
 
-//编辑节点属性提交
+/**
+ * 编辑节点属性提交
+ */
 $("#editNode").click(function () {
     $.ajax({
         url: '/NetworkSimulation/editNode',

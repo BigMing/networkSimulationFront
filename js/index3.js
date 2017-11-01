@@ -17,8 +17,11 @@ var canvas = document.getElementById('canvas');
 var content = document.getElementById('content');
 window.onload = window.onresize = function () {
     canvas.width = content.offsetWidth;
-    canvas.height = content.offsetHeight - 50;
+    // canvas.height = content.offsetHeight - 50;
+    canvas.height = $(document).height() - 100;
 };
+
+$("#slider_1").height($(document).height() - 50); // 设置侧边栏高度
 
 var stage = new JTopo.Stage(canvas); // 创建一个舞台对象
 stage.eagleEye.visible = true; // 显示鹰眼
@@ -275,12 +278,18 @@ var link04 = document.getElementById("link04"); // 停止添加
 
 var flag = 0; // 1,2,3表示三种链路，4表示停止添加链路，用于添加链路类型时候的判断
 
+/**
+ * 点击添加链路按钮
+ */
 $("#addlink01").click(function () {
     flag = 1;
     link01.style.color = "red";
     link04.style.color = "#333";
 });
 
+/**
+ * 点击停止添加链路
+ */
 $("#addlink04").click(function () {
     flag = 0;
     link01.style.color = "#333";
@@ -291,10 +300,10 @@ $("#addlink04").click(function () {
 /**
  * 判断ip是否合法的正则
  */
-function isValidIP(ip) {
-    var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
-    return reg.test(ip);
-}
+// function isValidIP(ip) {
+//     var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+//     return reg.test(ip);
+// }
 
 /**
  * 初始化复杂节点间链路模态框中的数据，分别是选择内部节点和端口的选择框
@@ -765,6 +774,35 @@ $("#toPort, #fromPort").blur(function () {
         $("#portErrorInfo").removeAttr("hidden");
     } else { // 没有重复
         $("#portErrorInfo").attr("hidden", "hidden");
+    }
+});
+
+/**
+ * 初始化链路模板选择框
+ */
+var linkTemplateObjs;
+function initLinkTemplate(data) {
+    linkTemplateObjs = jQuery.parseJSON(data);
+    var html = '';
+    for (var i = 0; i < linkTemplateObjs.length; i++) {
+        html += '<option value="' + linkTemplateObjs[i].linkName + '">' + '（模板）' + linkTemplateObjs[i].linkName + '</option>';
+    }
+    $("#linkTemplate").html(html);
+    $("#linkTemplate").val(''); // 初始化为空
+}
+
+/**
+ * 选中模板后自动填入部分参数
+ */
+$("#linkTemplate").change(function () {
+    var linkTemplateName = $("#linkTemplate").val();
+    for (var i = 0; i < linkTemplateObjs.length; i++) {
+        if (linkTemplateName == linkTemplateObjs[i].linkName) { // 找到选中的链路模板对象
+            $("#linkType").val(linkTemplateObjs[i].linkType);
+            $("#channelNoise").val(linkTemplateObjs[i].linkNoise);
+            $("#channelType").val(linkTemplateObjs[i].channelModel);
+            $("#linkLength").val(linkTemplateObjs[i].linkLength);
+        }
     }
 });
 

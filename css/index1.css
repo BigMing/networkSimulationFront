@@ -19,20 +19,12 @@ body {
     border-bottom: 1px solid #cccccc;
 }
 
-#main, #slider_1 {
-    height: 900px;
-}
-#content {
-    height: 900px;
-    padding: 0;
-}
-
 /**
  * 侧边栏样式
  */
-.right {
+#slider_1, #slider {
     border-right: 1px solid #cccccc;
-    height: 900px;
+    /*height: 900px;*/
     /*overflow-y: scroll;*/
     /*overflow-x: hidden;*/
 }

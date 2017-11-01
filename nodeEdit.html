@@ -146,6 +146,13 @@
             <div class="modal-body">
                 <form class="form-horizontal" role="form">
                     <div class="form-group">
+                        <label class="col-sm-3 control-label">选择网口模板</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="portTemplate"></select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label">网口名称</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control"  placeholder="网口1" id="portName">
@@ -244,6 +251,14 @@
                         <label class="col-sm-3 control-label">丢包率</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control"  placeholder="单位（%）" id="packetLoss">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"></label>
+                        <div class="col-sm-9">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="saveAsTemplateCheckbox" value="1"> 保存为模板
+                            </label>
                         </div>
                     </div>
                 </form>

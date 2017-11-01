@@ -17,9 +17,11 @@ var canvas = document.getElementById('canvas');
 var content = document.getElementById('content');
 window.onload = window.onresize = function () {
     canvas.width = content.offsetWidth;
-    canvas.height = content.offsetHeight - 50;
+    canvas.height = $(document).height() - 100;
     $("#inName").html($.getUrlParam("nodeName") + " 节点内部编辑器"); // 改变左上角的文字
 };
+
+$("#slider").height($(document).height() - 50);
 
 var stage = new JTopo.Stage(canvas); // 创建一个舞台对象
 var scene = new JTopo.Scene(stage); // 创建一个场景对象

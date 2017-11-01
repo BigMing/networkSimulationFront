@@ -39,7 +39,7 @@
 <!--内容区域-->
 <div class="container-fluid" id="main">
     <!--侧边栏-->
-    <div class="col-md-2 slide right" id="slider_1">
+    <div class="col-md-2 slide" id="slider_1">
         <div class="smallbox">
             <a href="javascript:;" data-toggle="collapse" data-target="#weixing" class="title"><h4>添加节点</h4></a>
             <div id="weixing" class="collapse in">
@@ -51,54 +51,8 @@
                     <img src="img/zhonggui00.png" id="weixing2">
                     &nbsp;&nbsp;&nbsp;&nbsp;复杂节点
                 </div>
-                <!--<div class="fenlei">-->
-                    <!--<img src="img/digui00.png" id="weixing3">-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;低轨卫星-->
-                <!--</div>-->
-                <!--<div class="fenlei">-->
-                    <!--<img src="img/leida00.png" id="weixing4">-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;移动终端-->
-                <!--</div>-->
             </div>
         </div>
-        <!--<div class="smallbox">-->
-            <!--<a href="javascript:;" data-toggle="collapse" data-target="#guding" class="title"><h4>固定网络</h4></a>-->
-            <!--<div  id="guding" class="collapse">-->
-                <!--<div class="fenlei">-->
-                    <!--<img src="img/switchOptical.png" >-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;交换机-->
-                <!--</div>-->
-                <!--<div class="fenlei">-->
-                    <!--<img src="img/5200.png">-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;防火墙-->
-                <!--</div>-->
-                <!--<div class="fenlei">-->
-                    <!--<img src="img/router.png" >-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;路由器-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="smallbox">-->
-            <!--<a href="javascript:;" data-toggle="collapse" data-target="#zizuwang" class="title"><h4>自组织网络</h4></a>-->
-            <!--<div id="zizuwang" class="collapse">-->
-                <!--<div class="fenlei">-->
-                    <!--<img src="img/gaogui00.png" id="">-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;简单节点-->
-                <!--</div>-->
-                <!--<div class="fenlei">-->
-                    <!--<img src="img/zhonggui00.png" id="">-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;复杂节点-->
-                <!--</div>-->
-                <!--<div class="fenlei">-->
-                    <!--<img src="img/digui00.png" id="">-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;低轨卫星-->
-                <!--</div>-->
-                <!--<div class="fenlei">-->
-                    <!--<img src="img/leida00.png" id="">-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;移动终端-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
         <div class="smallbox">
             <a href="javascript:;" data-toggle="collapse" data-target="#link" class="title"><h4>选择链路</h4></a>
             <div id="link" class="collapse in">
@@ -106,18 +60,6 @@
                     <img src="img/link02.png">
                     &nbsp;&nbsp;&nbsp;<span id="link01">添加链路</span>
                 </div>
-                <!--<div class="fenlei" id="addlink02">-->
-                    <!--<img src="img/link02.png">-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;<span id="link02">有线广播</span>-->
-                <!--</div>-->
-                <!--<div class="fenlei" id="addlink03">-->
-                    <!--<img src="img/link02.png">-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;<span id="link03">无线点到点</span>-->
-                <!--</div>-->
-                <!--<div class="fenlei">-->
-                    <!--<img src="img/link02.png">-->
-                    <!--&nbsp;&nbsp;&nbsp;&nbsp;<span>无线广播</span>-->
-                <!--</div>-->
                 <div class="fenlei" id="addlink04">
                     <img src="img/link03.png">
                     &nbsp;&nbsp;&nbsp;&nbsp;<span id="link04">停止添加链路</span>
@@ -280,6 +222,13 @@
                 <div class="modal-body">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">选择模板</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="linkTemplate"></select>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">链路名称</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control"  placeholder="链路1" id="linkName">
@@ -339,6 +288,14 @@
                             <label class="col-sm-2 control-label">链路长度</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" placeholder="单位（km）" id="linkLength">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="saveAsTemplateCheckbox" value="1"> 保存为模板
+                                </label>
                             </div>
                         </div>
                     </form>
@@ -786,7 +743,6 @@
 <script type="text/javascript" src="lib/jquery/jquery-confirm.min.js"></script>
 <script type="text/javascript" src="lib/jquery-ui-1.11.4/jquery-ui.js"></script>
 <script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>
-<!--<script type="text/javascript" src="lib/bootstrap/js/bootstrap-slider.js"></script>-->
 <script type="text/javascript" src="lib/jtopo/jtopo-0.4.8-min.js"></script>
 <script type="text/javascript" src="js/index3.js"></script>
 <script type="text/javascript" src="js/index3_00.js"></script>

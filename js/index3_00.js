@@ -123,10 +123,9 @@ scene.mouseup(function (e) {
 
                     }
                 });
-            } else {// 简单——简单
-                $("#linkModal").modal();
-                // 发送ajax查询from端口
-                $.ajax({
+            } else { // 简单——简单
+                $("#linkModal").modal(); // 弹出模态框
+                $.ajax({ // 发送ajax查询from端口
                     url: '/NetworkSimulation/getPortBynodeName',
                     data: {
                         nodeName: beginNode.text,
@@ -142,8 +141,7 @@ scene.mouseup(function (e) {
 
                     }
                 });
-                // 发送ajax查询to端口
-                $.ajax({
+                $.ajax({ // 发送ajax查询to端口
                     url: '/NetworkSimulation/getPortBynodeName',
                     data: {
                         nodeName: endLastNode.text,
@@ -154,6 +152,22 @@ scene.mouseup(function (e) {
                     async: false,
                     success: function (msg) {
                         initToPortList(msg);
+                    },
+                    error: function () {
+
+                    }
+                });
+                $.ajax({ // 发送ajax查询链路模板，要返回链路list的json
+                    url: '/NetworkSimulation/getLinkTemplate',
+                    data: {
+
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    async: false,
+                    success: function (msg) {
+                        console.log(msg);
+                        initLinkTemplate(msg);
                     },
                     error: function () {
 
@@ -379,48 +393,93 @@ $("#addLink").click(function () {
     // beginNode = null;
     // scene.remove(link1);
     // $('#linkModal').modal('hide');
-    $.ajax({
-        url: '/NetworkSimulation/addLink',
-        data: {
-            linkName : $("#linkName").val(),
-            linkType : $("#linkType").val(),
-            fromNodeIP : $("#fromNodeIP").val(),
-            toNodeIP : $("#toNodeIP").val(),
-            fromNodeName : beginNode.text,
-            toNodeName : endLastNode.text,
-            logicalFromNodeName : beginNode.text,
-            logicalToNodeName : endLastNode.text,
-            txPort_id : $("#fromPort").val(),
-            rxPort_id : $("#toPort").val(),
-            linkNoise : $("#channelNoise").val(),
-            channelModel : $("#channelType").val(),
-            linkLength : $("#linkLength").val(),
-            scenario_id : $.getUrlParam("scenarioId")
-        },
-        type: 'post',
-        dataType: 'json',
-        async: false,
-        success: function (msg) {
-            $.alert(msg);
-            if (msg == "创建成功") {
-                if ($("#linkType").val() == 0) { // 有线链路
-                    if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
-                        newLink(beginNode, endLastNode, $("#linkName").val(), "0,0,255"); // 蓝色
-                    } else { // 非星星之间的链路，星地链路
-                        newLink(beginNode, endLastNode, $("#linkName").val(), "128,0,128"); // 紫色
+    if ($("input[name='saveAsTemplateCheckbox']:checked").val() == 1) { // 链路保存为模板
+        $.ajax({
+            url: '/NetworkSimulation/addLinkAsTemplate',
+            data: {
+                linkName : $("#linkName").val(),
+                linkType : $("#linkType").val(),
+                fromNodeIP : $("#fromNodeIP").val(),
+                toNodeIP : $("#toNodeIP").val(),
+                fromNodeName : beginNode.text,
+                toNodeName : endLastNode.text,
+                logicalFromNodeName : beginNode.text,
+                logicalToNodeName : endLastNode.text,
+                txPort_id : $("#fromPort").val(),
+                rxPort_id : $("#toPort").val(),
+                linkNoise : $("#channelNoise").val(),
+                channelModel : $("#channelType").val(),
+                linkLength : $("#linkLength").val(),
+                scenario_id : $.getUrlParam("scenarioId")
+            },
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                $.alert(msg);
+                if (msg == "创建成功") {
+                    if ($("#linkType").val() == 0) { // 有线链路
+                        if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
+                            newLink(beginNode, endLastNode, $("#linkName").val(), "0,0,255"); // 蓝色
+                        } else { // 非星星之间的链路，星地链路
+                            newLink(beginNode, endLastNode, $("#linkName").val(), "128,0,128"); // 紫色
+                        }
+                    } else if ($("#linkType").val() == 1) {//无线链路
+                        newLink(beginNode, endLastNode, $("#linkName").val(), "0,0,0");
                     }
-                } else if ($("#linkType").val() == 1) {//无线链路
-                    newLink(beginNode, endLastNode, $("#linkName").val(), "0,0,0");
+                    beginNode = null;
+                    scene.remove(link1);
+                    $('#linkModal').modal('hide');
                 }
-                beginNode = null;
-                scene.remove(link1);
-                $('#linkModal').modal('hide');
-            }
-        },
-        error: function () {
+            },
+            error: function () {
 
-        }
-    });
+            }
+        });
+    } else { // 链路未保存未模板
+        $.ajax({
+            url: '/NetworkSimulation/addLink',
+            data: {
+                linkName : $("#linkName").val(),
+                linkType : $("#linkType").val(),
+                fromNodeIP : $("#fromNodeIP").val(),
+                toNodeIP : $("#toNodeIP").val(),
+                fromNodeName : beginNode.text,
+                toNodeName : endLastNode.text,
+                logicalFromNodeName : beginNode.text,
+                logicalToNodeName : endLastNode.text,
+                txPort_id : $("#fromPort").val(),
+                rxPort_id : $("#toPort").val(),
+                linkNoise : $("#channelNoise").val(),
+                channelModel : $("#channelType").val(),
+                linkLength : $("#linkLength").val(),
+                scenario_id : $.getUrlParam("scenarioId")
+            },
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                $.alert(msg);
+                if (msg == "创建成功") {
+                    if ($("#linkType").val() == 0) { // 有线链路
+                        if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
+                            newLink(beginNode, endLastNode, $("#linkName").val(), "0,0,255"); // 蓝色
+                        } else { // 非星星之间的链路，星地链路
+                            newLink(beginNode, endLastNode, $("#linkName").val(), "128,0,128"); // 紫色
+                        }
+                    } else if ($("#linkType").val() == 1) {//无线链路
+                        newLink(beginNode, endLastNode, $("#linkName").val(), "0,0,0");
+                    }
+                    beginNode = null;
+                    scene.remove(link1);
+                    $('#linkModal').modal('hide');
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
 });
 
 /**
