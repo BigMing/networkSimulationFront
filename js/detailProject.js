@@ -1,4 +1,15 @@
-/*定义三级分类数据*/
+/**
+ * 解析url参数的函数，包括解码
+ */
+(function ($) {
+    $.getUrlParam = function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var url = decodeURI(window.location.search);
+        var r = url.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+})(jQuery);
+
 //一级分类
 var province = [];
 var projectId = [];
@@ -63,21 +74,22 @@ function praseCompleNodeList(data) {
     }
 }
 
-//预读
 $(document).ready(function(){
-    //测试用
-    //praseProjectList();
-    //发送ajax查询工程列表并显示
-    $.ajax({
+    if ($.session.get('login') != 'true') { // 如果未登录
+        $.alert("请先登录！");
+        setTimeout(function () {
+            window.location.replace(encodeURI("login.html"));
+        }, 3000);
+    }
+    $.ajax({ // 发送ajax查询工程列表并显示
         url: '/NetworkSimulation/selectProjectList',
         data: {
-
+            username : $.getUrlParam("username")
         },
         type: 'post',
         dataType: 'json',
         async: false,
         success: function (data) {
-            //alert(data);
             praseProjectList(data);
         },
         error: function () {
@@ -266,8 +278,7 @@ $("#addProject").click(function () {
         dataType: 'json',
         async: false,
         success: function (msg) {
-            alert(msg);
-            //刷新页面
+            $.alert(msg);
             $("#myModal").hide();
             window.location.reload();
         },

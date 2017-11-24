@@ -1,7 +1,7 @@
 /**
  * Created by sjm on 2017/6/28.
  */
-//解析url参数的函数，包括解码
+// 解析url参数的函数，包括解码
 (function ($) {
     $.getUrlParam = function (name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -11,7 +11,7 @@
     }
 })(jQuery);
 
-//判断ip是否合法的正则
+// 判断ip是否合法的正则
 function isValidIP(ip) {
     var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
     return reg.test(ip);
@@ -29,13 +29,15 @@ $("#portIp").blur(function () {
     }
 });
 
-//编辑网口属性提交
+/**
+ * 编辑网口属性提交
+ */
 $("#editPort").click(function () {
     $.ajax({
         url: '/NetworkSimulation/editPort',
         data: {
             portName : $("#portName").val(),
-            portId : $("#portId").val(),
+            pt_id : $("#portId").val(),
             portType : $("#portType").val(),
             portIp : $("#portIp").val(),
             transmitterPower : $("#transmitterPower").val(),
@@ -54,8 +56,7 @@ $("#editPort").click(function () {
         async: false,
         success: function (msg) {
             $.alert(msg);
-            //刷新当前页面
-            location.herf = encodeURI("portEdit.html?portId=" + $("#portId").val());
+            location.herf = encodeURI("portEdit.html?portId=" + $("#portId").val()); // 刷新
         },
         error: function () {
 
@@ -63,12 +64,11 @@ $("#editPort").click(function () {
     });
 });
 
-//预读
 $(document).ready(function () {
     $.ajax({
         url: '/NetworkSimulation/getPort',
         data: {
-            p_id : $.getUrlParam("portId")
+            pt_id : $.getUrlParam("portId")
         },
         type: 'post',
         dataType: 'json',
@@ -87,7 +87,7 @@ $(document).ready(function () {
 function initPortAttr(data) {
     var objs = jQuery.parseJSON(data);
     $("#portName").val(objs[0].portName);
-    $("#portId").val(objs[0].p_id);
+    $("#portId").val(objs[0].pt_id);
     $("#portType").val(objs[0].portType);
     $("#portIp").val(objs[0].portIp);
     $("#transmitterPower").val(objs[0].transmitterPower);
@@ -100,7 +100,6 @@ function initPortAttr(data) {
     $("#modem").val(objs[0].modem);
     $("#maximumRate").val(objs[0].maximumRate);
     $("#packetLoss").val(objs[0].packetLoss);
-
     if ($("#portType").val() == 1) { // 类型1
         $("#transmitterPowerDiv").removeAttr("hidden", "hidden");
         $("#transmitterFrequencyDiv").removeAttr("hidden", "hidden");

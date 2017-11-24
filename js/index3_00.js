@@ -319,7 +319,7 @@ $("#addNode").click(function () {
             x : uiOut.offset.left - document.getElementById("slider_1").offsetWidth,
             y : uiOut.offset.top - 102,
             s_id : $.getUrlParam("scenarioId"),
-            iconUrl : "img/gaogui01.png"
+            iconUrl : iconUrl
         },
         type: 'post',
         dataType: 'json',
@@ -327,7 +327,7 @@ $("#addNode").click(function () {
         success: function (msg) {
             $.alert(msg);
             if (msg == "创建成功") {
-                if (iconUrl == "img/xinguanzhan.jpg" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点
+                if (iconUrl == "img/xinguanzhan01.jpg" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点
                     createNode1($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
                 } else { // 如果是星际节点
                     createNode($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
@@ -359,7 +359,7 @@ $("#addComplexNode").click(function () {
             x : uiOut.offset.left - document.getElementById("slider_1").offsetWidth,
             y : uiOut.offset.top - 102,
             s_id : $.getUrlParam("scenarioId"),
-            iconUrl : "img/zhonggui01.png"
+            iconUrl : iconUrl
         },
         type: 'post',
         dataType: 'json',
@@ -367,7 +367,7 @@ $("#addComplexNode").click(function () {
         success: function (msg) {
             $.alert(msg);
             if (msg == "创建成功") {
-                if (iconUrl == "img/xinguanzhan.jpg" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点
+                if (iconUrl == "img/xinguanzhan01.jpg" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点
                     createComplexNode1($("#complexNodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
                 } else { // 如果是星际节点
                     createComplexNode($("#complexNodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
@@ -395,7 +395,7 @@ $("#addLink").click(function () {
     // $('#linkModal').modal('hide');
     if ($("input[name='saveAsTemplateCheckbox']:checked").val() == 1) { // 链路保存为模板
         $.ajax({
-            url: '/NetworkSimulation/addLinkAsTemplate',
+            url: '/NetworkSimulation/addLink',
             data: {
                 linkName : $("#linkName").val(),
                 linkType : $("#linkType").val(),
@@ -410,7 +410,8 @@ $("#addLink").click(function () {
                 linkNoise : $("#channelNoise").val(),
                 channelModel : $("#channelType").val(),
                 linkLength : $("#linkLength").val(),
-                scenario_id : $.getUrlParam("scenarioId")
+                scenario_id : $.getUrlParam("scenarioId"),
+                isTemplate : 1
             },
             type: 'post',
             dataType: 'json',
@@ -420,9 +421,9 @@ $("#addLink").click(function () {
                 if (msg == "创建成功") {
                     if ($("#linkType").val() == 0) { // 有线链路
                         if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
-                            newLink(beginNode, endLastNode, $("#linkName").val(), "0,0,255"); // 蓝色
+                            newLink(beginNode, endLastNode, $("#linkName").val() + "(" + beginNode.text + "->" + endLastNode.text + ")", "0,0,255"); // 蓝色
                         } else { // 非星星之间的链路，星地链路
-                            newLink(beginNode, endLastNode, $("#linkName").val(), "128,0,128"); // 紫色
+                            newLink(beginNode, endLastNode, $("#linkName").val() + "(" + beginNode.text + "->" + endLastNode.text + ")", "128,0,128"); // 紫色
                         }
                     } else if ($("#linkType").val() == 1) {//无线链路
                         newLink(beginNode, endLastNode, $("#linkName").val(), "0,0,0");
@@ -453,7 +454,8 @@ $("#addLink").click(function () {
                 linkNoise : $("#channelNoise").val(),
                 channelModel : $("#channelType").val(),
                 linkLength : $("#linkLength").val(),
-                scenario_id : $.getUrlParam("scenarioId")
+                scenario_id : $.getUrlParam("scenarioId"),
+                isTemplate : 0
             },
             type: 'post',
             dataType: 'json',
@@ -463,9 +465,9 @@ $("#addLink").click(function () {
                 if (msg == "创建成功") {
                     if ($("#linkType").val() == 0) { // 有线链路
                         if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
-                            newLink(beginNode, endLastNode, $("#linkName").val(), "0,0,255"); // 蓝色
+                            newLink(beginNode, endLastNode, $("#linkName").val() + "(" + beginNode.text + "->" + endLastNode.text + ")", "0,0,255"); // 蓝色
                         } else { // 非星星之间的链路，星地链路
-                            newLink(beginNode, endLastNode, $("#linkName").val(), "128,0,128"); // 紫色
+                            newLink(beginNode, endLastNode, $("#linkName").val() + "(" + beginNode.text + "->" + endLastNode.text + ")", "128,0,128"); // 紫色
                         }
                     } else if ($("#linkType").val() == 1) {//无线链路
                         newLink(beginNode, endLastNode, $("#linkName").val(), "0,0,0");
@@ -519,13 +521,13 @@ $("#addComplexLink_0").click(function () {
         success: function (msg) {
             $.alert(msg);
             if (msg == "创建成功") {
-                if ($("#linkType_0").val() == 0) {//有线链路
+                if ($("#linkType_0").val() == 0) { // 有线链路
                     if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
-                        newLink(beginNode, endLastNode, $("#linkName_0").val(), "0,0,255");
+                        newLink(beginNode, endLastNode, $("#linkName_0").val() + "(" + $("#selectFromNode_0").val() + "->" + $("#selectToNode_0").val() + ")", "0,0,255");
                     } else { // 非星星之间的链路，星地链路
-                        newLink(beginNode, endLastNode, $("#linkName_0").val(), "128,0,128"); // 紫色
+                        newLink(beginNode, endLastNode, $("#linkName_0").val() + "(" + $("#selectFromNode_0").val() + "->" + $("#selectToNode_0").val() + ")", "128,0,128"); // 紫色
                     }
-                } else if ($("#linkType_0").val() == 1) {//无线链路
+                } else if ($("#linkType_0").val() == 1) { // 无线链路
                     newLink(beginNode, endLastNode, $("#linkName_0").val(), "0,0,0");
                 }
                 beginNode = null;
@@ -578,9 +580,9 @@ $("#addComplexLink_1").click(function () {
             if (msg == "创建成功") {
                 if ($("#linkType_1").val() == 0) {//有线链路
                     if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
-                        newLink(beginNode, endLastNode, $("#linkName_1").val(), "0,0,255");
+                        newLink(beginNode, endLastNode, $("#linkName_1").val() + "(" + beginNode.text + "->" + $("#selectToNode_1").val() + ")", "0,0,255");
                     } else { // 非星星之间的链路，星地链路
-                        newLink(beginNode, endLastNode, $("#linkName_1").val(), "128,0,128"); // 紫色
+                        newLink(beginNode, endLastNode, $("#linkName_1").val() + "(" + beginNode.text + "->" + $("#selectToNode_1").val() + ")", "128,0,128"); // 紫色
                     }
                 } else if ($("#linkType_1").val() == 1) {//无线链路
                     newLink(beginNode, endLastNode, $("#linkName_1").val(), "0,0,0");
@@ -633,13 +635,13 @@ $("#addComplexLink_2").click(function () {
         success: function (msg) {
             $.alert(msg);
             if (msg == "创建成功") {
-                if ($("#linkType_2").val() == 0) {//有线链路
+                if ($("#linkType_2").val() == 0) { // 有线链路
                     if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
-                        newLink(beginNode, endLastNode, $("#linkName_2").val(), "0,0,255");
+                        newLink(beginNode, endLastNode, $("#linkName_2").val() + "(" + $("#selectFromNode_2").val() + "->" + endLastNode.text + ")", "0,0,255");
                     } else { // 非星星之间的链路，星地链路
-                        newLink(beginNode, endLastNode, $("#linkName_2").val(), "128,0,128"); // 紫色
+                        newLink(beginNode, endLastNode, $("#linkName_2").val() + "(" + $("#selectFromNode_2").val() + "->" + endLastNode.text + ")", "128,0,128"); // 紫色
                     }
-                } else if ($("#linkType_2").val() == 1) {//无线链路
+                } else if ($("#linkType_2").val() == 1) { // 无线链路
                     newLink(beginNode, endLastNode, $("#linkName_2").val(), "0,0,0");
                 }
                 beginNode = null;

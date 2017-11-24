@@ -335,7 +335,7 @@ $("#editNode").click(function () {
         window.open(encodeURI("nodeEdit.html?nodeName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
     } else if (elements[0] instanceof JTopo.Node && elements[0].fontColor == "255,0,0") { // 选中的是复杂节点
         window.open(encodeURI("complexNodeEdit.html?complexNodeName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
-    } else {
-        $.alert("请选中节点后在进行下一步操作！");
+    } else if (elements[0] instanceof JTopo.Link) { // 选中的是节点
+        window.open(encodeURI("linkEdit.html?linkName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
     }
 });

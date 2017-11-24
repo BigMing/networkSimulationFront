@@ -7,6 +7,7 @@
     <title>注册页面</title>
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css"/>
     <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="lib/jquery/jquery-confirm.min.css"/>
 </head>
 <body background="img/background.jpg">
 <!--头部区域-->
@@ -24,14 +25,14 @@
         </div>
     </nav>
 </header>
-<form action="" method="post">
+<form>
     <div class="mycenter">
         <div class="mysign">
             <div class="col-lg-11 text-center text-info">
                 <h2 style="color: black">用户注册</h2>
             </div>
             <div class="col-lg-10">
-                <input type="text" class="form-control" name="username" placeholder="请输入用户名" required autofocus/>
+                <input type="text" class="form-control" name="username" id="username" placeholder="请输入用户名" required autofocus/>
             </div>
             <div class="col-lg-10"></div>
             <div class="col-lg-10">
@@ -43,7 +44,7 @@
             </div>
             <div class="col-lg-10"></div>
             <div class="col-lg-10">
-                <button type="button" class="btn btn-success col-lg-12" id="login">注册</button>
+                <button type="button" class="btn btn-success col-lg-12" id="register">注册</button>
             </div>
         </div>
     </div>
@@ -51,8 +52,10 @@
 
 <script type="text/javascript" src="lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery-confirm.min.js"></script>
 <script type="text/javascript" src="js/register.js"></script>
 </body>
+
 <footer>
     <div class="container">
         <div class="row">

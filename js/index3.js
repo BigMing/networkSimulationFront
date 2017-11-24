@@ -61,7 +61,8 @@ var simpleNodeType = [];
  * 刷新画布区域的请求函数
  */
 function refreshCanvas() {
-    //画出已有节点，简单节点
+    scene.clear(); // 先清楚元素再冲画上去
+    // 画出已有节点，简单节点
     $.ajax({
         url: '/NetworkSimulation/selectNodeList',
         data: {
@@ -160,6 +161,12 @@ function refreshCanvas() {
  * 显示时间，工程名和场景名，刷新画布
  */
 $(document).ready(function () {
+    if ($.session.get('login') != 'true') { // 如果未登录
+        $.alert("请先登录！3秒后自动跳转");
+        setTimeout(function () {
+            window.location.replace(encodeURI("login.html"));
+        }, 3000);
+    }
     showTime(); // 右上角显示时间
     $("#scenarioId").val($.getUrlParam("scenarioId")); // 设置到stk提交框
     $("#projectName").html($.getUrlParam("projectName")); // 显示工程名和场景名
@@ -257,7 +264,7 @@ $("#remove").click(function () {
             }
         }
     }
-    setTimeout("refreshCanvas()", 10 * 1000); // 10秒后刷新画布
+    // setTimeout("refreshCanvas()", 10 * 1000); // 10秒后刷新画布
 });
 
 /**
@@ -446,10 +453,10 @@ $("#selectToPort_0, #selectFromPort_0").blur(function () {
     }
     fromPortIp = fromPortIp.substring(0, fromPortIp.lastIndexOf("."));
     toPortIp = toPortIp.substring(0, toPortIp.lastIndexOf(".")); // 取得网段
-    if (fromPortIp.match(toPortIp) != null) { // 有重复
-        $("#portErrorInfo_0").removeAttr("hidden");
-    } else { // 没有重复
+    if (fromPortIp.match(toPortIp) != null) {
         $("#portErrorInfo_0").attr("hidden", "hidden");
+    } else {
+        $("#portErrorInfo_0").removeAttr("hidden");
     }
 });
 
@@ -473,10 +480,10 @@ $("#selectToPort_1, #fromPort_1").blur(function () {
     }
     fromPortIp = fromPortIp.substring(0, fromPortIp.lastIndexOf("."));
     toPortIp = toPortIp.substring(0, toPortIp.lastIndexOf(".")); // 取得网段
-    if (fromPortIp.match(toPortIp) != null) { // 有重复
-        $("#portErrorInfo_1").removeAttr("hidden");
-    } else { // 没有重复
+    if (fromPortIp.match(toPortIp) != null) {
         $("#portErrorInfo_1").attr("hidden", "hidden");
+    } else {
+        $("#portErrorInfo_1").removeAttr("hidden");
     }
 });
 
@@ -500,10 +507,10 @@ $("#selectFromPort_2, #toPort_2").blur(function () {
     }
     fromPortIp = fromPortIp.substring(0, fromPortIp.lastIndexOf("."));
     toPortIp = toPortIp.substring(0, toPortIp.lastIndexOf(".")); // 取得网段
-    if (fromPortIp.match(toPortIp) != null) { // 有重复
-        $("#portErrorInfo_2").removeAttr("hidden");
-    } else { // 没有重复
+    if (fromPortIp.match(toPortIp) != null) {
         $("#portErrorInfo_2").attr("hidden", "hidden");
+    } else {
+        $("#portErrorInfo_2").removeAttr("hidden");
     }
 });
 
@@ -770,10 +777,10 @@ $("#toPort, #fromPort").blur(function () {
     }
     fromPortIp = fromPortIp.substring(0, fromPortIp.lastIndexOf("."));
     toPortIp = toPortIp.substring(0, toPortIp.lastIndexOf(".")); // 取得网段
-    if (fromPortIp.match(toPortIp) != null) { // 有重复
+    if (fromPortIp.match(toPortIp) != null) { // 匹配上了，是同一网段。
+        $("#portErrorInfo").attr("hidden", "hidden"); // 不显示错误信息
+    } else { // 不是同一网段
         $("#portErrorInfo").removeAttr("hidden");
-    } else { // 没有重复
-        $("#portErrorInfo").attr("hidden", "hidden");
     }
 });
 
