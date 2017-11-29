@@ -217,6 +217,7 @@ $("#submitPort").click(function () {
             data: {
                 n_id : $("#nodeId").val(),
                 portName : $("#portName").val(),
+                isMultiplexing : $("#isMultiplexing").val(),
                 portType : $("#portType").val(),
                 portIp : $("#portIp").val(),
                 transmitterPower : $("#transmitterPower").val(),
@@ -249,6 +250,7 @@ $("#submitPort").click(function () {
             data: {
                 n_id : $("#nodeId").val(),
                 portName : $("#portName").val(),
+                isMultiplexing : $("#isMultiplexing").val(),
                 portType : $("#portType").val(),
                 portIp : $("#portIp").val(),
                 transmitterPower : $("#transmitterPower").val(),

@@ -38,6 +38,7 @@ $("#editPort").click(function () {
         data: {
             portName : $("#portName").val(),
             pt_id : $("#portId").val(),
+            isMultiplexing : $("#isMultiplexing").val(),
             portType : $("#portType").val(),
             portIp : $("#portIp").val(),
             transmitterPower : $("#transmitterPower").val(),
@@ -65,7 +66,7 @@ $("#editPort").click(function () {
 });
 
 $(document).ready(function () {
-    $.ajax({
+    $.ajax({ // 根据pt_id获取port对象的json
         url: '/NetworkSimulation/getPort',
         data: {
             pt_id : $.getUrlParam("portId")
@@ -86,20 +87,21 @@ $(document).ready(function () {
 //显示出端口属性
 function initPortAttr(data) {
     var objs = jQuery.parseJSON(data);
-    $("#portName").val(objs[0].portName);
-    $("#portId").val(objs[0].pt_id);
-    $("#portType").val(objs[0].portType);
-    $("#portIp").val(objs[0].portIp);
-    $("#transmitterPower").val(objs[0].transmitterPower);
-    $("#transmitterFrequency").val(objs[0].transmitterFrequency);
-    $("#transmitterBandwidth").val(objs[0].transmitterBandwidth);
-    $("#transmitterGain").val(objs[0].transmitterGain);
-    $("#receiverFrequency").val(objs[0].receiverFrequency);
-    $("#receiverBandwidth").val(objs[0].receiverBandwidth);
-    $("#receiverGain").val(objs[0].receiverGain);
-    $("#modem").val(objs[0].modem);
-    $("#maximumRate").val(objs[0].maximumRate);
-    $("#packetLoss").val(objs[0].packetLoss);
+    $("#portName").val(objs.portName);
+    $("#portId").val(objs.pt_id);
+    $("#isMultiplexing").val(objs.isMultiplexing);
+    $("#portType").val(objs.portType);
+    $("#portIp").val(objs.portIp);
+    $("#transmitterPower").val(objs.transmitterPower);
+    $("#transmitterFrequency").val(objs.transmitterFrequency);
+    $("#transmitterBandwidth").val(objs.transmitterBandwidth);
+    $("#transmitterGain").val(objs.transmitterGain);
+    $("#receiverFrequency").val(objs.receiverFrequency);
+    $("#receiverBandwidth").val(objs.receiverBandwidth);
+    $("#receiverGain").val(objs.receiverGain);
+    $("#modem").val(objs.modem);
+    $("#maximumRate").val(objs.maximumRate);
+    $("#packetLoss").val(objs.packetLoss);
     if ($("#portType").val() == 1) { // 类型1
         $("#transmitterPowerDiv").removeAttr("hidden", "hidden");
         $("#transmitterFrequencyDiv").removeAttr("hidden", "hidden");

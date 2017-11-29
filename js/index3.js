@@ -347,10 +347,10 @@ function getFromPort(k) {
             fromPortObjs_0 = jQuery.parseJSON(msg);
             var objs = jQuery.parseJSON(msg);
             for (var i = 0; i < objs.length; i++) {
-                if (objs[i].portStatus == 0) {
+                if (objs[i].portStatus == 0 || objs[i].isMultiplexing == 1) {
                     html += '<option value="' + objs[i].pt_id + '">' + objs[i].portName + '(' + objs[i].portIp + ')' + '</option>';
                 } else if (objs[i].portStatus == 1) {
-                    html += '<option value="' + objs[i].pt_id + '" disabled="disabled">' + objs[i].portName + '</option>';
+                    html += '<option value="' + objs[i].pt_id + '" disabled="disabled">' + objs[i].portName + '(已占用)' + '</option>';
                 }
             }
             $('[id = "selectFromPort_' + k + '"]').html(html);
@@ -386,10 +386,10 @@ function getToPort(k) {
             toPortObjs_0 = jQuery.parseJSON(msg);
             var objs = jQuery.parseJSON(msg);
             for (var i = 0; i < objs.length; i++) {
-                if (objs[i].portStatus == 0) {
+                if (objs[i].portStatus == 0 || objs[i].isMultiplexing == 1) {
                     html += '<option value="' + objs[i].pt_id + '">' + objs[i].portName + '(' + objs[i].portIp + ')' + '</option>';
                 } else if (objs[i].portStatus == 1) {
-                    html += '<option value="' + objs[i].pt_id + '" disabled="disabled">' + objs[i].portName + '</option>';
+                    html += '<option value="' + objs[i].pt_id + '" disabled="disabled">' + objs[i].portName + '(已占用)' + '</option>';
                 }
             }
             $('[id = "selectToPort_' + k + '"]').html(html);
@@ -409,10 +409,10 @@ function initFromPort(data, k) {
     fromPortObjs_1 = jQuery.parseJSON(data);
     var objs = jQuery.parseJSON(data);
     for (var i = 0; i < objs.length; i++) {
-        if (objs[i].portStatus == 0) {
+        if (objs[i].portStatus == 0 || objs[i].isMultiplexing == 1) {
             html += '<option value="' + objs[i].pt_id + '">' + objs[i].portName + '(' + objs[i].portIp + ')' + '</option>';
         } else if (objs[i].portStatus == 1) {
-            html += '<option value="' + objs[i].pt_id + '" disabled="disabled">' + objs[i].portName + '</option>';
+            html += '<option value="' + objs[i].pt_id + '" disabled="disabled">' + objs[i].portName + '(已占用)' + '</option>';
         }
     }
     $('[id = "fromPort_' + k + '"]').html(html);
@@ -424,10 +424,10 @@ function initToPort(data, k) {
     toPortObjs_1 = jQuery.parseJSON(data);
     var objs = jQuery.parseJSON(data);
     for (var i = 0; i < objs.length; i++) {
-        if (objs[i].portStatus == 0) {
+        if (objs[i].portStatus == 0 || objs[i].isMultiplexing == 1) {
             html += '<option value="' + objs[i].pt_id + '">' + objs[i].portName + '(' + objs[i].portIp + ')' + '</option>';
         } else if (objs[i].portStatus == 1) {
-            html += '<option value="' + objs[i].pt_id + '" disabled="disabled">' + objs[i].portName + '</option>';
+            html += '<option value="' + objs[i].pt_id + '" disabled="disabled">' + objs[i].portName + '(已占用)' + '</option>';
         }
     }
     $('[id = "toPort_' + k + '"]').html(html);
@@ -731,7 +731,7 @@ function initFromPortList(data) {
     fromPortObjs = jQuery.parseJSON(data);
     var areaCont = "";
     for (var i = 0; i < fromPortObjs.length; i++){
-        if (fromPortObjs[i].portStatus == 0){
+        if (fromPortObjs[i].portStatus == 0 || fromPortObjs[i].isMultiplexing == 1){ // 未被占用或者是一对多的端口
             areaCont += '<option value="' + fromPortObjs[i].pt_id + '">' + fromPortObjs[i].portName + '(' + fromPortObjs[i].portIp + ')' + '</option>';
         } else {
             areaCont += '<option value="' + fromPortObjs[i].pt_id + '" disabled="disabled">' + fromPortObjs[i].portName + '(已占用)' + '</option>';
@@ -748,7 +748,7 @@ function initToPortList(data) {
     toPortObjs = jQuery.parseJSON(data);
     var areaCont = "";
     for (var i = 0; i < toPortObjs.length; i++){
-        if (toPortObjs[i].portStatus == 0){
+        if (toPortObjs[i].portStatus == 0 || toPortObjs[i].isMultiplexing == 1){
             areaCont += '<option value="' + toPortObjs[i].pt_id + '">' + toPortObjs[i].portName + '(' + toPortObjs[i].portIp + ')' + '</option>';
         } else {
             areaCont += '<option value="' + toPortObjs[i].pt_id + '" disabled="disabled">' + toPortObjs[i].portName + '(已占用)' + '</option>';
