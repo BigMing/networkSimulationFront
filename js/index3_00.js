@@ -428,7 +428,7 @@ $("#addLink").click(function () {
     } else if (beginNode.fontColor == "0,1,0") { // 交换机到三层节点
         linkType = 6;
     } else if (endLastNode.fontColor == "0,1,0") { // 三层到交换机
-        linkType - 7;
+        linkType = 7;
     }
     $.ajax({
         url: '/NetworkSimulation/addLink',
