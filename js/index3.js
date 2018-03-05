@@ -61,7 +61,7 @@ var simpleNodeType = [];
  * 刷新画布区域的请求函数
  */
 function refreshCanvas() {
-    scene.clear(); // 先清楚元素再冲画上去
+    scene.clear(); // 先清楚元素再重画上去
     // 画出已有节点，简单节点
     $.ajax({
         url: '/NetworkSimulation/selectNodeList',
@@ -119,12 +119,12 @@ function refreshCanvas() {
             setTimeout(function () {
                 var fromNode = undefined;
                 var toNode = undefined;
-                //解析出来link对象
+                // 解析出来link对象
                 var objs = jQuery.parseJSON(data);
-                //获取画布上所有node对象
+                // 获取画布上所有node对象
                 var elements = scene.getDisplayedNodes();
                 for (var i = 0; i < objs.length; i++) {
-                    //对每个link对象找到fromNode和toNode
+                    // 对每个link对象找到fromNode和toNode
                     for (var j = 0; j < elements.length; j++) {
                         if (objs[i].logicalFromNodeName == elements[j].text) {
                             fromNode = elements[j];
@@ -133,7 +133,7 @@ function refreshCanvas() {
                             toNode = elements[j];
                         }
                     }
-                    //画出链路，静态场景中
+                    // 画出链路，静态场景中
                     if (objs[i].linkStatus == 1 && objs[i].cn_id == 0) {
                         newLink(fromNode, toNode, objs[i].linkName, "255,0,0"); // 断开的链路，红色
                     }
@@ -170,7 +170,7 @@ $(document).ready(function () {
     showTime(); // 右上角显示时间
     $("#scenarioId").val($.getUrlParam("scenarioId")); // 设置到stk提交框
     $("#projectName").html($.getUrlParam("projectName")); // 显示工程名和场景名
-    $("#scenarioName").html($.getUrlParam("scenarioName"));
+    $("#scenarioName").html($.getUrlParam("scenarioName")); // 显示场景名
     refreshCanvas(); // 刷新画布
 });
 
@@ -780,7 +780,7 @@ $("#toPort, #fromPort").blur(function () {
     if (fromPortIp.match(toPortIp) != null) { // 匹配上了，是同一网段。
         $("#portErrorInfo").attr("hidden", "hidden"); // 不显示错误信息
     } else { // 不是同一网段
-        $("#portErrorInfo").removeAttr("hidden");
+        $("#portErrorInfo").removeAttr("hidden"); // 显示错误信息
     }
 });
 
