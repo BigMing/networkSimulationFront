@@ -161,7 +161,7 @@ function refreshCanvas() {
  * 显示时间，工程名和场景名，刷新画布
  */
 $(document).ready(function () {
-    if ($.session.get('login') != 'true') { // 如果未登录
+    if ($.session.get('login') != 'true') { // 检测用户是否登陆，未登陆跳转到登陆页面
         $.alert("请先登录！3秒后自动跳转");
         setTimeout(function () {
             window.location.replace(encodeURI("login.html"));

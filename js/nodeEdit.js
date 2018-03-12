@@ -207,7 +207,7 @@ $("#portIp").blur(function () {
  * 新建网口提交
  */
 $("#submitPort").click(function () {
-    if ($("#portName").val() == null) { // 端口名称输入为空时
+    if ($("#portName").val() == "") { // 端口名称输入为空时
         $.alert("端口名称不能为空！");
         return;
     }

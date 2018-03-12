@@ -125,8 +125,8 @@ scene.mouseup(function (e) {
                 $("#linkModal").modal(); // 弹出模态框
                 if (beginNode.fontColor == "0,1,0") { // 起始节点是交换机，设置vlan端口
                     var html = "";
-                    for (var i = 0; i < 10; i++) { // 设置vlan_0-vlan_9
-                        html += '<option value="br"' + i + '>vlan_' + i + '</option>';
+                    for (var i = 0; i < 10; i++) { // 设置vlan_0 - vlan_9
+                        html += '<option value="' + i + '">vlan_' + i + '</option>';
                     }
                     $("#fromPort").html(html);
                 } else { // 起始节点不是交换机，需要查询端口
@@ -149,11 +149,11 @@ scene.mouseup(function (e) {
                 }
                 if (endLastNode.fontColor == "0,1,0") { // 终止节点是交换机，设置vlan端口
                     var html = "";
-                    for (var i = 0; i < 10; i++) { // 设置vlan_0-vlan_9
-                        html += '<option value="br"' + i + '>vlan_' + i + '</option>';
+                    for (var i = 0; i < 10; i++) { // 设置vlan_0 - vlan_9
+                        html += '<option value="' + i + '">vlan_' + i + '</option>';
                     }
                     $("#toPort").html(html);
-                } else {
+                } else { // 查询终止节点to端口
                     $.ajax({ // 发送ajax查询to端口
                         url: '/NetworkSimulation/getPortBynodeName',
                         data: {
@@ -291,26 +291,7 @@ $("#canvas").droppable({
         var getId = uiOut.draggable[0].id; // 此id即是html上元素的id
         // node_ips = [];
         if (getId == "weixing1") { // 如果拖拽的是简单节点
-            $("#myModal").modal(); // 首先弹出模态框
-            // 查询已有节点的信息，确保输入的管理ip不会重复
-            // $.ajax({
-            //     url: '/NetworkSimulation/selectNodeList',
-            //     data: {
-            //         s_id : $.getUrlParam("scenarioId")
-            //     },
-            //     type: 'post',
-            //     dataType: 'json',
-            //     async: false,
-            //     success: function (data) {
-            //         var objs = jQuery.parseJSON(data);
-            //         for (var i = 0; i < objs.length; i++){
-            //             node_ips[i] = objs[i].manageIp;
-            //         }
-            //     },
-            //     error: function () {
-            //
-            //     }
-            // });
+            $("#myModal").modal();
         }
         if (getId == "weixing2") { // 如果拖拽的是复杂节点，弹出复杂节点模态框
             $("#complexNodeModal").modal();
@@ -323,12 +304,18 @@ $("#canvas").droppable({
  */
 $("#addNode").click(function () {
     var iconUrl = $("input[name='optionsRadiosinline0']:checked").val(); // 选择的图标类型
+
     // if (iconUrl == "img/xinguanzhan01.png" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点
     //     createNode1($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
     // } else { // 如果是星际节点
     //     createNode($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
     // }
     // $('#myModal').modal('hide');
+
+    if ($("#nodeType").val() == 2) { // 设置为存入交换机的图标
+        iconUrl = "img/switchOptical_01.png";
+    }
+
     $.ajax({ // 发送创建节点的请求给后台
         url: '/NetworkSimulation/addNode',
         data: {
@@ -371,12 +358,14 @@ $("#addNode").click(function () {
  */
 $("#addComplexNode").click(function () {
     var iconUrl = $("input[name='optionsRadiosinline1']:checked").val();
+
     // if (iconUrl == "img/xinguanzhan01.png" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点
     //     createComplexNode1($("#complexNodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
     // } else { // 如果是星际节点
     //     createComplexNode($("#complexNodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
     // }
     // $('#complexNodeModal').modal('hide');
+
     $.ajax({
         url: '/NetworkSimulation/addComplexNode',
         data: {
@@ -422,7 +411,7 @@ $("#addLink").click(function () {
     if ($("input[name='saveAsTemplateCheckbox']:checked").val() == 1) { // 链路保存为模板
         isTemplate = 1;
     }
-    var linkType = 0;
+    var linkType = 0; //
     if (beginNode.fontColor == "0,1,0" && endLastNode.fontColor == "0,1,0") { // 交换机到交换机
         linkType = 5;
     } else if (beginNode.fontColor == "0,1,0") { // 交换机到三层节点
