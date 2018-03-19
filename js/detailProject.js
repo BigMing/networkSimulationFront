@@ -98,7 +98,7 @@ $(document).ready(function(){
     });
 });
 
-var expressP, expressC, expressD, expressArea, areaCont, s_id;
+var expressP, expressC, expressD, areaCont, s_id;
 var arrow = " <font>&gt;</font> ";
 
 /*初始化一级目录*/

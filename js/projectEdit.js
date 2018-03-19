@@ -231,11 +231,11 @@ $("#addScenario").click(function () {
         dataType: 'json',
         async: false,
         success: function (msg) {
-            alert(msg);
+            $.alert(msg);
             //刷新当前页面
             $("#myModal").hide();
             window.location.reload();
-            // opener.location.reload()刷新父窗口对象（用于单开窗口）
+            opener.location.reload(); // 刷新父窗口对象（用于单开窗口）
         },
         error: function () {
 

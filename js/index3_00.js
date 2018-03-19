@@ -2,6 +2,26 @@
  * 新建链路——打开模态框，鼠标点击后
  */
 scene.mouseup(function (e) {
+    if (e.target != null && e.target instanceof JTopo.Node) { // 拖动了节点
+        $.ajax({ // 更新节点坐标
+            url: '/NetworkSimulation/updateNodeLocation',
+            data: {
+                s_id: $.getUrlParam("scenarioId"),
+                nodeName : e.target.text,
+                x : e.target.x,
+                y : e.target.y
+            },
+            type: 'post',
+            dataType: 'json',
+            async: true,
+            success: function (msg) {
+                console.log(msg);
+            },
+            error: function () {
+
+            }
+        });
+    }
     if (e.target != null && e.target instanceof JTopo.Node && flag != 0) { // 点击了画布上的节点，且flag！=0
         if (beginNode == null) { // 还未设置起始节点的话
             beginNode = e.target; // 设置起始节点
@@ -128,6 +148,7 @@ scene.mouseup(function (e) {
                     for (var i = 0; i < 10; i++) { // 设置vlan_0 - vlan_9
                         html += '<option value="' + i + '">vlan_' + i + '</option>';
                     }
+                    console.log(html);
                     $("#fromPort").html(html);
                 } else { // 起始节点不是交换机，需要查询端口
                     $.ajax({ // 发送ajax查询from端口
@@ -138,7 +159,7 @@ scene.mouseup(function (e) {
                         },
                         type: 'post',
                         dataType: 'json',
-                        async: false,
+                        async: true,
                         success: function (msg) {
                             initFromPortList(msg);
                         },
@@ -152,6 +173,7 @@ scene.mouseup(function (e) {
                     for (var i = 0; i < 10; i++) { // 设置vlan_0 - vlan_9
                         html += '<option value="' + i + '">vlan_' + i + '</option>';
                     }
+                    console.log(html);
                     $("#toPort").html(html);
                 } else { // 查询终止节点to端口
                     $.ajax({ // 发送ajax查询to端口
@@ -162,7 +184,7 @@ scene.mouseup(function (e) {
                         },
                         type: 'post',
                         dataType: 'json',
-                        async: false,
+                        async: true,
                         success: function (msg) {
                             initToPortList(msg);
                         },
@@ -176,7 +198,7 @@ scene.mouseup(function (e) {
                     data: {},
                     type: 'post',
                     dataType: 'json',
-                    async: false,
+                    async: true,
                     success: function (msg) {
                         console.log(msg);
                         initLinkTemplate(msg);
@@ -411,21 +433,33 @@ $("#addLink").click(function () {
     if ($("input[name='saveAsTemplateCheckbox']:checked").val() == 1) { // 链路保存为模板
         isTemplate = 1;
     }
-    var linkType = 0; //
+    var linkType = 0;
+    var fromIp;
+    var toIp;
     if (beginNode.fontColor == "0,1,0" && endLastNode.fontColor == "0,1,0") { // 交换机到交换机
         linkType = 5;
     } else if (beginNode.fontColor == "0,1,0") { // 交换机到三层节点
         linkType = 6;
+        for (var i = 0; i < toPortObjs.length; i++) {
+        	if (toPortObjs[i].pt_id == $("#toPort").val()) {
+        		toIp = toPortObjs[i].portIp;
+        	}
+        }
     } else if (endLastNode.fontColor == "0,1,0") { // 三层到交换机
         linkType = 7;
+        for (var i = 0; i < fromPortObjs.length; i++) {
+        	if (fromPortObjs[i].pt_id == $("#fromPort").val()) {
+        		fromIp = fromPortObjs[i].portIp;
+        	}
+        }
     }
     $.ajax({
         url: '/NetworkSimulation/addLink',
         data: {
             linkName: $("#linkName").val(),
             linkType: linkType,
-            fromNodeIP: $("#fromNodeIP").val(),
-            toNodeIP: $("#toNodeIP").val(),
+            fromNodeIP: fromIp,
+            toNodeIP: toIp,
             fromNodeName: beginNode.text,
             toNodeName: endLastNode.text,
             logicalFromNodeName: beginNode.text,
