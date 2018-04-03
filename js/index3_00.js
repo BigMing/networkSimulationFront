@@ -87,42 +87,58 @@ scene.mouseup(function (e) {
 
                     }
                 });
-                // 发送ajax查询to端口
-                $.ajax({
-                    url: '/NetworkSimulation/getPortBynodeName',
-                    data: {
-                        nodeName: endLastNode.text,
-                        s_id: $.getUrlParam("scenarioId")
-                    },
-                    type: 'post',
-                    dataType: 'json',
-                    async: false,
-                    success: function (msg) {
-                        initToPort(msg, 2);
-                    },
-                    error: function () {
-
+                if (endLastNode.fontColor == "0,1,0") { // 终止节点是交换机，设置vlan端口
+                    var html = "";
+                    for (var i = 0; i < 3; i++) { // 设置vlan_0 - vlan_2
+                        html += '<option value="' + i + '">vlan_' + i + '</option>';
                     }
-                });
+                    console.log(html);
+                    $("#toPort").html(html);
+                } else {
+                    $.ajax({ // 发送ajax查询to端口
+                        url: '/NetworkSimulation/getPortBynodeName',
+                        data: {
+                            nodeName: endLastNode.text,
+                            s_id: $.getUrlParam("scenarioId")
+                        },
+                        type: 'post',
+                        dataType: 'json',
+                        async: false,
+                        success: function (msg) {
+                            initToPort(msg, 2);
+                        },
+                        error: function () {
+
+                        }
+                    });
+                }
             } else if (beginNode.fontColor == "0,0,0" && endLastNode.fontColor == "255,0,0") { // 简单——复杂
                 $("#complexNodeLinkModal_1").modal();
-                // 发送ajax查询from端口
-                $.ajax({
-                    url: '/NetworkSimulation/getPortBynodeName',
-                    data: {
-                        nodeName: beginNode.text,
-                        s_id: $.getUrlParam("scenarioId")
-                    },
-                    type: 'post',
-                    dataType: 'json',
-                    async: false,
-                    success: function (msg) {
-                        initFromPort(msg, 1);
-                    },
-                    error: function () {
-
+                if (beginNode.fontColor == "0,1,0") { // 起始节点是交换机，设置vlan端口
+                    var html = "";
+                    for (var i = 0; i < 3; i++) { // 设置vlan_0 - vlan_2
+                        html += '<option value="' + i + '">vlan_' + i + '</option>';
                     }
-                });
+                    console.log(html);
+                    $("#fromPort").html(html);
+                } else {
+                    $.ajax({ // 发送ajax查询from端口
+                        url: '/NetworkSimulation/getPortBynodeName',
+                        data: {
+                            nodeName: beginNode.text,
+                            s_id: $.getUrlParam("scenarioId")
+                        },
+                        type: 'post',
+                        dataType: 'json',
+                        async: false,
+                        success: function (msg) {
+                            initFromPort(msg, 1);
+                        },
+                        error: function () {
+
+                        }
+                    });
+                }
                 // 发送ajax查询toNode的内部节点对象列表的json
                 $.ajax({
                     url: '/NetworkSimulation/selectInnerNodeList',
@@ -145,7 +161,7 @@ scene.mouseup(function (e) {
                 $("#linkModal").modal(); // 弹出模态框
                 if (beginNode.fontColor == "0,1,0") { // 起始节点是交换机，设置vlan端口
                     var html = "";
-                    for (var i = 0; i < 10; i++) { // 设置vlan_0 - vlan_9
+                    for (var i = 0; i < 3; i++) { // 设置vlan_0 - vlan_2
                         html += '<option value="' + i + '">vlan_' + i + '</option>';
                     }
                     console.log(html);
@@ -170,7 +186,7 @@ scene.mouseup(function (e) {
                 }
                 if (endLastNode.fontColor == "0,1,0") { // 终止节点是交换机，设置vlan端口
                     var html = "";
-                    for (var i = 0; i < 10; i++) { // 设置vlan_0 - vlan_9
+                    for (var i = 0; i < 3; i++) { // 设置vlan_0 - vlan_2
                         html += '<option value="' + i + '">vlan_' + i + '</option>';
                     }
                     console.log(html);
@@ -515,13 +531,45 @@ $("#addComplexLink_0").click(function () {
     // beginNode = null;
     // scene.remove(link1);
     // $('#complexNodeLinkModal_0').modal('hide');
+    var fromNodeType; // 要确定复杂节点里面的节点类型
+    for (var i = 0; i < fromNodeObjs.length; i++) {
+        if ($("#selectFromNode_0").val() == fromNodeObjs[i].nodeName) {
+            fromNodeType = fromNodeObjs[i].nodeType;
+        }
+    }
+    var toNodeType; // 要确定复杂节点里面的节点类型
+    for (var i = 0; i < toNodeObjs.length; i++) {
+        if ($("#selectToNode_0").val() == toNodeObjs[i].nodeName) {
+            toNodeType = toNodeObjs[i].nodeType;
+        }
+    }
+    var linkType = 0;
+    var fromIp;
+    var toIp;
+    if (fromNodeType == 2 && toNodeType == 2) { // 交换机到交换机
+        linkType = 5;
+    } else if (fromNodeType == 2) { // 交换机到三层节点
+        linkType = 6;
+        for (var i = 0; i < toPortObjs_0.length; i++) {
+            if (toPortObjs_0[i].pt_id == $("#selectToPort_0").val()) {
+                toIp = toPortObjs_0[i].portIp;
+            }
+        }
+    } else if (toNodeType == 2) { // 三层到交换机
+        linkType = 7;
+        for (var i = 0; i < fromPortObjs_0.length; i++) {
+            if (fromPortObjs_0[i].pt_id == $("#selectFromPort_0").val()) {
+                fromIp = fromPortObjs_0[i].portIp;
+            }
+        }
+    }
     $.ajax({
         url: '/NetworkSimulation/addLink',
         data: {
             linkName: $("#linkName_0").val(),
-            linkType: $("#linkType_0").val(),
-            fromNodeIP: $("#fromNodeIP_0").val(),
-            toNodeIP: $("#toNodeIP_0").val(),
+            linkType: linkType,
+            fromNodeIP: fromIp,
+            toNodeIP: toIp,
             fromNodeName: $("#selectFromNode_0").val(),
             toNodeName: $("#selectToNode_0").val(),
             logicalFromNodeName: beginNode.text,
@@ -544,15 +592,6 @@ $("#addComplexLink_0").click(function () {
                 } else { // 非星星之间的链路，星地链路
                     newLink(beginNode, endLastNode, $("#linkName_0").val() + "(" + $("#selectFromNode_0").val() + "->" + $("#selectToNode_0").val() + ")", "128,0,128"); // 紫色
                 }
-                // if ($("#linkType_0").val() == 0) { // 有线链路
-                //     if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
-                //         newLink(beginNode, endLastNode, $("#linkName_0").val() + "(" + $("#selectFromNode_0").val() + "->" + $("#selectToNode_0").val() + ")", "0,0,255");
-                //     } else { // 非星星之间的链路，星地链路
-                //         newLink(beginNode, endLastNode, $("#linkName_0").val() + "(" + $("#selectFromNode_0").val() + "->" + $("#selectToNode_0").val() + ")", "128,0,128"); // 紫色
-                //     }
-                // } else if ($("#linkType_0").val() == 1) { // 无线链路
-                //     newLink(beginNode, endLastNode, $("#linkName_0").val(), "0,0,0");
-                // }
                 beginNode = null;
                 scene.remove(link1);
                 $('#complexNodeLinkModal_0').modal('hide');
@@ -576,13 +615,39 @@ $("#addComplexLink_1").click(function () {
     // beginNode = null;
     // scene.remove(link1);
     // $('#complexNodeLinkModal_1').modal('hide');
+    var toNodeType; // 要确定复杂节点里面的节点类型
+    for (var i = 0; i < toNodeObjs.length; i++) {
+        if ($("#selectToNode_0").val() == toNodeObjs[i].nodeName) {
+            toNodeType = toNodeObjs[i].nodeType;
+        }
+    }
+    var linkType = 0;
+    var fromIp;
+    var toIp;
+    if (beginNode.fontColor == "0,1,0" && toNodeType == 2) { // 交换机到交换机
+        linkType = 5;
+    } else if (beginNode.fontColor == "0,1,0") { // 交换机到三层节点
+        linkType = 6;
+        for (var i = 0; i < toPortObjs_0.length; i++) {
+            if (toPortObjs_0[i].pt_id == $("#selectToPort_1").val()) {
+                toIp = toPortObjs_0[i].portIp;
+            }
+        }
+    } else if (toNodeType == 2) { // 三层到交换机
+        linkType = 7;
+        for (var i = 0; i < fromPortObjs_1.length; i++) {
+            if (fromPortObjs_1[i].pt_id == $("#selectFromPort_1").val()) {
+                fromIp = fromPortObjs_1[i].portIp;
+            }
+        }
+    }
     $.ajax({
         url: '/NetworkSimulation/addLink',
         data: {
             linkName: $("#linkName_1").val(),
-            linkType: $("#linkType_1").val(),
-            fromNodeIP: $("#fromNodeIP_1").val(),
-            toNodeIP: $("#toNodeIP_1").val(),
+            linkType: linkType,
+            fromNodeIP: fromIp,
+            toNodeIP: toIp,
             fromNodeName: beginNode.text,
             toNodeName: $("#selectToNode_1").val(),
             logicalFromNodeName: beginNode.text,
@@ -605,15 +670,6 @@ $("#addComplexLink_1").click(function () {
                 } else { // 非星星之间的链路，星地链路
                     newLink(beginNode, endLastNode, $("#linkName_1").val() + "(" + beginNode.text + "->" + $("#selectToNode_1").val() + ")", "128,0,128"); // 紫色
                 }
-                // if ($("#linkType_1").val() == 0) {//有线链路
-                //     if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
-                //         newLink(beginNode, endLastNode, $("#linkName_1").val() + "(" + beginNode.text + "->" + $("#selectToNode_1").val() + ")", "0,0,255");
-                //     } else { // 非星星之间的链路，星地链路
-                //         newLink(beginNode, endLastNode, $("#linkName_1").val() + "(" + beginNode.text + "->" + $("#selectToNode_1").val() + ")", "128,0,128"); // 紫色
-                //     }
-                // } else if ($("#linkType_1").val() == 1) { // 无线链路
-                //     newLink(beginNode, endLastNode, $("#linkName_1").val(), "0,0,0");
-                // }
                 beginNode = null;
                 scene.remove(link1);
                 $('#complexNodeLinkModal_1').modal('hide');
@@ -637,13 +693,39 @@ $("#addComplexLink_2").click(function () {
     // beginNode = null;
     // scene.remove(link1);
     // $('#complexNodeLinkModal_2').modal('hide');
+    var fromNodeType; // 要确定复杂节点里面的节点类型
+    for (var i = 0; i < fromNodeObjs.length; i++) {
+        if ($("#selectFromNode_0").val() == fromNodeObjs[i].nodeName) {
+            fromNodeType = fromNodeObjs[i].nodeType;
+        }
+    }
+    var linkType = 0;
+    var fromIp;
+    var toIp;
+    if (fromNodeType == 2 && endLastNode.fontColor == "0,1,0") { // 交换机到交换机
+        linkType = 5;
+    } else if (fromNodeType == 2) { // 交换机到三层（简单）节点
+        linkType = 6;
+        for (var i = 0; i < toPortObjs_1.length; i++) {
+            if (toPortObjs_1[i].pt_id == $("#selectToPort_2").val()) {
+                toIp = toPortObjs_1[i].portIp;
+            }
+        }
+    } else if (endLastNode.fontColor == "0,1,0") { // 三层（复杂）到交换机
+        linkType = 7;
+        for (var i = 0; i < fromPortObjs_0.length; i++) {
+            if (fromPortObjs_0[i].pt_id == $("#selectFromPort_2").val()) {
+                fromIp = fromPortObjs_0[i].portIp;
+            }
+        }
+    }
     $.ajax({
         url: '/NetworkSimulation/addLink',
         data: {
             linkName: $("#linkName_2").val(),
-            linkType: $("#linkType_2").val(),
-            fromNodeIP: $("#fromNodeIP_2").val(),
-            toNodeIP: $("#toNodeIP_2").val(),
+            linkType: linkType,
+            fromNodeIP: fromIp,
+            toNodeIP: toIp,
             fromNodeName: $("#selectFromNode_2").val(),
             toNodeName: endLastNode.text,
             logicalFromNodeName: beginNode.text,
@@ -666,15 +748,6 @@ $("#addComplexLink_2").click(function () {
                 } else { // 非星星之间的链路，星地链路
                     newLink(beginNode, endLastNode, $("#linkName_2").val() + "(" + $("#selectFromNode_2").val() + "->" + endLastNode.text + ")", "128,0,128"); // 紫色
                 }
-                // if ($("#linkType_2").val() == 0) { // 有线链路
-                //     if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
-                //         newLink(beginNode, endLastNode, $("#linkName_2").val() + "(" + $("#selectFromNode_2").val() + "->" + endLastNode.text + ")", "0,0,255");
-                //     } else { // 非星星之间的链路，星地链路
-                //         newLink(beginNode, endLastNode, $("#linkName_2").val() + "(" + $("#selectFromNode_2").val() + "->" + endLastNode.text + ")", "128,0,128"); // 紫色
-                //     }
-                // } else if ($("#linkType_2").val() == 1) { // 无线链路
-                //     newLink(beginNode, endLastNode, $("#linkName_2").val(), "0,0,0");
-                // }
                 beginNode = null;
                 scene.remove(link1);
                 $('#complexNodeLinkModal_2').modal('hide');

@@ -80,9 +80,7 @@ function refreshCanvas() {
 				simpleNodeId[objs[i].nodeName] = objs[i].uuid;
 				simpleNodeType[objs[i].nodeName] = objs[i].nodeType;
 				if (objs[i].cn_id == 0) {
-					if (objs[i].iconUrl == "img/switchOptical_01.png") { // is
-																			// L2
-																			// node
+					if (objs[i].iconUrl == "img/switchOptical_01.png") { // is L2 node
 						createSwitchNode(objs[i].nodeName, objs[i].x,
 								objs[i].y, objs[i].iconUrl);
 					} else {
@@ -145,10 +143,10 @@ function refreshCanvas() {
 					}
 					// 画出链路，静态场景中
 					if (objs[i].linkStatus == 1 && objs[i].cn_id == 0) {
-						newLink(fromNode, toNode, objs[i].linkName, "255,0,0"); // 断开的链路，红色
+						newLink(fromNode, toNode, objs[i].linkName + "(" + fromNode.text + "->" + toNode.text + ")", "255,0,0"); // 断开的链路，红色
 					}
 					if (objs[i].linkStatus == 0 && objs[i].cn_id == 0) {
-						newLink(fromNode, toNode, objs[i].linkName, "0,0,255"); // 接通的链路，蓝色
+						newLink(fromNode, toNode, objs[i].linkName + "(" + fromNode.text + "->" + toNode.text + ")", "0,0,255"); // 接通的链路，蓝色
 					}
 					// 动态场景中
 					// if (objs[i].linkStatus == 2 && objs[i].cn_id == 0) {
@@ -156,7 +154,7 @@ function refreshCanvas() {
 					// newLink(fromNode, toNode, objs[i].linkName, "255,0,0");
 					// }
 					if (objs[i].linkStatus == 3 && objs[i].cn_id == 0) {
-						newLink(fromNode, toNode, objs[i].linkName, "0,0,255"); // 接通的链路，蓝色
+						newLink(fromNode, toNode, objs[i].linkName + "(" + fromNode.text + "->" + toNode.text + ")", "0,0,255"); // 接通的链路，蓝色
 					}
 				}
 			}, 1000);
@@ -192,7 +190,7 @@ function refreshCanvas() {
 							toNode = elements[j];
 						}
 					}
-					newLink(fromNode, toNode, objs[i].linkName, "128,0,128"); // 直接画出紫色链路
+					newLink(fromNode, toNode, objs[i].linkName + "(" + fromNode.text + "->" + toNode.text + ")", "128,0,128"); // 直接画出紫色链路
 				}
 			}, 1500);
 		},
@@ -357,24 +355,39 @@ $("#addlink04").click(function() {
 // /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
 // return reg.test(ip);
 // }
+var fromNodeObjs;
 /**
  * 初始化复杂节点间链路模态框中的数据，分别是选择内部节点和端口的选择框
- * 
- * @param data
- *            节点json
- * @param k
- *            标识是那种链路模态框
+ * @param data 节点json
+ * @param k 标识是那种链路模态框
  */
 function initFromNode(data, k) {
 	var html = '';
 	var objs = jQuery.parseJSON(data);
+	fromNodeObjs = jQuery.parseJSON(data);
 	console.log("已解析复杂节点json：");
 	for (var i = 0; i < objs.length; i++) {
-		html += '<option onclick="getFromPort(' + k + ');" value="'
-				+ objs[i].nodeName + '">' + objs[i].nodeName + '</option>';
+		if (objs[i].nodeType == 2) { // 如果是二层交换机
+            html += '<option onclick="initFromVlan(' + k + ');" value="'
+                + objs[i].nodeName + '">' + objs[i].nodeName + '</option>';
+        } else { // 其他三层节点
+            html += '<option onclick="getFromPort(' + k + ');" value="'
+                + objs[i].nodeName + '">' + objs[i].nodeName + '</option>';
+        }
 	}
 	console.log("html：" + html);
 	$('[id = "selectFromNode_' + k + '"]').html(html);
+}
+
+/**
+ * 选中二层节点后初始化端口列表为vlan号
+ */
+function initFromVlan(k) {
+	var html ='';
+	for (var i = 0; i < 3; i++) {
+        html += '<option value="' + i + '">vlan_' + i + '</option>';
+    }
+    $('[id = "selectFromPort_' + k + '"]').html(html);
 }
 
 /**
@@ -414,14 +427,29 @@ function getFromPort(k) {
 	});
 }
 
+var toNodeObjs;
 function initToNode(data, k) {
 	var html = '';
 	var objs = jQuery.parseJSON(data);
+	toNodeObjs = jQuery.parseJSON(data);
 	for (var i = 0; i < objs.length; i++) {
-		html += '<option onclick="getToPort(' + k + ');" value="'
-				+ objs[i].nodeName + '">' + objs[i].nodeName + '</option>';
+        if (objs[i].nodeType == 2) { // 如果是二层交换机
+            html += '<option onclick="initToVlan(' + k + ');" value="'
+                + objs[i].nodeName + '">' + objs[i].nodeName + '</option>';
+        } else { // 其他三层节点
+            html += '<option onclick="getToPort(' + k + ');" value="'
+                + objs[i].nodeName + '">' + objs[i].nodeName + '</option>';
+        }
 	}
 	$('[id = "selectToNode_' + k + '"]').html(html);
+}
+
+function initToVlan(k) {
+    var html ='';
+    for (var i = 0; i < 3; i++) {
+        html += '<option value="' + i + '">vlan_' + i + '</option>';
+    }
+    $('[id = "selectToPort_' + k + '"]').html(html);
 }
 
 var toPortObjs_0;

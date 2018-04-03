@@ -315,7 +315,7 @@ $("#openCli").click(function () {
 });
 
 /**
- * 打开内部编辑器
+ * 打开复杂节点编辑器
  */
 $("#openInnerEdit").click(function () {
     var elements = scene.selectedElements;
