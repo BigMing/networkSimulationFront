@@ -285,7 +285,7 @@ scene.mouseup(function (e) {
             //发送ajax查询from端口
             if (beginNode.fontColor == "0,1,0") { // 起始节点是交换机，设置vlan端口
                 var html = "";
-                for (var i = 0; i < 10; i++) { // 设置vlan_0 - vlan_9
+                for (var i = 0; i < 3; i++) { // 设置vlan_0 - vlan_2
                     html += '<option value="' + i + '">vlan_' + i + '</option>';
                 }
                 console.log(html);
@@ -310,7 +310,7 @@ scene.mouseup(function (e) {
             }
             if (endLastNode.fontColor == "0,1,0") { // 终止节点是交换机，设置vlan端口
                 var html = "";
-                for (var i = 0; i < 10; i++) { // 设置vlan_0 - vlan_9
+                for (var i = 0; i < 3; i++) { // 设置vlan_0 - vlan_2
                     html += '<option value="' + i + '">vlan_' + i + '</option>';
                 }
                 console.log(html);
@@ -616,8 +616,8 @@ $("#openCli").click(function () {
  */
 $("#editNode").click(function () {
     var elements = scene.selectedElements;
-    if (elements[0] == undefined || elements[0] instanceof JTopo.Link || elements[0].fontColor == "255,0,0"){
-        $.alert("请选中简单节点后在进行下一步操作");
+    if (elements[0] == undefined || elements[0] instanceof JTopo.Link || elements[0].fontColor == "255,0,0" || elements[0].fontColor == "0,1,0"){
+        $.alert("请选中简单三层节点后在进行下一步操作");
     } else {
         window.open(encodeURI("nodeEdit.html?nodeName="+ elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
     }

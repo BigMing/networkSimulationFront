@@ -107,7 +107,7 @@ function refreshCanvas() {
 			var objs = jQuery.parseJSON(data);
 			for (var i = 0; i < objs.length; i++) {
 				createComplexNode(objs[i].complexNodeName, objs[i].x,
-						objs[i].y, "img/zhonggui00.png");
+						objs[i].y, objs[i].iconUrl);
 			}
 		},
 		error : function() {

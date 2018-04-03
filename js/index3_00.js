@@ -67,7 +67,7 @@ scene.mouseup(function (e) {
 
                     }
                 });
-            } else if (beginNode.fontColor == "255,0,0" && endLastNode.fontColor == "0,0,0") { // 复杂——简单
+            } else if (beginNode.fontColor == "255,0,0") { // 复杂——简单
                 $("#complexNodeLinkModal_2").modal();
                 // 发送ajax查询fromNode的内部节点对象列表的json
                 $.ajax({
@@ -93,7 +93,7 @@ scene.mouseup(function (e) {
                         html += '<option value="' + i + '">vlan_' + i + '</option>';
                     }
                     console.log(html);
-                    $("#toPort").html(html);
+                    $("#toPort_2").html(html);
                 } else {
                     $.ajax({ // 发送ajax查询to端口
                         url: '/NetworkSimulation/getPortBynodeName',
@@ -112,7 +112,7 @@ scene.mouseup(function (e) {
                         }
                     });
                 }
-            } else if (beginNode.fontColor == "0,0,0" && endLastNode.fontColor == "255,0,0") { // 简单——复杂
+            } else if (endLastNode.fontColor == "255,0,0") { // 简单——复杂
                 $("#complexNodeLinkModal_1").modal();
                 if (beginNode.fontColor == "0,1,0") { // 起始节点是交换机，设置vlan端口
                     var html = "";
@@ -120,7 +120,7 @@ scene.mouseup(function (e) {
                         html += '<option value="' + i + '">vlan_' + i + '</option>';
                     }
                     console.log(html);
-                    $("#fromPort").html(html);
+                    $("#fromPort_1").html(html);
                 } else {
                     $.ajax({ // 发送ajax查询from端口
                         url: '/NetworkSimulation/getPortBynodeName',
