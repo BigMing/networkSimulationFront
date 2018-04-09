@@ -616,10 +616,16 @@ $("#openCli").click(function () {
  */
 $("#editNode").click(function () {
     var elements = scene.selectedElements;
-    if (elements[0] == undefined || elements[0] instanceof JTopo.Link || elements[0].fontColor == "255,0,0" || elements[0].fontColor == "0,1,0"){
-        $.alert("请选中简单三层节点后在进行下一步操作");
+    if (elements[0] instanceof JTopo.Node && elements[0].fontColor == "0,0,0") { // 选中的是简单三层节点
+        window.open(encodeURI("nodeEdit.html?nodeName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
+    } else if (elements[0] instanceof JTopo.Node && elements[0].fontColor == "255,0,0") { // 选中的是复杂节点
+        window.open(encodeURI("complexNodeEdit.html?complexNodeName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
+    } else if (elements[0] instanceof JTopo.Link) { // 选中的是链路
+        window.open(encodeURI("linkEdit.html?linkName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
+    } else if (elements[0] instanceof JTopo.Node && elements[0].fontColor == "0,1,0") { // 选中的是二层节点
+        window.open(encodeURI("nodeEdit.html?nodeName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId") + "&isL2node=1"));
     } else {
-        window.open(encodeURI("nodeEdit.html?nodeName="+ elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
+        $.alert("不支持的操作！");
     }
 });
 

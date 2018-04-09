@@ -1,7 +1,9 @@
 /**
  * Created by sjm on 2017/6/28.
  */
-// 解析url参数的函数，包括解码
+/**
+ * 解析url参数的函数，包括解码
+ */
 (function ($) {
     $.getUrlParam = function (name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -11,7 +13,9 @@
     }
 })(jQuery);
 
-// 判断ip是否合法的正则
+/**
+ * 判断ip是否合法的正则
+ */
 function isValidIP(ip) {
     var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
     return reg.test(ip);
@@ -33,58 +37,102 @@ $("#portIp").blur(function () {
  * 编辑网口属性提交
  */
 $("#editPort").click(function () {
-    $.ajax({
-        url: '/NetworkSimulation/editPort',
-        data: {
-            portName : $("#portName").val(),
-            pt_id : $("#portId").val(),
-            isMultiplexing : $("#isMultiplexing").val(),
-            portType : $("#portType").val(),
-            portIp : $("#portIp").val(),
-            transmitterPower : $("#transmitterPower").val(),
-            transmitterFrequency : $("#transmitterFrequency").val(),
-            transmitterBandwidth : $("#transmitterBandwidth").val(),
-            transmitterGain : $("#transmitterGain").val(),
-            receiverFrequency : $("#receiverFrequency").val(),
-            receiverBandwidth : $("#receiverBandwidth").val(),
-            receiverGain : $("#receiverGain").val(),
-            modem : $("#modem").val(),
-            maximumRate : $("#maximumRate").val(),
-            packetLoss : $("#packetLoss").val()
-        },
-        type: 'post',
-        dataType: 'json',
-        async: false,
-        success: function (msg) {
-            $.alert(msg);
-            location.herf = encodeURI("portEdit.html?portId=" + $("#portId").val()); // 刷新
-        },
-        error: function () {
+    if ($.getUrlParam("ethName") != null) { // 二层节点的网卡
+        $.ajax({ // 编辑二层节点的网卡提交
+            url: '/NetworkSimulation/editEth',
+            data: {
+                nodeName : $.getUrlParam("nodeName"), // 定位二层网卡的实例，节点名
+                ethName : $.getUrlParam("ethName"), // 该实例中要编辑的网卡名eth
+                toNodeName : $.getUrlParam("toNodeName"), // 二层节点另外一端节点名
+                toEth : $.getUrlParam("toEth"), // 另一端的节点的网卡名
+                portName : $("#portName").val(),
+                pt_id : $("#portId").val(),
+                isMultiplexing : $("#isMultiplexing").val(),
+                portType : $("#portType").val(),
+                portIp : $("#portIp").val(),
+                transmitterPower : $("#transmitterPower").val(),
+                transmitterFrequency : $("#transmitterFrequency").val(),
+                transmitterBandwidth : $("#transmitterBandwidth").val(),
+                transmitterGain : $("#transmitterGain").val(),
+                receiverFrequency : $("#receiverFrequency").val(),
+                receiverBandwidth : $("#receiverBandwidth").val(),
+                receiverGain : $("#receiverGain").val(),
+                modem : $("#modem").val(),
+                maximumRate : $("#maximumRate").val(),
+                packetLoss : $("#packetLoss").val()
+            },
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                $.alert(msg);
+                location.herf = encodeURI("portEdit.html?portId=" + $("#portId").val()); // 刷新
+            },
+            error: function () {
 
-        }
-    });
+            }
+        });
+    } else { // 三层节点的端口
+        $.ajax({ // 编辑三层节点的端口提交
+            url: '/NetworkSimulation/editPort',
+            data: {
+                portName : $("#portName").val(),
+                pt_id : $("#portId").val(),
+                isMultiplexing : $("#isMultiplexing").val(),
+                portType : $("#portType").val(),
+                portIp : $("#portIp").val(),
+                transmitterPower : $("#transmitterPower").val(),
+                transmitterFrequency : $("#transmitterFrequency").val(),
+                transmitterBandwidth : $("#transmitterBandwidth").val(),
+                transmitterGain : $("#transmitterGain").val(),
+                receiverFrequency : $("#receiverFrequency").val(),
+                receiverBandwidth : $("#receiverBandwidth").val(),
+                receiverGain : $("#receiverGain").val(),
+                modem : $("#modem").val(),
+                maximumRate : $("#maximumRate").val(),
+                packetLoss : $("#packetLoss").val()
+            },
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                $.alert(msg);
+                location.herf = encodeURI("portEdit.html?portId=" + $("#portId").val()); // 刷新
+            },
+            error: function () {
+
+            }
+        });
+    }
 });
 
 $(document).ready(function () {
-    $.ajax({ // 根据pt_id获取port对象的json
-        url: '/NetworkSimulation/getPort',
-        data: {
-            pt_id : $.getUrlParam("portId")
-        },
-        type: 'post',
-        dataType: 'json',
-        async: false,
-        success: function (msg) {
-            console.log(msg);
-            initPortAttr(msg);
-        },
-        error: function () {
+    if ($.getUrlParam("ethName") != null) { // 二层节点的端口
 
-        }
-    });
+    } else { // 三层节点的端口
+        $.ajax({ // 根据pt_id获取port对象的json，三层节点的端口有效
+            url: '/NetworkSimulation/getPort',
+            data: {
+                pt_id : $.getUrlParam("portId")
+            },
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                console.log(msg);
+                initPortAttr(msg);
+            },
+            error: function () {
+
+            }
+        });
+    }
 });
 
-//显示出端口属性
+/**
+ * 显示出端口属性
+ * @param data 端口对象的json
+ */
 function initPortAttr(data) {
     var objs = jQuery.parseJSON(data);
     $("#portName").val(objs.portName);

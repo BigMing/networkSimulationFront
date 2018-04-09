@@ -106,9 +106,10 @@
                             <label class="col-sm-2 control-label">节点类型</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="nodeType">
-                                    <option value="0">简单三层节点（Docker）</option>
-                                    <option value="1">简单三层节点(VM)</option>
-                                    <option value="2">简单二层节点(VM)</option>
+                                    <option value="0">三层节点（Docker）</option>
+                                    <option value="1">三层节点(VM)</option>
+                                    <option value="2">交换机节点(VM)</option>
+                                    <option value="3">MPLS节点(VM)</option>
                                 </select>
                             </div>
                         </div>
@@ -116,8 +117,7 @@
                             <label class="col-sm-2 control-label">硬件架构</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="hardwareArchitecture">
-                                    <option value="0">Intel x86 32bit</option>
-                                    <option value="1">Intel x86 64bit</option>
+                                    <option value="1">x86</option>
                                     <option value="2">ARM</option>
                                     <option value="3">MIPS</option>
                                 </select>
@@ -170,7 +170,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="linkModalLabel">请输入链路参数</h4>
+                    <h4 class="modal-title" id="linkModalLabel">链路参数设置</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" role="form">
@@ -180,15 +180,15 @@
                                 <input type="text" class="form-control"  placeholder="链路1" id="linkName">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">链路类型</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="linkType">
-                                    <option value="0">有线</option>
-                                    <option value="1">无线</option>
-                                </select>
-                            </div>
-                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-sm-2 control-label">链路类型</label>-->
+                            <!--<div class="col-sm-10">-->
+                                <!--<select class="form-control" id="linkType">-->
+                                    <!--<option value="0">有线</option>-->
+                                    <!--<option value="1">无线</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</div>-->
                         <div class="form-group">
                             <label class="col-sm-2 control-label">from端口</label>
                             <div class="col-sm-10">
@@ -202,12 +202,12 @@
                             </div>
                         </div>
                         <div class="alert alert-danger" hidden="hidden" id="portErrorInfo">请选择在相同网段的端口！</div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">噪声干扰</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" placeholder="单位（dB）" id="channelNoise">
-                            </div>
-                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-sm-2 control-label">噪声干扰</label>-->
+                            <!--<div class="col-sm-10">-->
+                                <!--<input type="text" class="form-control" placeholder="单位（dB）" id="channelNoise">-->
+                            <!--</div>-->
+                        <!--</div>-->
                         <div class="form-group">
                             <label class="col-sm-2 control-label">信道模型</label>
                             <div class="col-sm-10">

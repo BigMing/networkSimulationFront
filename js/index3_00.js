@@ -338,10 +338,18 @@ $("#canvas").droppable({
 });
 
 /**
+ * 选择图标预览
+ */
+$("#iconUrl").change(function () {
+    $("#iconUrl_0").attr('src', $("#iconUrl").val());
+});
+
+/**
  * 创建节点模态框的提交
  */
 $("#addNode").click(function () {
-    var iconUrl = $("input[name='optionsRadiosinline0']:checked").val(); // 选择的图标类型
+    // var iconUrl = $("input[name='optionsRadiosinline0']:checked").val(); // 选择的图标类型
+    var iconUrl = $("#iconUrl").val();
 
     // if (iconUrl == "img/xinguanzhan01.png" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点
     //     createNode1($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
@@ -392,10 +400,18 @@ $("#addNode").click(function () {
 });
 
 /**
+ * 选择复杂节点图标预览
+ */
+$("#complexIconUrl").change(function () {
+    $("#complexIconUrl_0").attr('src', $("#complexIconUrl_0").val());
+});
+
+/**
  * 新建复杂节点提交
  */
 $("#addComplexNode").click(function () {
-    var iconUrl = $("input[name='optionsRadiosinline1']:checked").val();
+    // var iconUrl = $("input[name='optionsRadiosinline1']:checked").val();
+    var iconUrl = $("#complexIconUrl").val();
 
     // if (iconUrl == "img/xinguanzhan01.png" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点
     //     createComplexNode1($("#complexNodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
@@ -617,7 +633,7 @@ $("#addComplexLink_1").click(function () {
     // $('#complexNodeLinkModal_1').modal('hide');
     var toNodeType; // 要确定复杂节点里面的节点类型
     for (var i = 0; i < toNodeObjs.length; i++) {
-        if ($("#selectToNode_0").val() == toNodeObjs[i].nodeName) {
+        if ($("#selectToNode_1").val() == toNodeObjs[i].nodeName) {
             toNodeType = toNodeObjs[i].nodeType;
         }
     }
@@ -695,7 +711,7 @@ $("#addComplexLink_2").click(function () {
     // $('#complexNodeLinkModal_2').modal('hide');
     var fromNodeType; // 要确定复杂节点里面的节点类型
     for (var i = 0; i < fromNodeObjs.length; i++) {
-        if ($("#selectFromNode_0").val() == fromNodeObjs[i].nodeName) {
+        if ($("#selectFromNode_2").val() == fromNodeObjs[i].nodeName) {
             fromNodeType = fromNodeObjs[i].nodeType;
         }
     }

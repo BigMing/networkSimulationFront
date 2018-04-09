@@ -1,7 +1,9 @@
 /**
  * Created by sjm on 2017/6/21.
  */
-// 解析url参数的函数，包括解码
+/**
+ * 解析url参数的函数，包括解码
+ */
 (function ($) {
     $.getUrlParam = function (name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -12,10 +14,10 @@
 })(jQuery);
 
 var portObjs; // 存储端口对象
+var L2LinkObjs; // 二层链路对象
 
 $(document).ready(function () {
-    // 获得节点的属性，显出节点属性
-    $.ajax({
+    $.ajax({ // 获得节点的属性，显出节点属性
         url: '/NetworkSimulation/getNodeBynodeName',
         data: {
             nodeName : $.getUrlParam("nodeName"),
@@ -31,25 +33,48 @@ $(document).ready(function () {
 
         }
     });
-    // 获得网口列表，显示网口
-    $.ajax({
-        url: '/NetworkSimulation/getPortList',
-        data: {
-            n_id : $("#nodeId").val()
-        },
-        type: 'post',
-        dataType: 'json',
-        async: false,
-        success: function (msg) {
-            initPortList(msg);
-        },
-        error: function () {
+    if ($.getUrlParam("isL2node") == 1) { // 编辑的是二层节点
+        $.ajax({ // 返回二层链路的对象列表json
+            url: '/NetworkSimulation/getL2LinkListByNodeName',
+            data: {
+                nodeName : $.getUrlParam("nodeName"),
+                s_id : $.getUrlParam("scenarioId")
+            },
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                console.log(msg);
+                initEthList(msg);
+            },
+            error: function () {
 
-        }
-    });
+            }
+        });
+        $("#addPort").attr('disabled', 'disabled'); // 二层节点不能在这里新建端口
+    } else { // 编辑的是三层节点
+        $.ajax({ // 获得网口列表，显示网口
+            url: '/NetworkSimulation/getPortList',
+            data: {
+                n_id : $("#nodeId").val()
+            },
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                initPortList(msg);
+            },
+            error: function () {
+
+            }
+        });
+    }
 });
 
-// 显示节点属性
+/**
+ * 显示节点属性
+ * @param data 节点对象的json
+ */
 function initNodeAttr(data) {
     var objs = jQuery.parseJSON(data);
     $("#nodeName").val(objs.nodeName);
@@ -64,7 +89,7 @@ function initNodeAttr(data) {
 }
 
 /**
- * 显示网口列表
+ * 显示三层节点的网口列表
  */
 function initPortList(data) {
     portObjs = jQuery.parseJSON(data);
@@ -78,18 +103,34 @@ function initPortList(data) {
 }
 
 /**
+ * 显示二层节点的网卡列表
+ * @param data 二层链路对象列表
+ */
+function initEthList(data) {
+    L2LinkObjs = jQuery.parseJSON(data);
+    var html = '';
+    for (var i = 0; i < L2LinkObjs.length; i++) {
+        if ($.getUrlParam("nodeName") == L2LinkObjs[i].fromNodeName) {
+            html += '<option onclick="selectE(' + L2LinkObjs[i].fromEth + ',' + L2LinkObjs[i].toNodeName + ',' + L2LinkObjs[i].toEth + ')">' + L2LinkObjs[i].fromEth + '(' + L2LinkObjs[i].linkName + ')' + '</option>';
+        }
+        if ($.getUrlParam("nodeName") == L2LinkObjs[i].toNodeName) {
+            html += '<option onclick="selectE(' + L2LinkObjs[i].toEth + ',' + L2LinkObjs[i].fromNodeName + ',' + L2LinkObjs[i].fromEth + ')">' + L2LinkObjs[i].toEth + '(' + L2LinkObjs[i].linkName + ')' + '</option>';
+        }
+    }
+    $("#selectPort").html(html);
+}
+
+/**
  * 选中列表中网口
  * @param i 选中的网口的id
  */
 function selectP(i) {
     $("#editPort").removeAttr("disabled");
     $("#delPort").removeAttr("disabled");
-    // 打开网口编辑器
-    document.getElementById("editPort").onclick = function () {
+    document.getElementById("editPort").onclick = function () { // 打开网口编辑器
         window.open(encodeURI("portEdit.html?portId=" + i));
     };
-    // 删除网口
-    document.getElementById("delPort").onclick = function () {
+    document.getElementById("delPort").onclick = function () { // 删除网口
         $.ajax({
             url: '/NetworkSimulation/deletePort',
             data: {
@@ -106,6 +147,16 @@ function selectP(i) {
 
             }
         });
+    };
+}
+
+/**
+ * 选中二层节点的网卡
+ */
+function selectE(ethName, toNodeName, toEth) {
+    $("#editPort").removeAttr("disabled");
+    document.getElementById("editPort").onclick = function () { // 打开网口编辑器
+        window.open(encodeURI("portEdit.html?nodeName=" + $.getUrlParam("nodeName") + "&ethName=" + ethName + "&toNodeName=" + toNodeName + "&toEth=" + toEth));
     };
 }
 
