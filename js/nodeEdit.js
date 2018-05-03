@@ -111,10 +111,10 @@ function initEthList(data) {
     var html = '';
     for (var i = 0; i < L2LinkObjs.length; i++) {
         if ($.getUrlParam("nodeName") == L2LinkObjs[i].fromNodeName) {
-            html += '<option onclick="selectE(' + L2LinkObjs[i].fromEth + ',' + L2LinkObjs[i].toNodeName + ',' + L2LinkObjs[i].toEth + ')">' + L2LinkObjs[i].fromEth + '(' + L2LinkObjs[i].linkName + ')' + '</option>';
+            html += '<option value="' + L2LinkObjs[i].fromEth + '" onclick="selectE(1);">' + L2LinkObjs[i].fromEth + '(' + L2LinkObjs[i].linkName + ')' + '</option>';
         }
         if ($.getUrlParam("nodeName") == L2LinkObjs[i].toNodeName) {
-            html += '<option onclick="selectE(' + L2LinkObjs[i].toEth + ',' + L2LinkObjs[i].fromNodeName + ',' + L2LinkObjs[i].fromEth + ')">' + L2LinkObjs[i].toEth + '(' + L2LinkObjs[i].linkName + ')' + '</option>';
+            html += '<option value="' + L2LinkObjs[i].toEth + '" onclick="selectE(2);">' + L2LinkObjs[i].toEth + '(' + L2LinkObjs[i].linkName + ')' + '</option>';
         }
     }
     $("#selectPort").html(html);
@@ -153,10 +153,27 @@ function selectP(i) {
 /**
  * 选中二层节点的网卡
  */
-function selectE(ethName, toNodeName, toEth) {
+function selectE(k) {
+    console.log("已选择网卡：" + $("#selectPort").val());
     $("#editPort").removeAttr("disabled");
+    var toNodeName, toEth;
+    if (k == 1) { // 是from端的网卡
+        for (var i = 0; i < L2LinkObjs.length; i++) {
+            if ($("#selectPort").val() == L2LinkObjs[i].fromEth) {
+                toNodeName = L2LinkObjs[i].toNodeName;
+                toEth = L2LinkObjs[i].toEth;
+            }
+        }
+    } else { // 是to端的网卡
+        for (var i = 0; i < L2LinkObjs.length; i++) {
+            if ($("#selectPort").val() == L2LinkObjs[i].toEth) {
+                toNodeName = L2LinkObjs[i].fromNodeName;
+                toEth = L2LinkObjs[i].fromEth;
+            }
+        }
+    }
     document.getElementById("editPort").onclick = function () { // 打开网口编辑器
-        window.open(encodeURI("portEdit.html?nodeName=" + $.getUrlParam("nodeName") + "&ethName=" + ethName + "&toNodeName=" + toNodeName + "&toEth=" + toEth));
+        window.open(encodeURI("portEdit.html?nodeName=" + $.getUrlParam("nodeName") + "&ethName=" + $("#selectPort").val() + "&toNodeName=" + toNodeName + "&toEth=" + toEth));
     };
 }
 

@@ -652,7 +652,7 @@ $("#addComplexLink_1").click(function () {
     } else if (toNodeType == 2) { // 三层到交换机
         linkType = 7;
         for (var i = 0; i < fromPortObjs_1.length; i++) {
-            if (fromPortObjs_1[i].pt_id == $("#selectFromPort_1").val()) {
+            if (fromPortObjs_1[i].pt_id == $("#fromPort_1").val()) {
                 fromIp = fromPortObjs_1[i].portIp;
             }
         }
@@ -730,7 +730,7 @@ $("#addComplexLink_2").click(function () {
     } else if (endLastNode.fontColor == "0,1,0") { // 三层（复杂）到交换机
         linkType = 7;
         for (var i = 0; i < fromPortObjs_0.length; i++) {
-            if (fromPortObjs_0[i].pt_id == $("#selectFromPort_2").val()) {
+            if (fromPortObjs_0[i].pt_id == $("#toPort_2").val()) {
                 fromIp = fromPortObjs_0[i].portIp;
             }
         }

@@ -109,6 +109,7 @@ function initLinkOnCanvas() {
         dataType: 'json',
         async: false,
         success: function (data) {
+        	console.log(data);
             setTimeout(function () { // 1.5秒之后执行
                 var fromNode = undefined;
                 var toNode = undefined;
@@ -119,14 +120,22 @@ function initLinkOnCanvas() {
                 for (var i = 0; i < objs.length; i++) {
                     // 对每个link对象找到fromNode和toNode
                     for (var j = 0; j < elements.length; j++) {
-                        if (objs[i].fromNodeName == elements[j].text) {
+                        if (objs[i].logicalFromNodeName == elements[j].text) {
                             fromNode = elements[j];
                         }
-                        if (objs[i].toNodeName == elements[j].text) {
+                        if (objs[i].logicalToNodeName == elements[j].text) {
                             toNode = elements[j];
                         }
                     }
-                    newLink(fromNode, toNode, objs[i].linkName + "(" + fromNode.text + "->" + toNode.text + ")", "128,0,128"); // 直接画出紫色链路
+                    if (fromNode == undefined || toNode == undefined) {
+						continue;
+					} else {
+						newLink(fromNode, toNode, objs[i].linkName + "("
+								+ fromNode.text + "->" + toNode.text + ")",
+								"128,0,128"); // 直接画出紫色链路
+					}
+                    fromNode = undefined;
+                    toNode = undefined;
                 }
             }, 1500);
         },
@@ -152,7 +161,11 @@ $(document).ready(function () {
             var objs = jQuery.parseJSON(data);
             for (var i = 0; i < objs.length; i++) {
                 if (objs[i].cn_id == complexNodeId) {
-                    createNode(objs[i].nodeName, objs[i].x, objs[i].y, objs[i].iconUrl);
+                	if (objs[i].nodeType == 2) {
+                		createSwitchNode(objs[i].nodeName, objs[i].x, objs[i].y, objs[i].iconUrl);
+                	} else {                		
+                		createNode(objs[i].nodeName, objs[i].x, objs[i].y, objs[i].iconUrl);
+                	}
                 }
             }
         },
@@ -551,9 +564,9 @@ $("#addLink").click(function () {
         url: '/NetworkSimulation/addInnerLink',
         data: {
             linkName : $("#linkName").val(),
-            linkType : $("#linkType").val(),
-            fromNodeIP : $("#fromNodeIP").val(),
-            toNodeIP : $("#toNodeIP").val(),
+            linkType : linkType,
+            fromNodeIP : fromIp,
+            toNodeIP : toIp,
             fromNodeName : beginNode.text,
             toNodeName : endLastNode.text,
             logicalFromNodeName : beginNode.text,

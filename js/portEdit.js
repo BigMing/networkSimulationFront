@@ -108,7 +108,7 @@ $("#editPort").click(function () {
 
 $(document).ready(function () {
     if ($.getUrlParam("ethName") != null) { // 二层节点的端口
-
+        $("#portName").val($.getUrlParam("ethName"));
     } else { // 三层节点的端口
         $.ajax({ // 根据pt_id获取port对象的json，三层节点的端口有效
             url: '/NetworkSimulation/getPort',
