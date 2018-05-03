@@ -27,7 +27,7 @@
 //修改链路的显示
 function changeLinkToRed(link) {
     link.fontColor = "0,0,0";
-    link.lineWidth = 3; // 线宽
+    link.lineWidth = 2; // 线宽
     // link.dashedPattern = dashedPattern; // 虚线
     link.bundleOffset = 60; // 折线拐角处的长度
     link.bundleGap = 20; // 线条之间的间隔
@@ -37,7 +37,7 @@ function changeLinkToRed(link) {
 }
 function changeLinkToBlue(link) {
     link.fontColor = "0,0,0";
-    link.lineWidth = 3; // 线宽
+    link.lineWidth = 2; // 线宽
     // link.dashedPattern = dashedPattern; // 虚线
     link.bundleOffset = 60; // 折线拐角处的长度
     link.bundleGap = 20; // 线条之间的间隔
@@ -45,7 +45,26 @@ function changeLinkToBlue(link) {
     link.strokeColor = "0,0,255"; //颜色
     link.arrowsRadius = 10;
 }
-
+function changeLinkToRed1(link) {
+    link.fontColor = "0,0,0";
+    link.lineWidth = 2; // 线宽
+    // link.dashedPattern = dashedPattern; // 虚线
+    link.bundleOffset = 60; // 折线拐角处的长度
+    link.bundleGap = 20; // 线条之间的间隔
+    link.textOffsetY = 3; // 文本偏移量（向下3个像素）
+    link.strokeColor = "255,1,0"; //红色
+    link.arrowsRadius = 10;
+}
+function changeLinkToBlue1(link) {
+    link.fontColor = "0,0,0";
+    link.lineWidth = 2; // 线宽
+    // link.dashedPattern = dashedPattern; // 虚线
+    link.bundleOffset = 60; // 折线拐角处的长度
+    link.bundleGap = 20; // 线条之间的间隔
+    link.textOffsetY = 3; // 文本偏移量（向下3个像素）
+    link.strokeColor = "0,1,255"; //颜色
+    link.arrowsRadius = 10;
+}
 //点击停止动态变化
 // $("#stopMove").click(function () {
 //    window.clearInterval(t1);

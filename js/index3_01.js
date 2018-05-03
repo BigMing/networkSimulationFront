@@ -4,11 +4,31 @@
 var cutLink;
 $("#cutLink").click(function () {
     var elements = scene.selectedElements;
-    if (elements[0] == undefined || elements[0] instanceof JTopo.Node){
-        $.alert("请选中链路后在进行下一步操作！");
-    } else {
+    if (elements[0] instanceof JTopo.Link && (elements[0].strokeColor == "0,0,255" || elements[0].strokeColor == "128,0,128")) { // 三层链路
         cutLink = elements;
         $("#cutLinkModal").modal();
+    } else if (elements[0] instanceof JTopo.Link && elements[0].strokeColor == "0,1,255") { // 二层链路
+        $.ajax({
+            url: '/NetworkSimulation/cutL2Link',
+            data: {
+                linkName : elements[0].text,
+                scenario_id : $.getUrlParam("scenarioId")
+            },
+            type: 'post',
+            dataType: 'json',
+            async: true,
+            success: function (msg) {
+                $.alert(msg);
+                if (msg == "断开成功") {
+                    changeLinkToRed1(elements[0]); // 变化链路为红色虚线
+                }
+            },
+            error: function () {
+
+            }
+        });
+    } else {
+        $.alert("请选中链路后在进行下一步操作！");
     }
 });
 
@@ -45,9 +65,7 @@ $("#cutLinkSubmit").click(function () {
  */
 $("#connectLink").click(function () {
     var elements = scene.selectedElements;
-    if (elements[0] == undefined || elements[0] instanceof JTopo.Node){
-        $.alert("请选中链路后在进行下一步操作");
-    } else {
+    if (elements[0] instanceof JTopo.Link && elements[0].strokeColor == "255,0,0") { // 三层链路
         $.ajax({
             url: '/NetworkSimulation/connectLink',
             data: {
@@ -67,6 +85,28 @@ $("#connectLink").click(function () {
 
             }
         });
+    } else if (elements[0] instanceof JTopo.Link && elements[0].strokeColor == "255,1,0") { // 二层链路
+        $.ajax({
+            url: '/NetworkSimulation/connectL2Link',
+            data: {
+                linkName : elements[0].text,
+                scenario_id : $.getUrlParam("scenarioId")
+            },
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                $.alert(msg);
+                if (msg == "恢复成功") {
+                    changeLinkToBlue1(elements[0]); // 变化链路为蓝色
+                }
+            },
+            error: function () {
+
+            }
+        });
+    } else {
+        $.alert("请选中链路后在进行下一步操作");
     }
 });
 

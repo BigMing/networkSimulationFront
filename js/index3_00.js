@@ -358,7 +358,7 @@ $("#addNode").click(function () {
     // }
     // $('#myModal').modal('hide');
 
-    if ($("#nodeType").val() == 2) { // 设置为存入交换机的图标
+    if ($("#nodeType").val() == 2 || $("#nodeType").val() == 3) { // 设置为存入交换机的图标
         iconUrl = "img/switchOptical_01.png";
     }
 
@@ -383,7 +383,7 @@ $("#addNode").click(function () {
         success: function (msg) {
             $.alert(msg);
             if (msg == "创建成功") {
-                if ($("#nodeType").val() == 2) { // 是二层交换机节点
+                if ($("#nodeType").val() == 2 || $("#nodeType").val() == 3) { // 是二层交换机节点
                     createSwitchNode($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, "img/switchOptical_01.png");
                 } else if (iconUrl == "img/xinguanzhan01.png" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点且不是交换机节点
                     createNode1($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
@@ -512,6 +512,8 @@ $("#addLink").click(function () {
             if (msg == "创建成功") {
                 if ((beginNode.fontColor == "0,0,0" || beginNode.fontColor == "255,0,0") && endLastNode.fontColor == "0,0,0" || endLastNode.fontColor == "255,0,0") { // 如果是星星之间的链路
                     newLink(beginNode, endLastNode, $("#linkName").val() + "(" + beginNode.text + "->" + endLastNode.text + ")", "0,0,255"); // 蓝色
+                } else if (beginNode.fontColor == "0,1,0" || endLastNode.fontColor == "0,1,0") { // 如果是二层链路
+                    newLink(beginNode, endLastNode, $("#linkName").val() + "(" + beginNode.text + "->" + endLastNode.text + ")", "0,1,255"); // 蓝色
                 } else { // 非星星之间的链路，星地链路
                     newLink(beginNode, endLastNode, $("#linkName").val() + "(" + beginNode.text + "->" + endLastNode.text + ")", "128,0,128"); // 紫色
                 }
