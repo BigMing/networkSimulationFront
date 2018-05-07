@@ -465,6 +465,10 @@ $("#addLink").click(function () {
     if ($("input[name='saveAsTemplateCheckbox']:checked").val() == 1) { // 链路保存为模板
         isTemplate = 1;
     }
+    var onlyPort = 0;
+    if ($("input[name='onlyPortCheckbox']:checked").val() == 1) { // 链路保存为模板
+        onlyPort = 1;
+    }
     var linkType = 0;
     var fromIp;
     var toIp;
@@ -502,7 +506,8 @@ $("#addLink").click(function () {
             channelModel: $("#channelType").val(),
             linkLength: $("#linkLength").val(),
             scenario_id: $.getUrlParam("scenarioId"),
-            isTemplate: isTemplate
+            isTemplate: isTemplate,
+            onlyPort : onlyPort
         },
         type: 'post',
         dataType: 'json',

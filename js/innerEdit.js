@@ -540,6 +540,10 @@ $("#addLink").click(function () {
     // beginNode = null;
     // scene.remove(link1);
     // $('#linkModal').modal('hide');
+    var onlyPort = 0;
+    if ($("input[name='onlyPortCheckbox']:checked").val() == 1) { // 链路保存为模板
+        onlyPort = 1;
+    }
     var linkType = 0;
     var fromIp;
     var toIp;
@@ -577,7 +581,8 @@ $("#addLink").click(function () {
             channelModel : $("#channelType").val(),
             linkLength : $("#linkLength").val(),
             scenario_id : $.getUrlParam("scenarioId"),
-            complexNodeName : $.getUrlParam("nodeName")
+            complexNodeName : $.getUrlParam("nodeName"),
+            onlyPort : onlyPort
         },
         type: 'post',
         dataType: 'json',

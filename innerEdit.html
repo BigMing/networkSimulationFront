@@ -109,7 +109,7 @@
                                     <option value="0">三层节点（Docker）</option>
                                     <option value="1">三层节点(VM)</option>
                                     <option value="2">交换机节点(VM)</option>
-                                    <option value="3">二层节点(VM)</option>
+                                    <!--<option value="3">二层节点(VM)</option>-->
                                     <option value="4">MPLS节点(VM)</option>
                                 </select>
                             </div>
@@ -221,6 +221,14 @@
                             <label class="col-sm-2 control-label">链路长度</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" placeholder="单位（km）" id="linkLength">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="onlyPortCheckbox" value="1"> 仅建立端口
+                                </label>
                             </div>
                         </div>
                     </form>
