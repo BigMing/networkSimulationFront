@@ -259,6 +259,14 @@ function createNode(name, X, Y, pic) { // 星际节点
     scene.add(node);
 }
 
+function createRealNode(name, X, Y, pic) { // 星际节点
+    var node = new JTopo.Node(name);
+    node.setLocation(X, Y);
+    node.fontColor = "0,0,2";
+    node.setImage(pic, true);
+    scene.add(node);
+}
+
 function createNode1(name, X, Y, pic) { // 地面节点
     var node = new JTopo.Node(name);
     node.setLocation(X, Y);
@@ -317,6 +325,9 @@ $("#weixing1").draggable({ // 简单节点
 $("#weixing2").draggable({ // 复杂节点
     helper: "clone"
 });
+$("#weixing3").draggable({ // 实物节点
+    helper: "clone"
+});
 
 var uiOut;// 全局数据-->用于传递变量-->将拖动的数据信息保存起来
 // var node_ips = []; // 保存已有的管理ip
@@ -333,6 +344,9 @@ $("#canvas").droppable({
         }
         if (getId == "weixing2") { // 如果拖拽的是复杂节点，弹出复杂节点模态框
             $("#complexNodeModal").modal();
+        }
+        if (getId == "weixing3") { // 实物节点
+            $("#realNodeModal").modal();
         }
     }
 });
@@ -390,6 +404,42 @@ $("#addNode").click(function () {
                 } else { // 如果是星际节点且不是交换机节点
                     createNode($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
                 }
+                $('#myModal').modal('hide');
+            }
+        },
+        error: function () {
+
+        }
+    });
+});
+
+/**
+ * 创建实物节点提交
+ */
+$("#addRealNode").click(function () {
+    $.ajax({
+        url: '/NetworkSimulation/addRealNode',
+        data: {
+            nodeName: $("#realNodeName").val(),
+            manageIp: $("#manageIP").val(),
+            realNodeIp : $("#realNodeIP"),
+            nodeType: 20,
+            hardwareArchitecture: $("#hardwareArchitecture").val(),
+            operatingSystem: $("#operatingSystem").val(),
+            flavorType: $("#nodeConfig").val(),
+            imageName: $("#nodeImage").val(),
+            x: uiOut.offset.left - document.getElementById("slider_1").offsetWidth,
+            y: uiOut.offset.top - 102,
+            s_id: $.getUrlParam("scenarioId"),
+            iconUrl: "img/5200_01.png"
+        },
+        type: 'post',
+        dataType: 'json',
+        async: false,
+        success: function (msg) {
+            $.alert(msg);
+            if (msg == "创建成功") {
+                createRealNode($("#realNodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, "img/5200_01.png");
                 $('#myModal').modal('hide');
             }
         },
@@ -465,10 +515,6 @@ $("#addLink").click(function () {
     if ($("input[name='saveAsTemplateCheckbox']:checked").val() == 1) { // 链路保存为模板
         isTemplate = 1;
     }
-    var onlyPort = 0;
-    if ($("input[name='onlyPortCheckbox']:checked").val() == 1) { // 链路保存为模板
-        onlyPort = 1;
-    }
     var linkType = 0;
     var fromIp;
     var toIp;
@@ -489,6 +535,9 @@ $("#addLink").click(function () {
         	}
         }
     }
+    if (beginNode.fontColor == "0,0,2" || endLastNode.fontColor == "0,0,2") {
+        linkType = 20;
+    }
     $.ajax({
         url: '/NetworkSimulation/addLink',
         data: {
@@ -507,7 +556,7 @@ $("#addLink").click(function () {
             linkLength: $("#linkLength").val(),
             scenario_id: $.getUrlParam("scenarioId"),
             isTemplate: isTemplate,
-            onlyPort : onlyPort
+            onlyPort : $("#onlyPort").val()
         },
         type: 'post',
         dataType: 'json',

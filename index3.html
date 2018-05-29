@@ -51,6 +51,10 @@
                     <img src="img/zhonggui00.png" id="weixing2">
                     &nbsp;&nbsp;&nbsp;&nbsp;复杂节点
                 </div>
+                <div class="fenlei">
+                    <img src="img/5200.png" id="weixing3">
+                    &nbsp;&nbsp;&nbsp;&nbsp;实物节点
+                </div>
             </div>
         </div>
         <div class="smallbox">
@@ -69,9 +73,11 @@
         <div class="smallbox">
             <a href="javascript:;" data-toggle="collapse" data-target="#more" class="title"><h4>导入轨道文件</h4></a>
             <div id="more" class="collapse in">
-                <form class="form-horizontal" role="form" action="/NetworkSimulation/springUpload" method="post" enctype="multipart/form-data" name="Form2" id="stkForm" target="_blank">
+                <form class="form-horizontal" role="form" action="/NetworkSimulation/springUpload" method="post"
+                      enctype="multipart/form-data" name="Form2" id="stkForm" target="_blank">
                     <div class="form-group">
-                        <input type="file" id="inputFile" accept="text/csv" class="btn btn-default btn-block" name="file">
+                        <input type="file" id="inputFile" accept="text/csv" class="btn btn-default btn-block"
+                               name="file">
                         <input type="text" name="s_id" id="scenarioId" hidden="hidden">
                     </div>
                     <input type="submit" class="btn btn-primary btn-block" id="inputFileSubmit" value="提交">
@@ -134,14 +140,14 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">节点名称</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control"  placeholder="请输入节点名称" id="nodeName">
+                                <input type="text" class="form-control" placeholder="请输入节点名称" id="nodeName">
                             </div>
                         </div>
                         <!--<div class="form-group">-->
-                            <!--<label class="col-sm-2 control-label">管理IP</label>-->
-                            <!--<div class="col-sm-10">-->
-                                <!--<input type="text" class="form-control" placeholder="请输入192.168.10.0/24网段地址" id="manageIP">-->
-                            <!--</div>-->
+                        <!--<label class="col-sm-2 control-label">管理IP</label>-->
+                        <!--<div class="col-sm-10">-->
+                        <!--<input type="text" class="form-control" placeholder="请输入192.168.10.0/24网段地址" id="manageIP">-->
+                        <!--</div>-->
                         <!--</div>-->
                         <div class="alert alert-danger" hidden="hidden" id="nodeIpErrorInfo">错误！请进行一些更改。</div>
                         <div class="form-group">
@@ -207,8 +213,48 @@
         </div><!-- /.modal -->
     </div>
 
+    <!-- 实物节点模态框（Modal） -->
+    <div class="modal fade" id="realNodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="realNodeModalLabel">节点参数设置</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">节点名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="请输入节点名称" id="realNodeName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">管理IP</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="请输入192.168.10.0/24网段地址" id="manageIP">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">物理IP</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="请输入192.168.10.0/24网段地址" id="realNodeIP">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="addRealNode">提交</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
     <!-- 链路模态框（Modal） -->
-    <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel" aria-hidden="true">
+    <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -227,17 +273,17 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">链路名称</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control"  placeholder="链路1" id="linkName">
+                                <input type="text" class="form-control" placeholder="链路1" id="linkName">
                             </div>
                         </div>
                         <!--<div class="form-group">-->
-                            <!--<label class="col-sm-2 control-label">链路类型</label>-->
-                            <!--<div class="col-sm-10">-->
-                                <!--<select class="form-control" id="linkType">-->
-                                    <!--<option value="0">有线</option>-->
-                                    <!--<option value="1">无线</option>-->
-                                <!--</select>-->
-                            <!--</div>-->
+                        <!--<label class="col-sm-2 control-label">链路类型</label>-->
+                        <!--<div class="col-sm-10">-->
+                        <!--<select class="form-control" id="linkType">-->
+                        <!--<option value="0">有线</option>-->
+                        <!--<option value="1">无线</option>-->
+                        <!--</select>-->
+                        <!--</div>-->
                         <!--</div>-->
                         <div class="form-group">
                             <label class="col-sm-2 control-label">from端口</label>
@@ -253,10 +299,10 @@
                         </div>
                         <div class="alert alert-danger" hidden="hidden" id="portErrorInfo">请选择在相同网段的端口！</div>
                         <!--<div class="form-group">-->
-                            <!--<label class="col-sm-2 control-label">噪声干扰</label>-->
-                            <!--<div class="col-sm-10">-->
-                                <!--<input type="text" class="form-control" placeholder="单位（dB）" id="channelNoise">-->
-                            <!--</div>-->
+                        <!--<label class="col-sm-2 control-label">噪声干扰</label>-->
+                        <!--<div class="col-sm-10">-->
+                        <!--<input type="text" class="form-control" placeholder="单位（dB）" id="channelNoise">-->
+                        <!--</div>-->
                         <!--</div>-->
                         <div class="form-group">
                             <label class="col-sm-2 control-label">信道模型</label>
@@ -273,11 +319,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label"></label>
+                            <label class="col-sm-2 control-label">二层端口</label>
                             <div class="col-sm-10">
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" name="onlyPortCheckbox" value="1"> 仅建立端口
-                                </label>
+                                <select class="form-control" id="onlyPort">
+                                    <option value="0">默认建立端口和内部网桥</option>
+                                    <option value="1">两端仅建立端口</option>
+                                    <option value="2">起始端仅建立端口</option>
+                                    <option value="3">到达端仅建立端口</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -299,7 +348,8 @@
     </div>
 
     <!--设置链路断开模态框-->
-    <div class="modal fade" id="cutLinkModal" tabindex="-1" role="dialog" aria-labelledby="cutLinkModalLabel" aria-hidden="true">
+    <div class="modal fade" id="cutLinkModal" tabindex="-1" role="dialog" aria-labelledby="cutLinkModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -325,7 +375,8 @@
     </div>
 
     <!--设置链路通段时间模态框-->
-    <div class="modal fade" id="setLinkTimeModal" tabindex="-1" role="dialog" aria-labelledby="setLinkTimeModalLabel" aria-hidden="true">
+    <div class="modal fade" id="setLinkTimeModal" tabindex="-1" role="dialog" aria-labelledby="setLinkTimeModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -358,12 +409,13 @@
                                     <input type="text" class="form-control" placeholder="X秒" id="moment_0">
                                 </div>
                                 <div class="col-sm-4">
-                                    <select class="form-control" id="selectLink_0" onchange="selectConnction(0);"></select>
+                                    <select class="form-control" id="selectLink_0"
+                                            onchange="selectConnction(0);"></select>
                                 </div>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="switch_0">
-                                        <option value="0" >连通</option>
-                                        <option value="1" >断开</option>
+                                        <option value="0">连通</option>
+                                        <option value="1">断开</option>
                                     </select>
                                 </div>
                             </div>
@@ -371,7 +423,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="closeSetLinkTimeModal">关闭</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="closeSetLinkTimeModal">关闭
+                    </button>
                     <button type="button" class="btn btn-primary" id="setLinkTimeSubmit">提交</button>
                 </div>
             </div><!-- /.modal-content -->
@@ -379,7 +432,8 @@
     </div>
 
     <!--新建复杂节点模态框-->
-    <div class="modal fade" id="complexNodeModal" tabindex="-1" role="dialog" aria-labelledby="complexNodeModalLabel" aria-hidden="true">
+    <div class="modal fade" id="complexNodeModal" tabindex="-1" role="dialog" aria-labelledby="complexNodeModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -420,7 +474,8 @@
     </div>
 
     <!--复杂——复杂链路模态框-->
-    <div class="modal fade" id="complexNodeLinkModal_0" tabindex="-1" role="dialog" aria-labelledby="complexNodeLinkModalLabel_0" aria-hidden="true">
+    <div class="modal fade" id="complexNodeLinkModal_0" tabindex="-1" role="dialog"
+         aria-labelledby="complexNodeLinkModalLabel_0" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -441,7 +496,8 @@
                             </a>
                             <select size="6" class="form-control" id="selectFromPort_0"></select>
                         </div>
-                    </div><hr>
+                    </div>
+                    <hr>
                     <div class="row clearfix">
                         <div class="col-md-6 column">
                             <a href="#" class="list-group-item active">
@@ -455,30 +511,31 @@
                             </a>
                             <select size="6" class="form-control" id="selectToPort_0"></select>
                         </div>
-                    </div><hr>
+                    </div>
+                    <hr>
                     <div class="alert alert-danger" hidden="hidden" id="portErrorInfo_0">请选择在相同网段的端口！</div>
                     <div class="row clearfix">
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">链路名称</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control"  placeholder="链路1" id="linkName_0">
+                                    <input type="text" class="form-control" placeholder="链路1" id="linkName_0">
                                 </div>
                             </div>
                             <!--<div class="form-group">-->
-                                <!--<label class="col-sm-2 control-label">链路类型</label>-->
-                                <!--<div class="col-sm-9">-->
-                                    <!--<select class="form-control" id="linkType_0">-->
-                                        <!--<option value="0">有线</option>-->
-                                        <!--<option value="1">无线</option>-->
-                                    <!--</select>-->
-                                <!--</div>-->
+                            <!--<label class="col-sm-2 control-label">链路类型</label>-->
+                            <!--<div class="col-sm-9">-->
+                            <!--<select class="form-control" id="linkType_0">-->
+                            <!--<option value="0">有线</option>-->
+                            <!--<option value="1">无线</option>-->
+                            <!--</select>-->
+                            <!--</div>-->
                             <!--</div>-->
                             <!--<div class="form-group">-->
-                                <!--<label class="col-sm-2 control-label">噪声干扰</label>-->
-                                <!--<div class="col-sm-9">-->
-                                    <!--<input type="text" class="form-control" placeholder="单位（dB）" id="channelNoise_0">-->
-                                <!--</div>-->
+                            <!--<label class="col-sm-2 control-label">噪声干扰</label>-->
+                            <!--<div class="col-sm-9">-->
+                            <!--<input type="text" class="form-control" placeholder="单位（dB）" id="channelNoise_0">-->
+                            <!--</div>-->
                             <!--</div>-->
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">信道模型</label>
@@ -506,7 +563,8 @@
     </div>
 
     <!--简单——复杂链路模态框-->
-    <div class="modal fade" id="complexNodeLinkModal_1" tabindex="-1" role="dialog" aria-labelledby="complexNodeLinkModalLabel_1" aria-hidden="true">
+    <div class="modal fade" id="complexNodeLinkModal_1" tabindex="-1" role="dialog"
+         aria-labelledby="complexNodeLinkModalLabel_1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -527,24 +585,25 @@
                             </a>
                             <select size="6" class="form-control" id="selectToPort_1"></select>
                         </div>
-                    </div><hr>
+                    </div>
+                    <hr>
                     <div class="alert alert-danger" hidden="hidden" id="portErrorInfo_1">请选择在相同网段的端口！</div>
                     <div class="row clearfix">
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">链路名称</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control"  placeholder="链路1" id="linkName_1">
+                                    <input type="text" class="form-control" placeholder="链路1" id="linkName_1">
                                 </div>
                             </div>
                             <!--<div class="form-group">-->
-                                <!--<label class="col-sm-2 control-label">链路类型</label>-->
-                                <!--<div class="col-sm-9">-->
-                                    <!--<select class="form-control" id="linkType_1">-->
-                                        <!--<option value="0">有线</option>-->
-                                        <!--<option value="1">无线</option>-->
-                                    <!--</select>-->
-                                <!--</div>-->
+                            <!--<label class="col-sm-2 control-label">链路类型</label>-->
+                            <!--<div class="col-sm-9">-->
+                            <!--<select class="form-control" id="linkType_1">-->
+                            <!--<option value="0">有线</option>-->
+                            <!--<option value="1">无线</option>-->
+                            <!--</select>-->
+                            <!--</div>-->
                             <!--</div>-->
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">from端口</label>
@@ -553,10 +612,10 @@
                                 </div>
                             </div>
                             <!--<div class="form-group">-->
-                                <!--<label class="col-sm-2 control-label">噪声干扰</label>-->
-                                <!--<div class="col-sm-9">-->
-                                    <!--<input type="text" class="form-control" placeholder="单位（dB）" id="channelNoise_1">-->
-                                <!--</div>-->
+                            <!--<label class="col-sm-2 control-label">噪声干扰</label>-->
+                            <!--<div class="col-sm-9">-->
+                            <!--<input type="text" class="form-control" placeholder="单位（dB）" id="channelNoise_1">-->
+                            <!--</div>-->
                             <!--</div>-->
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">信道模型</label>
@@ -584,7 +643,8 @@
     </div>
 
     <!--复杂——简单链路模态框-->
-    <div class="modal fade" id="complexNodeLinkModal_2" tabindex="-1" role="dialog" aria-labelledby="complexNodeLinkModalLabel_2" aria-hidden="true">
+    <div class="modal fade" id="complexNodeLinkModal_2" tabindex="-1" role="dialog"
+         aria-labelledby="complexNodeLinkModalLabel_2" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -605,24 +665,25 @@
                             </a>
                             <select size="6" class="form-control" id="selectFromPort_2"></select>
                         </div>
-                    </div><hr>
+                    </div>
+                    <hr>
                     <div class="alert alert-danger" hidden="hidden" id="portErrorInfo_2">请选择在相同网段的端口！</div>
                     <div class="row clearfix">
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">链路名称</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control"  placeholder="链路1" id="linkName_2">
+                                    <input type="text" class="form-control" placeholder="链路1" id="linkName_2">
                                 </div>
                             </div>
                             <!--<div class="form-group">-->
-                                <!--<label class="col-sm-2 control-label">链路类型</label>-->
-                                <!--<div class="col-sm-9">-->
-                                    <!--<select class="form-control" id="linkType_2">-->
-                                        <!--<option value="0">有线</option>-->
-                                        <!--<option value="1">无线</option>-->
-                                    <!--</select>-->
-                                <!--</div>-->
+                            <!--<label class="col-sm-2 control-label">链路类型</label>-->
+                            <!--<div class="col-sm-9">-->
+                            <!--<select class="form-control" id="linkType_2">-->
+                            <!--<option value="0">有线</option>-->
+                            <!--<option value="1">无线</option>-->
+                            <!--</select>-->
+                            <!--</div>-->
                             <!--</div>-->
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">to端口</label>
@@ -631,10 +692,10 @@
                                 </div>
                             </div>
                             <!--<div class="form-group">-->
-                                <!--<label class="col-sm-2 control-label">噪声干扰</label>-->
-                                <!--<div class="col-sm-9">-->
-                                    <!--<input type="text" class="form-control" placeholder="单位（dB）" id="channelNoise_2">-->
-                                <!--</div>-->
+                            <!--<label class="col-sm-2 control-label">噪声干扰</label>-->
+                            <!--<div class="col-sm-9">-->
+                            <!--<input type="text" class="form-control" placeholder="单位（dB）" id="channelNoise_2">-->
+                            <!--</div>-->
                             <!--</div>-->
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">信道模型</label>
