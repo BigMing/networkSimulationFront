@@ -159,7 +159,7 @@ scene.mouseup(function (e) {
                 });
             } else { // 简单——简单
                 $("#linkModal").modal(); // 弹出模态框
-                if (beginNode.fontColor == "0,1,0") { // 起始节点是交换机，设置vlan端口
+                if (beginNode.fontColor == "0,1,0" || beginNode.fontColor == "1,0,0") { // 起始节点是交换机，设置vlan端口
                     var html = "";
                     for (var i = 0; i < 3; i++) { // 设置vlan_0 - vlan_2
                         html += '<option value="' + i + '">vlan_' + i + '</option>';
@@ -184,7 +184,7 @@ scene.mouseup(function (e) {
                         }
                     });
                 }
-                if (endLastNode.fontColor == "0,1,0") { // 终止节点是交换机，设置vlan端口
+                if (endLastNode.fontColor == "0,1,0" || endLastNode.fontColor == "1,0,0") { // 终止节点是交换机，设置vlan端口
                     var html = "";
                     for (var i = 0; i < 3; i++) { // 设置vlan_0 - vlan_2
                         html += '<option value="' + i + '">vlan_' + i + '</option>';
@@ -259,7 +259,7 @@ function createNode(name, X, Y, pic) { // 星际节点
     scene.add(node);
 }
 
-function createRealNode(name, X, Y, pic) { // 星际节点
+function createRealNode(name, X, Y, pic) { // 实物节点
     var node = new JTopo.Node(name);
     node.setLocation(X, Y);
     node.fontColor = "0,0,2";
@@ -279,6 +279,14 @@ function createSwitchNode(name, X, Y, pic) { // 画出交换机类型的节点
     var node = new JTopo.Node(name);
     node.setLocation(X, Y);
     node.fontColor = "0,1,0";
+    node.setImage(pic, true);
+    scene.add(node);
+}
+
+function createSwitchNode1(name, X, Y, pic) { // 画出docker交换机类型的节点
+    var node = new JTopo.Node(name);
+    node.setLocation(X, Y);
+    node.fontColor = "1,0,0";
     node.setImage(pic, true);
     scene.add(node);
 }
@@ -397,8 +405,10 @@ $("#addNode").click(function () {
         success: function (msg) {
             $.alert(msg);
             if (msg == "创建成功") {
-                if ($("#nodeType").val() == 2 || $("#nodeType").val() == 3) { // 是二层交换机节点
+                if ($("#nodeType").val() == 2) { // 是二层交换机节点
                     createSwitchNode($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, "img/switchOptical_01.png");
+                } else if ($("#nodeType").val() == 3) { // 是二层docker
+                    createSwitchNode1($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, "img/switchOptical_01.png");
                 } else if (iconUrl == "img/xinguanzhan01.png" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点且不是交换机节点
                     createNode1($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
                 } else { // 如果是星际节点且不是交换机节点
@@ -535,7 +545,27 @@ $("#addLink").click(function () {
         	}
         }
     }
-    if (beginNode.fontColor == "0,0,2" || endLastNode.fontColor == "0,0,2") {
+    if (beginNode.fontColor == "1,0,0" && endLastNode.fontColor == "1,0,0") { // 二层docker到二层docker
+        linkType = 11;
+        $("#onlyPortDiv").attr("hidden", "hidden");
+    } else if (beginNode.fontColor == "1,0,0") { // 二层docker到其他
+        linkType = 12;
+        $("#onlyPortDiv").attr("hidden", "hidden");
+        for (var i = 0; i < toPortObjs.length; i++) {
+            if (toPortObjs[i].pt_id == $("#toPort").val()) {
+                toIp = toPortObjs[i].portIp;
+            }
+        }
+    } else if (endLastNode.fontColor == "1,0,0") { // 其他到二层docker
+        linkType = 13;
+        $("#onlyPortDiv").attr("hidden", "hidden");
+        for (var i = 0; i < fromPortObjs.length; i++) {
+            if (fromPortObjs[i].pt_id == $("#fromPort").val()) {
+                fromIp = fromPortObjs[i].portIp;
+            }
+        }
+    }
+    if (beginNode.fontColor == "0,0,2" || endLastNode.fontColor == "0,0,2") { // 某一端是实物节点
         linkType = 20;
     }
     $.ajax({
