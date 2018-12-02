@@ -110,10 +110,12 @@ function intProvince() {
 	$("#sort1").html(areaCont);
 }
 
-/*选择一级目录*/
+/**
+ * 选中工程
+ * @param index
+ */
 function selectP(p) {
-    //发送ajax查询场景列表
-    $.ajax({
+    $.ajax({ // 发送ajax查询场景列表
         url: '/NetworkSimulation/selectScenarioList',
         data: {
             p_id : projectId[p]
@@ -129,8 +131,7 @@ function selectP(p) {
 
         }
     });
-    //显示出场景列表
-	areaCont = "";
+	areaCont = ""; // 显示出场景列表
 	for (var i = 0; i < city.length; i++) {
 	    if (scenarioStatus[i] == 0) {
 	        //运行的场景
@@ -146,12 +147,10 @@ function selectP(p) {
 	expressP = province[p];
 	$("#selectedSort").html(expressP);
 	$("#releaseBtn").removeAttr("disabled");
-	//打开工程编辑器
-    document.getElementById("releaseBtn").onclick = function () {
+    document.getElementById("releaseBtn").onclick = function () { // 打开工程编辑器
         window.open(encodeURI("projectEdit.html?projectId=" + projectId[p] + "&projectName=" + expressP));
     };
-	//删除工程
-	$("#delete").click(function () {
+	$("#delete").click(function () { // 删除工程
         $.ajax({
             url: '/NetworkSimulation/deleteProject',
             data: {
@@ -172,10 +171,9 @@ function selectP(p) {
     });
 }
 
-/*选择二级目录*/
+// 选择二级目录
 function selectC(p) {
-    //发送ajax查询节点列表
-    $.ajax({
+    $.ajax({ // 发送ajax查询节点列表
         url: '/NetworkSimulation/selectNodeList',
         data: {
             s_id : scenarioId[p]
@@ -190,8 +188,7 @@ function selectC(p) {
 
         }
     });
-    //查询复杂节点
-    $.ajax({
+    $.ajax({ // 查询复杂节点
         url: '/NetworkSimulation/selectComplexNodeList',
         data: {
             s_id : scenarioId[p]
@@ -208,7 +205,7 @@ function selectC(p) {
 
         }
     });
-    //显示出节点列表
+    // 显示出节点列表
 	areaCont = "";
 	expressC = "";
 	for (var i = 0; i < node.length; i++) {
@@ -221,20 +218,18 @@ function selectC(p) {
 	$("#sort2 li").eq(p).addClass("active").siblings("li").removeClass("active");
 	expressC = city[p];
 	s_id = scenarioId[p];
-	$("#selectedSort").html(expressC);
-	if (scenarioStatus[p] == 1) {
-	    //如果是挂起的场景
+	$("#selectedSort").html(expressC); // 显示出用户选中的元素名称
+	if (scenarioStatus[p] == 1) { // 如果是挂起的场景
         $("#releaseBtn").attr("disabled", "disabled");
     } else {
 	    $("#releaseBtn").removeAttr("disabled");
-        //打开场景编辑器
-        document.getElementById("releaseBtn").onclick = function () {
+        document.getElementById("releaseBtn").onclick = function () { // 打开场景编辑器
             window.open(encodeURI("index3.html?scenarioId=" + s_id + "&scenarioName=" + city[p] + "&projectName=" + expressP));
         };
     }
 }
 
-/*选择三级目录*/
+// 选择三级目录
 function selectD(p) {
 	$("#sort3 li").eq(p).addClass("active").siblings("li").removeClass("active");
 	expressD = node[p];
@@ -254,20 +249,20 @@ function selectE(p) {
     };
 }
 
-/*编辑工程*/
+// 编辑工程
 $("#releaseBtn").click(function() {
 	var releaseS = $(this).prop("disabled");
 	if (releaseS == false) {//未被禁用
-		//location.href = "商品发布-详细信息.html";//跳转到下一页
+		// location.href = "商品发布-详细信息.html";//跳转到下一页
 	}
 });
 
-//新建工程
+// 新建工程
 $("#add").click(function () {
     $("#myModal").modal();
 });
 
-//新建工程提交
+// 新建工程提交
 $("#addProject").click(function () {
     $.ajax({
         url: '/NetworkSimulation/creatProject',

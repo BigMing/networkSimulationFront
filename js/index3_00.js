@@ -33,8 +33,7 @@ scene.mouseup(function (e) {
             // 判断选择的节点中是否有复杂节点，弹出相应的模态框
             if (beginNode.fontColor == "255,0,0" && endLastNode.fontColor == "255,0,0") { // 复杂——复杂
                 $("#complexNodeLinkModal_0").modal();
-                // 发送ajax查询fromNode的内部节点对象列表的json
-                $.ajax({
+                $.ajax({ // 发送ajax查询fromNode的内部节点对象列表的json
                     url: '/NetworkSimulation/selectInnerNodeList',
                     data: {
                         complexNodeName: beginNode.text,
@@ -50,8 +49,7 @@ scene.mouseup(function (e) {
 
                     }
                 });
-                // 发送ajax查询toNode的内部节点对象列表的json
-                $.ajax({
+                $.ajax({ // 发送ajax查询toNode的内部节点对象列表的json
                     url: '/NetworkSimulation/selectInnerNodeList',
                     data: {
                         complexNodeName: endLastNode.text,
@@ -69,8 +67,7 @@ scene.mouseup(function (e) {
                 });
             } else if (beginNode.fontColor == "255,0,0") { // 复杂——简单
                 $("#complexNodeLinkModal_2").modal();
-                // 发送ajax查询fromNode的内部节点对象列表的json
-                $.ajax({
+                $.ajax({ // 发送ajax查询fromNode的内部节点对象列表的json
                     url: '/NetworkSimulation/selectInnerNodeList',
                     data: {
                         complexNodeName: beginNode.text,
@@ -139,8 +136,7 @@ scene.mouseup(function (e) {
                         }
                     });
                 }
-                // 发送ajax查询toNode的内部节点对象列表的json
-                $.ajax({
+                $.ajax({ // 发送ajax查询toNode的内部节点对象列表的json
                     url: '/NetworkSimulation/selectInnerNodeList',
                     data: {
                         complexNodeName: endLastNode.text,
@@ -258,7 +254,6 @@ function createNode(name, X, Y, pic) { // 星际节点
     node.setImage(pic, true);
     scene.add(node);
 }
-
 function createRealNode(name, X, Y, pic) { // 实物节点
     var node = new JTopo.Node(name);
     node.setLocation(X, Y);
@@ -266,7 +261,6 @@ function createRealNode(name, X, Y, pic) { // 实物节点
     node.setImage(pic, true);
     scene.add(node);
 }
-
 function createNode1(name, X, Y, pic) { // 地面节点
     var node = new JTopo.Node(name);
     node.setLocation(X, Y);
@@ -274,7 +268,6 @@ function createNode1(name, X, Y, pic) { // 地面节点
     node.setImage(pic, true);
     scene.add(node);
 }
-
 function createSwitchNode(name, X, Y, pic) { // 画出交换机类型的节点
     var node = new JTopo.Node(name);
     node.setLocation(X, Y);
@@ -282,7 +275,6 @@ function createSwitchNode(name, X, Y, pic) { // 画出交换机类型的节点
     node.setImage(pic, true);
     scene.add(node);
 }
-
 function createSwitchNode1(name, X, Y, pic) { // 画出docker交换机类型的节点
     var node = new JTopo.Node(name);
     node.setLocation(X, Y);
@@ -290,7 +282,6 @@ function createSwitchNode1(name, X, Y, pic) { // 画出docker交换机类型的�
     node.setImage(pic, true);
     scene.add(node);
 }
-
 function createComplexNode(name, X, Y, pic) { // 星际复杂节点
     var node = new JTopo.Node(name);
     node.setLocation(X, Y);
@@ -298,7 +289,6 @@ function createComplexNode(name, X, Y, pic) { // 星际复杂节点
     node.setImage(pic, true);
     scene.add(node);
 }
-
 function createComplexNode1(name, X, Y, pic) { // 地面复杂节点
     var node = new JTopo.Node(name);
     node.setLocation(X, Y);
@@ -372,18 +362,15 @@ $("#iconUrl").change(function () {
 $("#addNode").click(function () {
     // var iconUrl = $("input[name='optionsRadiosinline0']:checked").val(); // 选择的图标类型
     var iconUrl = $("#iconUrl").val();
-
     // if (iconUrl == "img/xinguanzhan01.png" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点
     //     createNode1($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
     // } else { // 如果是星际节点
     //     createNode($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
     // }
     // $('#myModal').modal('hide');
-
     if ($("#nodeType").val() == 2 || $("#nodeType").val() == 3) { // 设置为存入交换机的图标
         iconUrl = "img/switchOptical_01.png";
     }
-
     $.ajax({ // 发送创建节点的请求给后台
         url: '/NetworkSimulation/addNode',
         data: {
@@ -405,7 +392,7 @@ $("#addNode").click(function () {
         success: function (msg) {
             $.alert(msg);
             if (msg == "创建成功") {
-                if ($("#nodeType").val() == 2) { // 是二层交换机节点
+                if ($("#nodeType").val() == 2) { // 是二层kvm交换机节点
                     createSwitchNode($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, "img/switchOptical_01.png");
                 } else if ($("#nodeType").val() == 3) { // 是二层docker
                     createSwitchNode1($("#nodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, "img/switchOptical_01.png");
@@ -472,14 +459,12 @@ $("#complexIconUrl").change(function () {
 $("#addComplexNode").click(function () {
     // var iconUrl = $("input[name='optionsRadiosinline1']:checked").val();
     var iconUrl = $("#complexIconUrl").val();
-
     // if (iconUrl == "img/xinguanzhan01.png" || iconUrl == "img/cheliang_01.jpg" || iconUrl == "img/shouchi_01.png") { // 如果是地面节点
     //     createComplexNode1($("#complexNodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
     // } else { // 如果是星际节点
     //     createComplexNode($("#complexNodeName").val(), uiOut.offset.left - document.getElementById("slider_1").offsetWidth, uiOut.offset.top - 102, iconUrl);
     // }
     // $('#complexNodeModal').modal('hide');
-
     $.ajax({
         url: '/NetworkSimulation/addComplexNode',
         data: {
@@ -548,7 +533,7 @@ $("#addLink").click(function () {
     if (beginNode.fontColor == "1,0,0" && endLastNode.fontColor == "1,0,0") { // 二层docker到二层docker
         linkType = 11;
         $("#onlyPortDiv").attr("hidden", "hidden");
-    } else if (beginNode.fontColor == "1,0,0") { // 二层docker到其他
+    } else if (beginNode.fontColor == "1,0,0") { // 二层docker到三层docker
         linkType = 12;
         $("#onlyPortDiv").attr("hidden", "hidden");
         for (var i = 0; i < toPortObjs.length; i++) {
@@ -556,7 +541,7 @@ $("#addLink").click(function () {
                 toIp = toPortObjs[i].portIp;
             }
         }
-    } else if (endLastNode.fontColor == "1,0,0") { // 其他到二层docker
+    } else if (endLastNode.fontColor == "1,0,0") { // 三层docker到二层docker
         linkType = 13;
         $("#onlyPortDiv").attr("hidden", "hidden");
         for (var i = 0; i < fromPortObjs.length; i++) {

@@ -377,7 +377,7 @@ $("#editNode").click(function () {
         window.open(encodeURI("complexNodeEdit.html?complexNodeName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
     } else if (elements[0] instanceof JTopo.Link) { // 选中的是链路
         window.open(encodeURI("linkEdit.html?linkName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId")));
-    } else if (elements[0] instanceof JTopo.Node && elements[0].fontColor == "0,1,0") { // 选中的是二层节点
+    } else if (elements[0] instanceof JTopo.Node && (elements[0].fontColor == "0,1,0" || elements[0].fontColor == "1,0,0")) { // 选中的是二层节点
         window.open(encodeURI("nodeEdit.html?nodeName=" + elements[0].text + "&scenarioId=" + $.getUrlParam("scenarioId") + "&isL2node=1"));
     } else {
         $.alert("不支持的操作！");

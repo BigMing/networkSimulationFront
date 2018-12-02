@@ -64,8 +64,7 @@ var simpleNodeType = [];
  */
 function refreshCanvas() {
     scene.clear(); // 先清楚元素再重画上去
-    // 画出已有节点，简单节点
-    $.ajax({
+    $.ajax({ // 画出已有节点，简单节点
         url: '/NetworkSimulation/selectNodeList',
         data: {
             s_id: $.getUrlParam("scenarioId")
@@ -80,10 +79,11 @@ function refreshCanvas() {
                 simpleNodeId[objs[i].nodeName] = objs[i].uuid;
                 simpleNodeType[objs[i].nodeName] = objs[i].nodeType;
                 if (objs[i].cn_id == 0) {
-                    if (objs[i].nodeType == 2 || objs[i].nodeType == 3) { // is
-                        // L2
-                        // node
+                    if (objs[i].nodeType == 2) {
                         createSwitchNode(objs[i].nodeName, objs[i].x,
+                            objs[i].y, objs[i].iconUrl);
+                    } else if (objs[i].nodeType == 3) {
+                        createSwitchNode1(objs[i].nodeName, objs[i].x,
                             objs[i].y, objs[i].iconUrl);
                     } else {
                         createNode(objs[i].nodeName, objs[i].x, objs[i].y,
@@ -96,8 +96,7 @@ function refreshCanvas() {
 
         }
     });
-    // 画出复杂节点
-    $.ajax({
+    $.ajax({ // 画出复杂节点
         url: '/NetworkSimulation/selectComplexNodeList',
         data: {
             s_id: $.getUrlParam("scenarioId")
@@ -116,8 +115,7 @@ function refreshCanvas() {
 
         }
     });
-    // 获取所有L3链路并画出
-    $.ajax({
+    $.ajax({ // 获取所有L3链路并画出
         url: '/NetworkSimulation/getLinkList',
         data: {
             s_id: $.getUrlParam("scenarioId")
@@ -171,8 +169,7 @@ function refreshCanvas() {
 
         }
     });
-    // 获取所有L2链路并画出
-    $.ajax({
+    $.ajax({ // 获取所有L2链路并画出
         url: '/NetworkSimulation/getL2LinkList',
         data: {
             s_id: $.getUrlParam("scenarioId")
